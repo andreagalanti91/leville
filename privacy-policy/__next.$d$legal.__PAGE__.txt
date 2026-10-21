@@ -1,0 +1,105 @@
+1:"$Sreact.fragment"
+2:I[56814,["/leville/_next/static/chunks/3t60b9p99cir7.js","/leville/_next/static/chunks/3lq2qu0efsdjo.js","/leville/_next/static/chunks/2b1a209wxde90.js"],"LegalPage"]
+3:T785,
+<section>
+  <h2>Titolare del trattamento</h2>
+  <p>Agriturismo Le Ville, Località Le Ville, 53034 Colle di Val d’Elsa (SI).
+  Per qualsiasi richiesta relativa ai dati personali è possibile scrivere a
+  <a href="mailto:amministrazione@gruppofontani.it">amministrazione@gruppofontani.it</a>.</p>
+</section>
+<section>
+  <h2>Dati raccolti</h2>
+  <p>Questo sito non utilizza moduli di contatto propri, non registra account e
+  non esegue profilazione. I contatti avvengono tramite WhatsApp, email o
+  telefono: in quel caso i dati sono trattati dai rispettivi fornitori secondo
+  le loro informative.</p>
+  <p>Le prenotazioni online avvengono tramite il motore di prenotazione di
+  Amenitiz, incorporato nelle pagine del sito. I dati inseriti per prenotare
+  (nome, contatti, date del soggiorno, dati di pagamento) sono raccolti da
+  Amenitiz per conto della struttura e trattati secondo l’informativa del
+  fornitore.</p>
+  <p>Il server che ospita il sito può conservare log tecnici di accesso
+  (indirizzo IP, data e ora, pagina richiesta) per finalità di sicurezza e
+  diagnostica.</p>
+</section>
+<section>
+  <h2>Finalità e base giuridica</h2>
+  <p>I dati eventualmente comunicati sono utilizzati esclusivamente per
+  rispondere alle richieste di informazioni e disponibilità, sulla base del
+  legittimo interesse a dare riscontro alle richieste ricevute.</p>
+</section>
+<section>
+  <h2>Conservazione</h2>
+  <p>Le comunicazioni sono conservate per il tempo necessario a gestire la
+  richiesta e gli eventuali obblighi contabili e fiscali conseguenti.</p>
+</section>
+<section>
+  <h2>Diritti dell’interessato</h2>
+  <p>È possibile chiedere in qualsiasi momento accesso, rettifica, cancellazione,
+  limitazione o portabilità dei propri dati, e opporsi al trattamento,
+  scrivendo all’indirizzo indicato sopra. È inoltre possibile proporre reclamo
+  al Garante per la protezione dei dati personali.</p>
+</section>4:T697,
+<section>
+  <h2>Data controller</h2>
+  <p>Agriturismo Le Ville, Località Le Ville, 53034 Colle di Val d’Elsa (SI), Italy.
+  For any request concerning personal data, write to
+  <a href="mailto:amministrazione@gruppofontani.it">amministrazione@gruppofontani.it</a>.</p>
+</section>
+<section>
+  <h2>Data collected</h2>
+  <p>This website has no contact forms of its own, no accounts and no
+  profiling. Enquiries reach us through WhatsApp, email or phone: in those cases
+  data is processed by the respective providers under their own privacy
+  notices.</p>
+  <p>Online bookings go through the Amenitiz booking engine, embedded in the
+  pages of this site. The data you enter to book (name, contact details, stay
+  dates, payment details) is collected by Amenitiz on behalf of the property
+  and processed under the provider’s privacy notice.</p>
+  <p>The hosting server may keep technical access logs (IP address, timestamp,
+  requested page) for security and diagnostic purposes.</p>
+</section>
+<section>
+  <h2>Purpose and legal basis</h2>
+  <p>Any data you send us is used solely to answer requests for information and
+  availability, on the basis of our legitimate interest in replying to enquiries.</p>
+</section>
+<section>
+  <h2>Retention</h2>
+  <p>Messages are kept for as long as needed to handle the enquiry and to meet
+  any resulting accounting and tax obligations.</p>
+</section>
+<section>
+  <h2>Your rights</h2>
+  <p>You may at any time request access to, correction, erasure, restriction or
+  portability of your data, and object to processing, by writing to the address
+  above. You may also lodge a complaint with the Italian Data Protection
+  Authority.</p>
+</section>9:X
+e:X
+e:C
+0:{"buildId":"IIBB0ECkrDeoTjxI2k925","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"page":{"slug":"privacy-policy","title":{"it":"Privacy Policy","en":"Privacy Policy"},"body":{"it":"$3","en":"$4"}}}],["$L5","$L6"],"$L7"]}],"isPartial":"$@8","staleTime":"$9","varyParams":null},{"rsc":"$La","isPartial":"$@b","staleTime":"$9","varyParams":null},{"rsc":"$Lc","isPartial":"$@d","staleTime":"$9","varyParams":"$e"},{"rsc":"$Lf","isPartial":"$@10","staleTime":"$9","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@11","rootVaryParams":null,"needsRuntimeRequest":"$@12"}
+13:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"OutletBoundary"]
+14:"$Sreact.suspense"
+16:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"ViewportBoundary"]
+17:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"MetadataBoundary"]
+18:I[27201,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"IconMark"]
+19:I[39756,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"default"]
+1a:I[37457,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"default"]
+1b:I[33499,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"LanguageProvider"]
+:HL["/leville/_next/static/chunks/0vfa-zdfnfeo4.css","style"]
+5:["$","script","script-0",{"src":"/leville/_next/static/chunks/3lq2qu0efsdjo.js","async":true}]
+6:["$","script","script-1",{"src":"/leville/_next/static/chunks/2b1a209wxde90.js","async":true}]
+7:["$","$L13",null,{"children":["$","$14",null,{"name":"Next.MetadataOutlet","children":"$@15"}]}]
+a:["$","$1","h",{"children":[null,["$","$L16",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L17",null,{"children":["$","$14",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Privacy Policy | Agriturismo Le Ville"}],["$","meta","1",{"name":"description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}],["$","meta","2",{"name":"robots","content":"noindex"}],["$","meta","3",{"property":"og:title","content":"Agriturismo Le Ville | Toscana autentica"}],["$","meta","4",{"property":"og:description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}],["$","meta","5",{"property":"og:url","content":"https://andreagalanti91.github.io/leville/"}],["$","meta","6",{"property":"og:site_name","content":"Agriturismo Le Ville"}],["$","meta","7",{"property":"og:image","content":"https://andreagalanti91.github.io/leville/leville/tenants/le-ville/estate/aerial.webp?v=2026-08-26"}],["$","meta","8",{"property":"og:type","content":"website"}],["$","meta","9",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","10",{"name":"twitter:title","content":"Agriturismo Le Ville | Toscana autentica"}],["$","meta","11",{"name":"twitter:description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}],["$","meta","12",{"name":"twitter:image","content":"https://andreagalanti91.github.io/leville/leville/tenants/le-ville/estate/aerial.webp?v=2026-08-26"}],["$","link","13",{"rel":"shortcut icon","href":"/leville/tenants/le-ville/logo.png?v=2026-08-26"}],["$","link","14",{"rel":"icon","href":"/leville/tenants/le-ville/logo.png?v=2026-08-26"}],["$","$L18","15",{}]]}]}]}],null]}]
+c:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+f:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/leville/_next/static/chunks/0vfa-zdfnfeo4.css","precedence":"next"}],["$","script","script-0",{"src":"/leville/_next/static/chunks/3t60b9p99cir7.js","async":true}]],["$","html",null,{"lang":"it","data-scroll-behavior":"smooth","children":["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"LodgingBusiness\",\"name\":\"Agriturismo Le Ville\",\"description\":\"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa.\",\"url\":\"https://andreagalanti91.github.io/leville\",\"telephone\":\"+393520215528\",\"email\":\"amministrazione@gruppofontani.it\",\"address\":{\"@type\":\"PostalAddress\",\"streetAddress\":\"Località Le Ville\",\"addressLocality\":\"53034 Colle di Val d’Elsa (SI)\",\"addressCountry\":\"IT\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":43.3667,\"longitude\":11.1167}}"}}],["$","$L1b",null,{"children":["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]]}]}]]}]
+15:null
+12:true
+9:300
+9:C
+11:0
+b:"$undefined"
+d:"$undefined"
+10:"$undefined"
+8:"$undefined"

@@ -1,0 +1,62 @@
+1:"$Sreact.fragment"
+2:I[56814,["/leville/_next/static/chunks/3t60b9p99cir7.js","/leville/_next/static/chunks/3lq2qu0efsdjo.js","/leville/_next/static/chunks/2b1a209wxde90.js"],"LegalPage"]
+4:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"OutletBoundary"]
+5:"$Sreact.suspense"
+9:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"ViewportBoundary"]
+a:I[97367,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"MetadataBoundary"]
+3:T488,
+<section>
+  <h2>Cookie utilizzati</h2>
+  <p>Questo sito non utilizza cookie di profilazione e non installa strumenti
+  di analisi statistica.</p>
+  <p>Il motore di prenotazione Amenitiz, incorporato nelle pagine, può
+  impostare i cookie tecnici necessari a completare la prenotazione. Sono
+  gestiti da Amenitiz secondo la propria cookie policy.</p>
+</section>
+<section>
+  <h2>Memoria locale</h2>
+  <p>Il sito salva sul dispositivo una sola preferenza tecnica: la lingua
+  scelta, così da riproporla alla visita successiva. Non è un cookie e non
+  viene trasmessa a nessun server. Si cancella svuotando i dati del sito dalle
+  impostazioni del browser.</p>
+</section>
+<section>
+  <h2>Servizi esterni</h2>
+  <p>I collegamenti a WhatsApp, email e telefono aprono applicazioni esterne:
+  da quel momento valgono le informative dei rispettivi fornitori. Lo stesso
+  vale per il motore di prenotazione Amenitiz.</p>
+</section>
+<section>
+  <h2>Aggiornamenti</h2>
+  <p>Se in futuro verranno introdotti strumenti di analisi o mappe
+  incorporate, questa pagina sarà aggiornata e verrà aggiunta la richiesta di
+  consenso prevista dalla normativa.</p>
+</section>8:X
+17:X
+17:C
+0:{"buildId":"IIBB0ECkrDeoTjxI2k925","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"page":{"slug":"cookie-policy","title":{"it":"Cookie Policy","en":"Cookie Policy"},"body":{"it":"$3","en":"\n<section>\n  <h2>Cookies used</h2>\n  <p>This website uses no profiling cookies and installs no analytics\n  tools.</p>\n  <p>The Amenitiz booking engine embedded in the pages may set the technical\n  cookies needed to complete a booking. They are managed by Amenitiz under its\n  own cookie policy.</p>\n</section>\n<section>\n  <h2>Local storage</h2>\n  <p>The site stores one technical preference on your device: the language you\n  selected, so it can be restored on your next visit. It is not a cookie and is\n  never sent to any server. Clearing the site data in your browser settings\n  removes it.</p>\n</section>\n<section>\n  <h2>External services</h2>\n  <p>Links to WhatsApp, email and phone open external applications: from that\n  point their own privacy notices apply. The same goes for the Amenitiz\n  booking engine.</p>\n</section>\n<section>\n  <h2>Updates</h2>\n  <p>Should analytics or embedded maps be added in future, this page will be\n  updated and the consent request required by law will be introduced.</p>\n</section>"}}}],[["$","script","script-0",{"src":"/leville/_next/static/chunks/3lq2qu0efsdjo.js","async":true}],["$","script","script-1",{"src":"/leville/_next/static/chunks/2b1a209wxde90.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$L9",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$La",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Cookie Policy | Agriturismo Le Ville"}],["$","meta","1",{"name":"description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}],["$","meta","2",{"name":"robots","content":"noindex"}],["$","meta","3",{"property":"og:title","content":"Agriturismo Le Ville | Toscana autentica"}],["$","meta","4",{"property":"og:description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}],["$","meta","5",{"property":"og:url","content":"https://andreagalanti91.github.io/leville/"}],["$","meta","6",{"property":"og:site_name","content":"Agriturismo Le Ville"}],"$Lb","$Lc","$Ld","$Le","$Lf","$L10","$L11","$L12","$L13"]}]}]}],null]}],"isPartial":"$@14","staleTime":"$8","varyParams":null},{"rsc":"$L15","isPartial":"$@16","staleTime":"$8","varyParams":"$17"},{"rsc":"$L18","isPartial":"$@19","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@1a","rootVaryParams":null,"needsRuntimeRequest":"$@1b"}
+1c:I[27201,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"IconMark"]
+1d:I[39756,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"default"]
+1e:I[37457,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"default"]
+1f:I[33499,["/leville/_next/static/chunks/3t60b9p99cir7.js"],"LanguageProvider"]
+:HL["/leville/_next/static/chunks/0vfa-zdfnfeo4.css","style"]
+6:null
+b:["$","meta","7",{"property":"og:image","content":"https://andreagalanti91.github.io/leville/leville/tenants/le-ville/estate/aerial.webp?v=2026-08-26"}]
+c:["$","meta","8",{"property":"og:type","content":"website"}]
+d:["$","meta","9",{"name":"twitter:card","content":"summary_large_image"}]
+e:["$","meta","10",{"name":"twitter:title","content":"Agriturismo Le Ville | Toscana autentica"}]
+f:["$","meta","11",{"name":"twitter:description","content":"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa."}]
+10:["$","meta","12",{"name":"twitter:image","content":"https://andreagalanti91.github.io/leville/leville/tenants/le-ville/estate/aerial.webp?v=2026-08-26"}]
+11:["$","link","13",{"rel":"shortcut icon","href":"/leville/tenants/le-ville/logo.png?v=2026-08-26"}]
+12:["$","link","14",{"rel":"icon","href":"/leville/tenants/le-ville/logo.png?v=2026-08-26"}]
+13:["$","$L1c","15",{}]
+15:["$","$1","c",{"children":[null,["$","$L1d",null,{"parallelRouterKey":"children","template":["$","$L1e",null,{}]}]]}]
+18:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/leville/_next/static/chunks/0vfa-zdfnfeo4.css","precedence":"next"}],["$","script","script-0",{"src":"/leville/_next/static/chunks/3t60b9p99cir7.js","async":true}]],["$","html",null,{"lang":"it","data-scroll-behavior":"smooth","children":["$","body",null,{"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"LodgingBusiness\",\"name\":\"Agriturismo Le Ville\",\"description\":\"Soggiorni, esperienze e natura nel cuore della Toscana, a Colle di Val d’Elsa.\",\"url\":\"https://andreagalanti91.github.io/leville\",\"telephone\":\"+393520215528\",\"email\":\"amministrazione@gruppofontani.it\",\"address\":{\"@type\":\"PostalAddress\",\"streetAddress\":\"Località Le Ville\",\"addressLocality\":\"53034 Colle di Val d’Elsa (SI)\",\"addressCountry\":\"IT\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":43.3667,\"longitude\":11.1167}}"}}],["$","$L1f",null,{"children":["$","$L1d",null,{"parallelRouterKey":"children","template":["$","$L1e",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]]}]}]]}]
+8:300
+1b:true
+8:C
+1a:0
+14:"$undefined"
+16:"$undefined"
+19:"$undefined"
+7:"$undefined"
