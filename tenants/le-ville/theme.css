@@ -1,0 +1,16 @@
+/* TEMA — Agriturismo Le Ville
+   ===========================
+   Sovrascrive i valori di partenza definiti in src/styles/tokens.css.
+   Viene caricato dopo, quindi vince.
+
+   Le Ville usa la palette originale, quindi qui non c'è nulla da cambiare.
+   Un nuovo cliente parte da qui: ricolorare l'intero sito significa
+   riscrivere queste poche righe. */
+
+:root {
+  /* --ink: #17231c; */
+  /* --forest: #183026; */
+  /* --lime: #c8db9a; */
+  /* --cream: #f2eee4; */
+  /* --font-display: "Playfair Display", Georgia, serif; */
+}

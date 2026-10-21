@@ -1,0 +1,40 @@
+/* Video o foto a tutto schermo dell'apertura, e velatura.
+   Attenzione: l'ordine dei file elencati in src/styles/site.css è
+   significativo. Alcune regole in coda sovrascrivono di proposito
+   regole dei file precedenti. */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #fffef8;
+  background: #15251d;
+}
+
+.hero-media,
+.hero-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-media {
+  overflow: hidden;
+  background: url("/images/demo-20260826/general-01.webp") center/cover
+    no-repeat;
+}
+
+.hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 15, 10, 0.66) 0%,
+      rgba(7, 15, 10, 0.17) 60%,
+      rgba(7, 15, 10, 0.1) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(4, 10, 7, 0.82) 0%,
+      transparent 48%,
+      rgba(4, 10, 7, 0.35) 100%
+    );
+}

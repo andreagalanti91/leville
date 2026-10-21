@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+dist/
+.env
+.DS_Store
+*.log
+
+# Build delle demo e dei siti
+dist/
+# Materiale di lavoro raccolto per i preventivi (foto grezze, note)
+prospects/*/foto/

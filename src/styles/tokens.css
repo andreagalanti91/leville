@@ -1,0 +1,38 @@
+/* TOKEN DI TEMA
+   =============
+   Questi sono i valori di partenza, condivisi da tutti gli agriturismi.
+   Ogni cliente può sovrascriverne una parte in tenants/<id>/theme.css:
+   quel file viene caricato DOPO questo, quindi vince.
+
+   Nel resto del CSS non devono comparire colori o font scritti a mano:
+   sempre var(--nome). È ciò che rende possibile ricolorare un intero sito
+   modificando dieci righe. */
+
+:root {
+  /* --- Colori ------------------------------------------------------ */
+
+  /* Testo principale e sfondi scuri */
+  --ink: #17231c;
+  --forest: #183026;
+  --deep: #10241b;
+  --panel: #14271e; /* riquadri scuri: mappa, pannello contatti */
+  --panel-deep: #0b1711; /* fondo delle card esperienze */
+
+  /* Sfondi chiari */
+  --cream: #f2eee4;
+  --paper: #fbf8f1;
+
+  /* Colore d'accento: bottoni principali, indicatori, dettagli */
+  --lime: #c8db9a;
+
+  /* Filetti e separatori */
+  --line: rgba(23, 35, 28, 0.18);
+
+  /* --- Tipografia -------------------------------------------------- */
+
+  /* Titoli e numeri: serif, dà il carattere "storico" al sito */
+  --font-display: Georgia, serif;
+
+  /* Testo corrente, etichette, navigazione */
+  --font-body: Arial, Helvetica, sans-serif;
+}
