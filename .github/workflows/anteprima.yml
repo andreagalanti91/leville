@@ -1,0 +1,60 @@
+# Anteprima di lavoro su GitHub Pages
+# ===================================
+# A ogni push sui rami claude/** (o a mano, da Actions → "Run workflow")
+# compila il sito e lo pubblica sul ramo gh-pages:
+#
+#   https://andreagalanti91.github.io/leville/
+#
+# L'anteprima è compilata con NOINDEX=true: robots.txt chiude tutto e ogni
+# pagina porta <meta name="robots" content="noindex, nofollow">.
+#
+# Una tantum, nelle impostazioni del repository:
+#   Settings → Pages → Source: "Deploy from a branch" → gh-pages / (root)
+
+name: Anteprima
+
+on:
+  push:
+    branches: ["claude/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: anteprima
+  cancel-in-progress: true
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run validate
+
+      - name: Compila l'anteprima
+        run: npm run build:static
+        env:
+          SITE_ID: le-ville
+          BASE_PATH: /${{ github.event.repository.name }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          NOINDEX: "true"
+
+      - name: Pubblica su gh-pages
+        run: |
+          cd dist/le-ville
+          # Senza questo file GitHub Pages ignora la cartella _next/.
+          touch .nojekyll
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Anteprima da ${GITHUB_SHA::7} (${GITHUB_REF_NAME})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages

@@ -1,11 +1,13 @@
 /**
- * Compila UN agriturismo in una cartella statica pronta da caricare.
+ * Compila il sito in una cartella statica pronta da caricare.
  *
- *   SITE_ID=le-ville npm run build:static
+ *   npm run build:static
  *
  * Se il sito non sta nella radice del dominio ma in una sottocartella:
  *
- *   SITE_ID=le-ville BASE_PATH=/demo npm run build:static
+ *   BASE_PATH=/demo npm run build:static
+ *
+ * Per un'anteprima da non indicizzare aggiungi NOINDEX=true.
  *
  * Risultato: dist/<site-id>/ — HTML, CSS, JS e media, senza bisogno di Node
  * sul server. Si carica su qualsiasi hosting.
@@ -38,20 +40,7 @@ const result = spawnSync(process.execPath, [nextBinary, "build"], {
 
 if (result.status !== 0) process.exit(result.status ?? 1);
 
-/* L'esportazione statica copia tutta la cartella public/, che contiene i media
-   di ogni cliente. Senza questa potatura la build di un agriturismo si
-   porterebbe dietro le foto di tutti gli altri: con dieci clienti sarebbero
-   centinaia di megabyte inutili per ognuno. */
-const mediaRoot = path.join("out", "tenants");
-if (fs.existsSync(mediaRoot)) {
-  for (const other of fs.readdirSync(mediaRoot)) {
-    if (other !== siteId) {
-      fs.rmSync(path.join(mediaRoot, other), { recursive: true, force: true });
-    }
-  }
-}
-
-/* Un cliente senza alloggi genera comunque una pagina a uno slug riservato,
+/* Un sito senza alloggi genera comunque una pagina a uno slug riservato,
    perché l'esportazione statica pretende almeno un indirizzo per ogni rotta
    dinamica (vedi app/sistemazioni/[slug]/page.tsx). Non serve online. */
 const emptyStay = path.join("out", "sistemazioni", "__nessuna__");
@@ -59,19 +48,7 @@ if (fs.existsSync(emptyStay)) {
   fs.rmSync(path.join("out", "sistemazioni"), { recursive: true, force: true });
 }
 
-/* I file gemelli che marcano le immagini segnaposto non servono online. */
-const stripMarkers = (dir) => {
-  if (!fs.existsSync(dir)) return;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) stripMarkers(full);
-    else if (entry.name.endsWith(".placeholder")) fs.rmSync(full);
-  }
-};
-stripMarkers(mediaRoot);
-
-/* Next scrive sempre in out/. Lo spostiamo sotto dist/<site-id>/ così si
-   possono tenere in parallelo le build di più clienti. */
+/* Next scrive sempre in out/. Lo spostiamo sotto dist/<site-id>/. */
 const target = path.join("dist", siteId);
 fs.rmSync(target, { recursive: true, force: true });
 fs.mkdirSync("dist", { recursive: true });

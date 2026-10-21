@@ -5,22 +5,15 @@ import Image from "next/image";
 import { asset } from "../../config";
 import { useLanguage } from "../../lib/i18n";
 import type { HeroSection } from "../../config/types";
-import { SiteHeader } from "../layout/SiteHeader";
 
 /**
- * Apertura a tutto schermo: video (o foto) di sfondo, header, titolo, claim.
+ * Apertura a tutto schermo: video (o foto) di sfondo, titolo, claim.
  *
  * Il video può avere due sorgenti, una per telefono e una per schermi larghi:
  * il browser sceglie da sé in base a `media`, quindi su mobile non viene
  * scaricato il file pesante.
  */
-export function Hero({
-  section,
-  onMenuChange,
-}: {
-  section: HeroSection;
-  onMenuChange?: (open: boolean) => void;
-}) {
+export function Hero({ section }: { section: HeroSection }) {
   const { t } = useLanguage();
 
   return (
@@ -59,7 +52,9 @@ export function Hero({
 
       <div className="hero-shade" />
 
-      <SiteHeader onMenuChange={onMenuChange} />
+      {/* L'header fisso sta fuori dalla hero (vedi HomePage): qui resta lo
+          spazio che occupa, così il titolo non ci finisce sotto. */}
+      <div className="site-header-spacer" aria-hidden="true" />
 
       <div className="hero-content">
         <p className="hero-label">

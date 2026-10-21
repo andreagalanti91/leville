@@ -260,12 +260,6 @@ export interface TerritorySection {
   items: Destination[];
 }
 
-/** Una riga di orario. Es. "Giovedì – Lunedì" / "19:30 – 22:00" */
-export interface OpeningRow {
-  days: Localized;
-  hours: Localized;
-}
-
 /** Sezione — contatti finali. */
 export interface ContactSection {
   type: "contact";
@@ -276,70 +270,24 @@ export interface ContactSection {
   text: Localized;
   whatsappLabel: Localized;
   emailLabel: Localized;
-  /**
-   * Orari di apertura. Per un ristorante sono la prima cosa che si cerca:
-   * se presenti compaiono accanto ai pulsanti di contatto.
-   */
-  opening?: {
-    label: Localized;
-    rows: OpeningRow[];
-    /** Nota libera: chiusura settimanale, festivi, prenotazione consigliata. */
-    note?: Localized;
-  };
-}
-
-/* --- Sezioni aggiunte per la ristorazione ------------------------- */
-
-export interface MenuDish {
-  name: Localized;
-  /** Riga di dettaglio: ingredienti, provenienza. Facoltativa. */
-  detail?: Localized;
-  /** Es. "14" — la valuta la mette il componente. */
-  price?: string;
-}
-
-export interface MenuCourse {
-  /** Es. "Antipasti", "Primi", "Dolci" */
-  title: Localized;
-  /** Riga introduttiva del corso. Facoltativa. */
-  note?: Localized;
-  dishes: MenuDish[];
 }
 
 /**
- * Sezione menù. Pensata per un ristorante, ma utile anche a un agriturismo
- * con cucina.
+ * Sezione — motore di prenotazione incorporato.
  *
- * Il menù completo di solito cambia spesso e vive come PDF: `documents`
- * raccoglie quei file (menù, carta dei vini) e li mostra come pulsanti di
- * scaricamento. `courses` serve a mostrarne un estratto in pagina — qualche
- * piatto rappresentativo — senza dover riscrivere tutto a ogni cambio di
- * stagione. Si può usare l'uno, l'altro o entrambi.
+ * L'indirizzo del motore non sta qui ma in `booking.url`: la stessa fascia
+ * compare anche in fondo a ogni pagina sistemazione, e l'indirizzo va
+ * scritto una volta sola. L'`id` è l'ancora a cui puntano tutti i pulsanti
+ * "Prenota" del sito.
  */
-export interface MenuSection {
-  type: "menu";
+export interface BookingSection {
+  type: "booking";
   id: string;
   kicker: Localized;
   title: Localized;
   text?: Localized;
-  /** Simbolo di valuta anteposto ai prezzi. Predefinito: nessuno. */
-  currency?: string;
-  courses?: MenuCourse[];
-  documents?: { label: Localized; href: string }[];
-}
-
-/**
- * Galleria fotografica. Le immagini riempiono una griglia; il CSS è lo
- * stesso già usato dalle gallerie delle pagine interne, quindi non serve
- * stile nuovo.
- */
-export interface GallerySection {
-  type: "gallery";
-  id: string;
-  kicker: Localized;
-  title: Localized;
-  text?: Localized;
-  images: ImageRef[];
+  /** Titolo accessibile dell'iframe. */
+  frameTitle: Localized;
 }
 
 export type Section =
@@ -351,8 +299,7 @@ export type Section =
   | TrailSection
   | TerritorySection
   | ContactSection
-  | MenuSection
-  | GallerySection;
+  | BookingSection;
 
 /* ------------------------------------------------------------------ */
 /* Elementi ricorrenti                                                 */
@@ -429,17 +376,18 @@ export interface SiteConfig {
   headerCta: Localized;
 
   /**
-   * Motore di prenotazione esterno.
+   * Motore di prenotazione.
    *
-   * Il collegamento serve in tre punti — il bottone dell'header, il blocco
-   * contatti e il pannello flottante — quindi sta scritto qui una volta sola.
-   * Cambiando fornitore si aggiorna un indirizzo, non tre.
+   * Viene incorporato nella sezione `booking` della homepage e in fondo a
+   * ogni pagina sistemazione; i pulsanti "Prenota" (header, pannello
+   * flottante, pagine sistemazione) portano a quella fascia. L'indirizzo sta
+   * scritto qui una volta sola: cambiando fornitore si aggiorna un punto.
    *
    * Se assente, il bottone dell'header punta semplicemente alla sezione
    * contatti e nessun pulsante "prenota" compare.
    */
   booking?: {
-    /** Indirizzo del motore di prenotazione (si apre in una nuova scheda). */
+    /** Indirizzo del motore di prenotazione, caricato in un iframe. */
     url: string;
     /** Etichetta dei pulsanti. Es. "Prenota" */
     label: Localized;
@@ -449,8 +397,8 @@ export interface SiteConfig {
   sections: Section[];
 
   /**
-   * Alloggi. Vuoto o assente per un'attività che non ne ha (un ristorante):
-   * in quel caso non viene generata nessuna pagina /sistemazioni.
+   * Alloggi. Se vuoto o assente non viene generata nessuna pagina
+   * /sistemazioni.
    */
   accommodations?: Accommodation[];
   /** Serve solo se ci sono alloggi. */

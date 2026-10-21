@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { asset, defaultLocale, site, siteUrl } from "../src/config";
+import { asset, defaultLocale, noIndex, site, siteUrl } from "../src/config";
 import { LanguageProvider } from "../src/lib/i18n";
 import { translate } from "../src/lib/translate";
 import "./globals.css";
@@ -24,6 +24,8 @@ export const metadata: Metadata = {
     images: site.seo.ogImage ? [asset(site.seo.ogImage)] : undefined,
     type: "website",
   },
+  /* Le anteprime di lavoro non devono finire su Google. */
+  robots: noIndex ? { index: false, follow: false } : undefined,
 };
 
 /**

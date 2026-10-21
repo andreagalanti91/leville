@@ -1,16 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { bookingUrl, mailUrl, site, telUrl, whatsappUrl } from "../../config";
+import {
+  bookingAnchor,
+  bookingSection,
+  bookingUrl,
+  mailUrl,
+  site,
+  telUrl,
+  whatsappUrl,
+} from "../../config";
 import { useLanguage } from "../../lib/i18n";
 
 /**
- * Pulsante contatti fisso in basso a destra, con pannello a scomparsa.
- * Si nasconde quando il menù mobile a tutto schermo è aperto.
+ * Pulsante fisso in basso a destra.
+ *
+ * Con il motore di prenotazione incorporato è un collegamento diretto alla
+ * fascia di prenotazione, e si toglie di mezzo quando quella fascia è sullo
+ * schermo (coprirebbe i pulsanti del calendario). Senza, apre un pannello
+ * con i contatti.
+ *
+ * Si nasconde anche quando il menù mobile a tutto schermo è aperto.
  */
 export function ContactDock({ hidden = false }: { hidden?: boolean }) {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
+  const [bookingVisible, setBookingVisible] = useState(false);
+
+  useEffect(() => {
+    const target = bookingSection && document.getElementById(bookingSection.id);
+    if (!target) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setBookingVisible(entry.isIntersecting),
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   /* Esc chiude il pannello. Il listener esiste solo quando serve. */
   useEffect(() => {
@@ -25,6 +50,26 @@ export function ContactDock({ hidden = false }: { hidden?: boolean }) {
   if (!site.dock.enabled) return null;
 
   const { dock } = site;
+
+  if (bookingSection && bookingUrl) {
+    return (
+      <aside
+        className={`contact-dock ${hidden || bookingVisible ? "is-hidden" : ""}`}
+        aria-label={t(dock.triggerLabel)}
+      >
+        <a className="contact-dock-trigger" href={bookingAnchor}>
+          <span className="contact-dock-pulse" aria-hidden="true" />
+          <span>
+            <small>{t(dock.triggerKicker)}</small>
+            <b>{t(dock.triggerLabel)}</b>
+          </span>
+          <i aria-hidden="true">
+            <span className="direction-mark" />
+          </i>
+        </a>
+      </aside>
+    );
+  }
 
   return (
     <aside

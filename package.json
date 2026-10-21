@@ -1,5 +1,5 @@
 {
-  "name": "agriturismo-platform",
+  "name": "agriturismo-le-ville",
   "version": "2.0.0",
   "private": true,
   "engines": {
@@ -9,15 +9,11 @@
     "dev": "next dev",
     "build": "next build",
     "build:static": "node scripts/build-static.mjs",
-    "build:all": "node scripts/build-all.mjs",
     "start": "next start",
     "media:scan": "node scripts/scan-media.mjs",
     "check": "tsc --noEmit",
     "validate": "node scripts/validate.mjs",
-    "new:tenant": "node scripts/new-tenant.mjs",
-    "media:prepare": "node scripts/prepare-media.mjs",
-    "demo:build": "node scripts/build-demo.mjs",
-    "media:placeholders": "node scripts/make-placeholders.mjs"
+    "media:prepare": "node scripts/prepare-media.mjs"
   },
   "dependencies": {
     "next": "16.3.3",

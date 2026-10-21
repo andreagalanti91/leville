@@ -11,6 +11,9 @@ import type { NextConfig } from "next";
  *  - senza la variabile   -> applicazione Next completa, con ottimizzazione
  *                           delle immagini lato server.
  *
+ * NOINDEX=true va usato per ogni anteprima pubblica (GitHub Pages, sottodomini
+ * di prova): il sito dichiara ai motori di ricerca di non indicizzarlo.
+ *
  * BASE_PATH serve quando il sito NON sta nella radice del dominio ma dentro
  * una sottocartella:
  *
@@ -42,6 +45,9 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_BASE_PATH: basePath,
     /* Dominio pubblico. Se assente si usa quello in configurazione. */
     NEXT_PUBLIC_SITE_URL: process.env.SITE_URL ?? "",
+    /* NOINDEX=true per le anteprime di lavoro: chiede ai motori di ricerca
+       di non indicizzarle (robots.txt e meta robots). */
+    NEXT_PUBLIC_NOINDEX: process.env.NOINDEX === "true" ? "true" : "",
   },
 };
 

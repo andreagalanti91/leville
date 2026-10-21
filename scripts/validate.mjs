@@ -1,9 +1,8 @@
 /**
- * VALIDAZIONE DI UN CLIENTE
- * =========================
+ * VALIDAZIONE DELLA CONFIGURAZIONE
+ * ================================
  *
- *   SITE_ID=nerbona npm run validate
- *   npm run validate            (controlla tutti i clienti registrati)
+ *   npm run validate
  *
  * Serve a rispondere in due secondi a "questo sito è pronto?", senza dover
  * rileggere novecento righe di configurazione.
@@ -202,9 +201,9 @@ function validate(id, site) {
     err("stayPage: mancano i testi della pagina di dettaglio degli alloggi");
   }
 
-  const menu = (site.sections ?? []).find((s) => s.type === "menu");
-  if (menu && !menu.courses?.length && !menu.documents?.length) {
-    err("sezione menu: serve almeno un estratto (courses) o un documento (documents)");
+  const bookingSection = (site.sections ?? []).find((s) => s.type === "booking");
+  if (bookingSection && !site.booking?.url) {
+    err("sezione booking: serve l'indirizzo del motore di prenotazione in booking.url");
   }
 
   /* --- limiti noti del CSS --------------------------------------- */
@@ -291,8 +290,7 @@ function validate(id, site) {
 
   /* --- adempimenti italiani -------------------------------------- */
 
-  /* Il CIN riguarda solo le strutture ricettive: un ristorante non ne ha uno.
-     Lo si chiede quindi solo a chi offre alloggi. */
+  /* Il CIN va esposto sul sito delle strutture ricettive. */
   if ((site.accommodations ?? []).length && !site.brand?.cin) {
     warn(
       "brand.cin: manca il Codice Identificativo Nazionale. In Italia va " +

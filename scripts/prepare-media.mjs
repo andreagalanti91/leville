@@ -2,7 +2,7 @@
  * PREPARA I MEDIA DI UN CLIENTE
  * =============================
  *
- *   SITE_ID=nerbona npm run media:prepare
+ *   npm run media:prepare
  *
  * Prende le immagini grezze da prospects/<id>/foto/ — qualsiasi formato,
  * qualsiasi dimensione, i nomi che avevano sul sito di origine — e le
@@ -51,7 +51,7 @@ const source = path.join("prospects", id, "foto");
 const target = path.join("public", "tenants", id);
 
 if (!fs.existsSync(source)) {
-  console.error(`\nCartella non trovata: ${source}\nLancia prima: npm run new:tenant ${id}\n`);
+  console.error(`\nCartella non trovata: ${source}\nCrea la cartella e mettici le foto grezze.\n`);
   process.exit(1);
 }
 

@@ -79,8 +79,9 @@ const site: SiteConfig = {
      l'etichetta del motore di prenotazione. */
   headerCta: { it: "Richiedi disponibilità", en: "Check availability" },
 
-  /* Motore di prenotazione Amenitiz. Scritto qui una volta sola, viene usato
-     dal bottone dell'header, dal blocco contatti e dal pannello flottante. */
+  /* Motore di prenotazione Amenitiz. Scritto qui una volta sola: viene
+     incorporato nella sezione "prenota" qui sotto e in fondo a ogni pagina
+     sistemazione; header e pulsante flottante portano lì. */
   booking: {
     url: "https://agriturismo-le-ville.amenitiz.io/en/booking/room#DatesGuests-BE",
     label: { it: "Prenota", en: "Book now" },
@@ -474,6 +475,24 @@ const site: SiteConfig = {
       },
       emailLabel: { it: "Invia una email", en: "Send us an email" },
     },
+
+    {
+      type: "booking",
+      id: "prenota",
+      kicker: { it: "Prenota direttamente", en: "Book directly" },
+      title: {
+        it: "Scegli le date del tuo soggiorno.",
+        en: "Choose the dates of your stay.",
+      },
+      text: {
+        it: "Disponibilità e prezzi in tempo reale, senza intermediari.",
+        en: "Live availability and prices, with no intermediaries.",
+      },
+      frameTitle: {
+        it: "Prenotazione Agriturismo Le Ville",
+        en: "Agriturismo Le Ville booking",
+      },
+    },
   ],
 
   /* ================================================================ */
@@ -771,8 +790,8 @@ const site: SiteConfig = {
 
   dock: {
     enabled: true,
-    triggerKicker: { it: "PARLA CON NOI", en: "TALK TO US" },
-    triggerLabel: { it: "Contattaci", en: "Contact us" },
+    triggerKicker: { it: "PRENOTA DIRETTAMENTE", en: "BOOK DIRECTLY" },
+    triggerLabel: { it: "Prenota", en: "Book now" },
     panelKicker: { it: "PRENOTA DIRETTAMENTE", en: "BOOK DIRECTLY" },
     panelTitle: { it: "Iniziamo da qui.", en: "Let’s start here." },
     panelText: {
@@ -792,8 +811,8 @@ const site: SiteConfig = {
 
   /* Il corpo accetta HTML semplice: <h2>, <h3>, <p>, <ul>, <li>, <strong>,
      <a>. Da rileggere con il cliente prima della pubblicazione, e da
-     aggiornare se si aggiungono analytics, mappe incorporate o sistemi di
-     prenotazione di terze parti. */
+     aggiornare se si aggiungono analytics o mappe incorporate. Il paragrafo
+     su Amenitiz va verificato con l’informativa del fornitore. */
 
   legalPages: [
     {
@@ -809,10 +828,15 @@ const site: SiteConfig = {
 </section>
 <section>
   <h2>Dati raccolti</h2>
-  <p>Questo sito non utilizza moduli di contatto, non registra account e non
-  esegue profilazione. I contatti avvengono tramite WhatsApp, email o telefono:
-  in quel caso i dati sono trattati dai rispettivi fornitori secondo le loro
-  informative.</p>
+  <p>Questo sito non utilizza moduli di contatto propri, non registra account e
+  non esegue profilazione. I contatti avvengono tramite WhatsApp, email o
+  telefono: in quel caso i dati sono trattati dai rispettivi fornitori secondo
+  le loro informative.</p>
+  <p>Le prenotazioni online avvengono tramite il motore di prenotazione di
+  Amenitiz, incorporato nelle pagine del sito. I dati inseriti per prenotare
+  (nome, contatti, date del soggiorno, dati di pagamento) sono raccolti da
+  Amenitiz per conto della struttura e trattati secondo l’informativa del
+  fornitore.</p>
   <p>Il server che ospita il sito può conservare log tecnici di accesso
   (indirizzo IP, data e ora, pagina richiesta) per finalità di sicurezza e
   diagnostica.</p>
@@ -844,9 +868,14 @@ const site: SiteConfig = {
 </section>
 <section>
   <h2>Data collected</h2>
-  <p>This website has no contact forms, no accounts and no profiling. Enquiries
-  reach us through WhatsApp, email or phone: in those cases data is processed by
-  the respective providers under their own privacy notices.</p>
+  <p>This website has no contact forms of its own, no accounts and no
+  profiling. Enquiries reach us through WhatsApp, email or phone: in those cases
+  data is processed by the respective providers under their own privacy
+  notices.</p>
+  <p>Online bookings go through the Amenitiz booking engine, embedded in the
+  pages of this site. The data you enter to book (name, contact details, stay
+  dates, payment details) is collected by Amenitiz on behalf of the property
+  and processed under the provider’s privacy notice.</p>
   <p>The hosting server may keep technical access logs (IP address, timestamp,
   requested page) for security and diagnostic purposes.</p>
 </section>
@@ -876,9 +905,11 @@ const site: SiteConfig = {
         it: `
 <section>
   <h2>Cookie utilizzati</h2>
-  <p>Questo sito non utilizza cookie di profilazione, non installa strumenti di
-  analisi statistica e non incorpora contenuti di terze parti che tracciano la
-  navigazione.</p>
+  <p>Questo sito non utilizza cookie di profilazione e non installa strumenti
+  di analisi statistica.</p>
+  <p>Il motore di prenotazione Amenitiz, incorporato nelle pagine, può
+  impostare i cookie tecnici necessari a completare la prenotazione. Sono
+  gestiti da Amenitiz secondo la propria cookie policy.</p>
 </section>
 <section>
   <h2>Memoria locale</h2>
@@ -890,19 +921,23 @@ const site: SiteConfig = {
 <section>
   <h2>Servizi esterni</h2>
   <p>I collegamenti a WhatsApp, email e telefono aprono applicazioni esterne:
-  da quel momento valgono le informative dei rispettivi fornitori.</p>
+  da quel momento valgono le informative dei rispettivi fornitori. Lo stesso
+  vale per il motore di prenotazione Amenitiz.</p>
 </section>
 <section>
   <h2>Aggiornamenti</h2>
-  <p>Se in futuro verranno introdotti strumenti di analisi, mappe incorporate o
-  sistemi di prenotazione di terze parti, questa pagina sarà aggiornata e verrà
-  aggiunta la richiesta di consenso prevista dalla normativa.</p>
+  <p>Se in futuro verranno introdotti strumenti di analisi o mappe
+  incorporate, questa pagina sarà aggiornata e verrà aggiunta la richiesta di
+  consenso prevista dalla normativa.</p>
 </section>`,
         en: `
 <section>
   <h2>Cookies used</h2>
-  <p>This website uses no profiling cookies, installs no analytics tools and
-  embeds no third-party content that tracks browsing.</p>
+  <p>This website uses no profiling cookies and installs no analytics
+  tools.</p>
+  <p>The Amenitiz booking engine embedded in the pages may set the technical
+  cookies needed to complete a booking. They are managed by Amenitiz under its
+  own cookie policy.</p>
 </section>
 <section>
   <h2>Local storage</h2>
@@ -914,13 +949,13 @@ const site: SiteConfig = {
 <section>
   <h2>External services</h2>
   <p>Links to WhatsApp, email and phone open external applications: from that
-  point their own privacy notices apply.</p>
+  point their own privacy notices apply. The same goes for the Amenitiz
+  booking engine.</p>
 </section>
 <section>
   <h2>Updates</h2>
-  <p>Should analytics, embedded maps or third-party booking systems be added in
-  future, this page will be updated and the consent request required by law
-  will be introduced.</p>
+  <p>Should analytics or embedded maps be added in future, this page will be
+  updated and the consent request required by law will be introduced.</p>
 </section>`,
       },
     },

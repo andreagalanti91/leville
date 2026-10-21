@@ -5,11 +5,11 @@ import { site } from "../config";
 import type { Section } from "../config/types";
 import { ContactDock } from "./layout/ContactDock";
 import { Footer } from "./layout/Footer";
+import { SiteHeader } from "./layout/SiteHeader";
+import { Booking } from "./sections/Booking";
 import { Contact } from "./sections/Contact";
 import { Experiences } from "./sections/Experiences";
 import { Feature } from "./sections/Feature";
-import { Gallery } from "./sections/Gallery";
-import { Menu } from "./sections/Menu";
 import { Hero } from "./sections/Hero";
 import { Stays } from "./sections/Stays";
 import { Story } from "./sections/Story";
@@ -22,9 +22,8 @@ import { Trail } from "./sections/Trail";
  * Non contiene layout: scorre l'elenco `sections` della configurazione del
  * cliente e monta il componente corrispondente a ciascun tipo.
  *
- * È il punto che rende il sito replicabile. Riordinare le sezioni, toglierne
- * una o usarne una due volte si fa spostando blocchi in tenants/<id>/site.ts,
- * senza aprire questo file.
+ * Riordinare le sezioni, toglierne una o usarne una due volte si fa
+ * spostando blocchi in tenants/le-ville/site.ts, senza aprire questo file.
  *
  * Per aggiungere un TIPO nuovo di sezione (es. "recensioni"):
  *   1. descrivilo in src/config/types.ts e aggiungilo all'unione `Section`
@@ -33,15 +32,10 @@ import { Trail } from "./sections/Trail";
  * TypeScript segnala da solo se dimentichi il terzo passaggio.
  */
 
-function renderSection(
-  section: Section,
-  onMenuChange: (open: boolean) => void,
-) {
+function renderSection(section: Section) {
   switch (section.type) {
     case "hero":
-      return (
-        <Hero key={section.id} section={section} onMenuChange={onMenuChange} />
-      );
+      return <Hero key={section.id} section={section} />;
     case "story":
       return <Story key={section.id} section={section} />;
     case "stays":
@@ -56,10 +50,8 @@ function renderSection(
       return <Territory key={section.id} section={section} />;
     case "contact":
       return <Contact key={section.id} section={section} />;
-    case "menu":
-      return <Menu key={section.id} section={section} />;
-    case "gallery":
-      return <Gallery key={section.id} section={section} />;
+    case "booking":
+      return <Booking key={section.id} section={section} />;
     default: {
       /* Se questa riga smette di compilare, manca un caso qui sopra. */
       const unhandled: never = section;
@@ -75,7 +67,8 @@ export function HomePage() {
 
   return (
     <main>
-      {site.sections.map((section) => renderSection(section, setMenuOpen))}
+      <SiteHeader onMenuChange={setMenuOpen} />
+      {site.sections.map(renderSection)}
       <ContactDock hidden={menuOpen} />
       <Footer />
     </main>

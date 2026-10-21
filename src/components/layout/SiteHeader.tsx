@@ -1,13 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { bookingUrl, site } from "../../config";
+import { bookingAnchor, site } from "../../config";
 import { useLanguage } from "../../lib/i18n";
+import { useScrolled } from "../../lib/use-scrolled";
 import { Brand } from "./Brand";
 
 /**
  * Barra superiore: logo, navigazione, selettore lingua, invito all'azione.
  * Il menù mobile vive qui perché ne condivide lo stato di apertura.
+ *
+ * L'header resta fisso in cima alla pagina. Sopra il video è trasparente;
+ * appena si scorre prende lo sfondo pieno (`is-scrolled`) per restare
+ * leggibile sopra qualsiasi sezione.
+ *
+ * Va montato fuori dalla hero: un antenato con `transform` farebbe scorrere
+ * l'elemento fisso insieme a lui. La hero tiene uno spaziatore della stessa
+ * altezza al suo posto.
  *
  * `onMenuChange` serve al pulsante contatti flottante, che si nasconde
  * quando il menù a tutto schermo è aperto.
@@ -19,6 +28,7 @@ export function SiteHeader({
 }) {
   const { t, cycleLocale, switchLabel, nextLocaleName } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrolled = useScrolled();
 
   const toggleMenu = (open: boolean) => {
     setMenuOpen(open);
@@ -27,7 +37,7 @@ export function SiteHeader({
 
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <Brand />
 
         <nav className="desktop-nav">
@@ -42,13 +52,9 @@ export function SiteHeader({
           <button className="lang" onClick={cycleLocale}>
             {switchLabel}
           </button>
-          {/* Con un motore di prenotazione esterno il bottone ci porta
-              direttamente; senza, resta un'ancora alla sezione contatti. */}
-          <a
-            className="header-cta"
-            href={bookingUrl ?? "#contatti"}
-            {...(bookingUrl && { target: "_blank", rel: "noreferrer" })}
-          >
+          {/* Scende alla fascia con il motore di prenotazione; senza
+              motore, alla sezione contatti. */}
+          <a className="header-cta" href={bookingAnchor}>
             {t(site.booking?.label ?? site.headerCta)}
           </a>
           <button
@@ -75,11 +81,7 @@ export function SiteHeader({
             </a>
           ))}
           <button onClick={cycleLocale}>{nextLocaleName}</button>
-          <a
-            href={bookingUrl ?? "#contatti"}
-            {...(bookingUrl && { target: "_blank", rel: "noreferrer" })}
-            onClick={() => toggleMenu(false)}
-          >
+          <a href={bookingAnchor} onClick={() => toggleMenu(false)}>
             {t(site.booking?.label ?? site.headerCta)}
           </a>
         </nav>

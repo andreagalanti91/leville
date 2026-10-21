@@ -6,51 +6,26 @@ Come è organizzato il progetto, e perché è organizzato così.
 
 ## L'idea di fondo
 
-Un solo codice sorgente, N agriturismi.
-
-Ogni cliente è una cartella di **dati**: testi, percorsi delle foto, colori.
-Il codice che li trasforma in un sito è lo stesso per tutti.
+Il sito di Agriturismo Le Ville separa i **dati** dal codice che li mostra.
 
 ```
-tenants/le-ville/site.ts      contenuto           ← si modifica per ogni cliente
-tenants/le-ville/theme.css    colori e font       ← si modifica per ogni cliente
-public/tenants/le-ville/      foto e video        ← si modifica per ogni cliente
+tenants/le-ville/site.ts      contenuto           ← si modifica qui
+tenants/le-ville/theme.css    colori e font
+public/tenants/le-ville/      foto e video
 
-src/                          piattaforma         ← non si tocca mai
-app/                          rotte               ← non si tocca mai
+src/                          componenti e stili
+app/                          rotte
 ```
 
-La conseguenza pratica: se scopri un difetto nel carosello, lo correggi una
-volta in `src/` e `npm run build:all` lo risolve per tutti i clienti. Con
-un progetto duplicato per cliente andrebbe corretto N volte, e prima o poi
-qualcuno resterebbe indietro.
-
----
-
-## Come viene scelto il cliente da compilare
-
-La variabile d'ambiente `SITE_ID` indica quale cartella di `tenants/` usare.
-
-```bash
-SITE_ID=le-ville    npm run build:static   →  dist/le-ville/
-SITE_ID=podere-rosa npm run build:static   →  dist/podere-rosa/
-```
-
-`src/config/index.ts` legge la variabile, cerca il cliente in un registro
-esplicito e lo espone come `site`. Da lì in poi ogni componente importa `site`
-e legge quello che gli serve.
-
-Il registro è un oggetto scritto a mano invece di un import dinamico per due
-motivi: Next deve poter risolvere i moduli in fase di compilazione per generare
-le pagine statiche, e avere l'elenco dei clienti in un punto solo rende ovvio
-chi è in produzione.
+`src/config/index.ts` carica la configurazione e la espone come `site`. Da lì
+in poi ogni componente importa `site` e legge quello che gli serve.
 
 ---
 
 ## Il contratto di contenuto
 
-`src/config/types.ts` descrive tutto ciò che può cambiare da un cliente
-all'altro. È il punto di incontro fra piattaforma e dati.
+`src/config/types.ts` descrive la forma del contenuto. È il punto di
+incontro fra codice e dati.
 
 La regola che tiene insieme il progetto:
 
@@ -58,9 +33,7 @@ La regola che tiene insieme il progetto:
 > `src/` o `app/`.
 
 Se serve una voce nuova, si aggiunge allo schema e TypeScript segnala
-automaticamente tutti i clienti da aggiornare. È il motivo per cui vale la pena
-avere lo schema tipizzato: senza, aggiungere un campo significherebbe ricordarsi
-a memoria quali clienti toccare.
+automaticamente i punti della configurazione da completare.
 
 ---
 
@@ -70,8 +43,8 @@ a memoria quali clienti toccare.
 componente corrispondente a ogni `type`.
 
 Questo è ciò che rende il sito adattabile senza toccare codice: riordinare le
-sezioni, toglierne una o usarne una due volte si fa spostando blocchi nella
-configurazione del cliente.
+sezioni, toglierne una o usarne una due volte si fa spostando blocchi in
+`site.ts`.
 
 Per aggiungere un **tipo** nuovo di sezione:
 
@@ -112,7 +85,7 @@ animazioni vede le sezioni direttamente nel loro stato finale.
 ```
 tokens.css        colori e font, valori di partenza
 site.css          elenca i blocchi nell'ordine di caricamento
-parts/01-…17-     il CSS vero, diviso per argomento
+parts/01-…18-     il CSS vero, diviso per argomento
 ```
 
 **L'ordine dei blocchi in `site.css` è significativo.** Il CSS originale era
@@ -123,12 +96,13 @@ mantenendo l'ordine esatto, non raggruppati per argomento: raggrupparli
 avrebbe cambiato la cascata e quindi il risultato a schermo.
 
 Se devi aggiungere stile nuovo, mettilo in fondo o crea un file e importalo
-per ultimo.
+per ultimo. L'ultimo blocco, `18-booking-header.css`, rende fisso l'header e
+dà lo stile alla fascia di prenotazione.
 
 ### Il tema
 
-`tokens.css` definisce le variabili; `tenants/<id>/theme.css` le sovrascrive e
-viene caricato dopo. Nel resto del CSS non compaiono colori o font scritti a
+`tokens.css` definisce le variabili; `tenants/le-ville/theme.css` le
+sovrascrive e viene caricato dopo. Nel resto del CSS non compaiono colori o font scritti a
 mano: sempre `var(--nome)`. È ciò che permette di ricolorare un intero sito
 cambiando dieci righe.
 
@@ -156,14 +130,13 @@ della pagina sistemazione. Altrove rompe il layout.
 `?v=<mediaVersion>`. Serve quando sostituisci una foto tenendo lo stesso nome
 file: senza, browser e CDN continuano a mostrare la vecchia.
 
-Cambia `mediaVersion` nella configurazione del cliente ogni volta che
-sostituisci dei media.
+Cambia `mediaVersion` in `site.ts` ogni volta che sostituisci dei media.
 
 ---
 
 ## Le lingue
 
-`locales` elenca le lingue attive del cliente; la prima è quella predefinita.
+`locales` elenca le lingue attive; la prima è quella predefinita.
 Ogni testo è un oggetto con una chiave per lingua.
 
 `src/lib/i18n.tsx` tiene la lingua corrente in un context ed espone `t()`.
@@ -173,9 +146,9 @@ serve per metadati, sitemap e dati strutturati, che girano in fase di
 generazione.
 
 La lingua scelta viene salvata in `localStorage` con una chiave che include lo
-slug del cliente, così due siti sullo stesso dominio non si pestano i piedi.
+slug del sito, così due siti sullo stesso dominio non si pestano i piedi.
 
-Aggiungere una lingua a un cliente: mettila in `locales`, aggiungi la chiave a
+Aggiungere una lingua: mettila in `locales`, aggiungi la chiave a
 `localeNames`, e traduci. TypeScript non obbliga a completare tutte le
 traduzioni — `Localized` è un `Record<string, string>` — ma `translate()`
 ripiega sulla lingua di default, quindi un testo mancante non lascia mai un
@@ -185,8 +158,7 @@ buco a schermo.
 
 ## SEO
 
-Generati dalla configurazione, quindi corretti per ogni cliente senza doverci
-pensare:
+Generati dalla configurazione:
 
 - metadati e anteprima social — `app/layout.tsx`
 - dati strutturati `LodgingBusiness` con indirizzo, coordinate e contatti —
@@ -196,13 +168,41 @@ pensare:
 
 Le pagine legali sono escluse dall'indicizzazione.
 
+Con `NOINDEX=true` in compilazione (le anteprime di lavoro) `robots.txt`
+chiude tutto e ogni pagina porta `<meta name="robots" content="noindex,
+nofollow">`.
+
+---
+
+## Prenotazione
+
+Il motore di prenotazione Amenitiz è incorporato in un iframe
+(`src/components/sections/Booking.tsx`). L'indirizzo sta una volta sola in
+`booking.url`; la fascia compare due volte:
+
+- in homepage, come sezione `booking` (ancora `#prenota`)
+- in fondo a ogni pagina sistemazione, con il titolo di `stayPage.ctaTitle`
+
+Tutti i pulsanti "Prenota" — header, menù mobile, pulsante flottante, header
+delle pagine sistemazione — scendono a quell'ancora (`bookingAnchor` in
+`src/config/index.ts`). Il pulsante flottante si nasconde mentre la fascia è
+sullo schermo, per non coprire il calendario.
+
+L'header è fisso (`position: fixed`) e sta fuori dalla hero: un antenato con
+`transform` lo farebbe scorrere con la pagina. Nella hero resta uno
+spaziatore alto `--header-h`.
+
 ---
 
 ## Pubblicazione
 
-`npm run build:static` produce `dist/<site-id>/`: file statici, nessun Node
-sul server. È la modalità pensata per la vendita — si carica su qualsiasi
-hosting e non c'è niente da mantenere.
+`npm run build:static` produce `dist/le-ville/`: file statici, nessun Node
+sul server. Si carica su qualsiasi hosting.
+
+### Anteprima su GitHub Pages
+
+`.github/workflows/anteprima.yml` compila il sito a ogni push sui rami
+`claude/**` e lo pubblica sul ramo `gh-pages`, con `NOINDEX=true`.
 
 ### Sottocartelle
 
@@ -235,44 +235,11 @@ Node attivo.
 | Testi nei componenti | 53 condizioni sulla lingua | nessuna |
 | Nome, telefono, email cablati | 45 occorrenze | nessuna |
 | Dati sistemazioni | due elenchi da tenere allineati | un oggetto solo |
-| CSS | 3.576 righe, un file | 17 blocchi + token |
+| CSS | 3.576 righe, un file | 18 blocchi + token |
 | Regole CSS mai applicabili | 62 | rimosse |
 | Mappa territorio | 6 numeri a mano per località | coordinate, il resto si calcola |
-| Aggiungere un cliente | duplicare il progetto | una cartella di dati |
 
 L'HTML generato è stato confrontato con quello della versione precedente su
 tutte e dieci le pagine: struttura, classi e testo coincidono.
 
 ---
-
-## Oltre gli agriturismi
-
-Il primo cliente non ricettivo (una trattoria) ha messo alla prova l'impianto.
-Ha retto, con tre aggiunte allo schema e nessuna riscrittura.
-
-**Cosa ha funzionato senza toccare niente**
-
-- `story` usato due volte nella stessa pagina: la filosofia della casa e il
-  ritratto dello chef
-- `feature` usato tre volte: la sala, il km 0, il come arrivare
-- niente sezione `stays`, semplicemente non elencata
-
-**Cosa è stato aggiunto**
-
-- il tipo `menu`: un estratto di piatti in pagina più i collegamenti ai PDF
-  del cliente. Il PDF resta sul suo dominio, così lo aggiorna a ogni stagione
-  senza ricompilare niente; l'estratto in pagina serve ai motori di ricerca,
-  che dai PDF non leggono
-- il tipo `gallery`, che riusa le classi CSS già scritte per le gallerie delle
-  pagine interne: zero stile nuovo
-- gli orari di apertura, campo facoltativo del blocco contatti
-
-**Cosa è diventato facoltativo**
-
-`accommodations` e `stayPage`. Un'attività senza alloggi non genera nessuna
-pagina `/sistemazioni`. `src/lib/stay-routes.ts` è l'unico punto che conosce
-questo caso.
-
-Il segnale che l'architettura regge: TypeScript ha elencato da solo, in un
-colpo, i dodici punti che davano per scontata l'esistenza degli alloggi. Nessuno
-è stato dimenticato.

@@ -1,30 +1,17 @@
 /**
- * SELEZIONE DEL SITO ATTIVO
- * =========================
- * Un solo codice sorgente, N agriturismi. Quale sito viene compilato lo decide
- * la variabile d'ambiente SITE_ID, che corrisponde al nome di una cartella
- * dentro tenants/.
+ * CONFIGURAZIONE DEL SITO
+ * =======================
+ * Il contenuto di Agriturismo Le Ville sta in tenants/le-ville/site.ts.
+ * Qui lo si carica e se ne ricavano le URL pronte all'uso.
  *
- *   SITE_ID=le-ville      npm run build
- *   SITE_ID=podere-rosa   npm run build
- *
- * Se SITE_ID non è impostata si usa il valore in .env (vedi .env.example).
- *
- * Perché un registro esplicito invece di un import dinamico: Next deve poter
- * risolvere staticamente i moduli per generare le pagine, e un registro rende
- * evidente in un colpo d'occhio quali clienti sono in produzione.
+ * Il registro esplicito (invece di un import dinamico) serve a Next, che deve
+ * poter risolvere staticamente i moduli per generare le pagine.
  */
 
-import type { SiteConfig } from "./types";
+import type { BookingSection, SiteConfig } from "./types";
 import leVille from "../../tenants/le-ville/site";
-import nerbona from "../../tenants/nerbona/site";
-import belmicolle from "../../tenants/belmicolle/site";
 
-/* Per aggiungere un cliente: importalo qui sopra e aggiungi una riga.
-   Vedi docs/NUOVO-CLIENTE.md per la procedura completa. */
 const REGISTRY: Record<string, SiteConfig> = {
-  belmicolle: belmicolle,
-  nerbona: nerbona,
   "le-ville": leVille,
 };
 
@@ -90,6 +77,17 @@ export const mailUrl = `mailto:${site.contact.email}`;
 export const bookingUrl = site.booking?.url;
 
 /**
+ * La fascia con il motore di prenotazione incorporato. I pulsanti "Prenota"
+ * del sito portano qui; se manca, si ripiega sulla sezione contatti.
+ */
+export const bookingSection = site.sections.find(
+  (section): section is BookingSection => section.type === "booking",
+);
+
+/** Ancora dei pulsanti "Prenota", valida in homepage e nelle sistemazioni. */
+export const bookingAnchor = `#${bookingSection?.id ?? "contatti"}`;
+
+/**
  * Indirizzo pubblico del sito.
  *
  * Normalmente è quello scritto in `seo.domain`, ma la variabile d'ambiente
@@ -102,5 +100,11 @@ export const bookingUrl = site.booking?.url;
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL || site.seo.domain
 ).replace(/\/+$/, "");
+
+/**
+ * Anteprima di lavoro da non indicizzare (NOINDEX=true in compilazione).
+ * Spegne l'indicizzazione in robots.txt e nei meta tag di ogni pagina.
+ */
+export const noIndex = process.env.NEXT_PUBLIC_NOINDEX === "true";
 
 export * from "./types";

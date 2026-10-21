@@ -1,10 +1,10 @@
 # Istruzioni per Claude
 
-Piattaforma per vendere siti a strutture ricettive e ristoranti italiani.
-Un solo codice sorgente, N clienti.
+Sito di Agriturismo Le Ville, Colle di Val d'Elsa — **in produzione** su
+agriturismoleville.it: ogni modifica finisce su un sito vero.
 
 Leggi questo file prima di toccare qualsiasi cosa. `docs/ARCHITETTURA.md` ha il
-dettaglio, `docs/NUOVO-CLIENTE.md` la procedura di onboarding.
+dettaglio.
 
 ---
 
@@ -13,7 +13,7 @@ dettaglio, `docs/NUOVO-CLIENTE.md` la procedura di onboarding.
 **Nessun testo, immagine, numero di telefono, indirizzo o colore deve comparire
 dentro `src/` o `app/`.**
 
-Tutto ciò che si vede a schermo sta in `tenants/<id>/site.ts`. Se ti viene
+Tutto ciò che si vede a schermo sta in `tenants/le-ville/site.ts`. Se ti viene
 chiesto di cambiare qualcosa di visibile, è quasi sempre quel file, non un
 componente.
 
@@ -24,48 +24,44 @@ al prossimo cambio se ne dimentica uno.
 ## Struttura
 
 ```
-tenants/<id>/site.ts      contenuto del cliente — qui si lavora quasi sempre
-tenants/<id>/theme.css    colori e font del cliente
-public/tenants/<id>/      foto e video del cliente
-src/config/types.ts       lo schema: cosa può cambiare da cliente a cliente
-src/components/sections/  una sezione della homepage per file
-src/styles/parts/         il CSS, in 18 blocchi
-app/                      rotte Next, sottili
+tenants/le-ville/site.ts     contenuto — qui si lavora quasi sempre
+tenants/le-ville/theme.css   colori e font
+public/tenants/le-ville/     foto e video
+src/config/types.ts          lo schema del contenuto
+src/components/sections/     una sezione della homepage per file
+src/styles/parts/            il CSS, in 18 blocchi
+app/                         rotte Next, sottili
+.github/workflows/           anteprima su GitHub Pages
 ```
-
-## Clienti attivi
-
-| id | chi è | stato |
-|---|---|---|
-| `le-ville` | Agriturismo Le Ville, Colle di Val d'Elsa | **in produzione** su agriturismoleville.it |
-| `nerbona` | Fattoria Nerbona, Colle di Val d'Elsa | demo, foto segnaposto |
-| `belmicolle` | Trattoria Bel Mi Colle, Colle di Val d'Elsa | demo, foto segnaposto |
-
-`le-ville` è online: ogni modifica lì finisce su un sito vero. Gli altri due
-sono anteprime commerciali con immagini generate al posto delle fotografie.
 
 ## Comandi
 
 ```bash
-npm run dev                                   # sviluppo locale
-SITE_ID=nerbona npm run dev                   # su un altro cliente
-
-npm run validate                              # controlla tutti i clienti
-SITE_ID=le-ville npm run validate             # uno solo
-
-SITE_ID=le-ville SITE_URL=https://agriturismoleville.it npm run build:static
-SITE_ID=nerbona npm run demo:build            # anteprima su /demo/<id>
-npm run build:all                             # tutti i clienti
-
-npm run new:tenant <slug>                     # crea un nuovo cliente
-SITE_ID=x npm run media:prepare               # converte le foto grezze in webp
-SITE_ID=x npm run media:placeholders          # segnaposto per le foto mancanti
-SITE_ID=x npm run media:scan                  # genera gli array gallery
+npm run dev                  # sviluppo locale
+npm run validate             # controlla la configurazione
+SITE_URL=https://agriturismoleville.it npm run build:static
+npm run media:prepare        # converte le foto grezze in webp
+npm run media:scan           # genera gli array gallery
 ```
 
 **Lancia sempre `npm run validate` prima di dire che una modifica è finita.**
 Controlla foto mancanti, TODO rimasti, traduzioni incomplete, ancore rotte,
 formato di telefono ed email. È più affidabile di rileggere la configurazione.
+
+## Prenotazione
+
+Il motore Amenitiz (`booking.url` in `site.ts`) è incorporato in un iframe
+dalla sezione `booking` (ancora `#prenota`) e in fondo a ogni pagina
+sistemazione. Header, menù mobile, pulsante flottante e header delle pagine
+sistemazione puntano a `bookingAnchor` (`src/config/index.ts`): non scrivere
+`#prenota` a mano nei componenti.
+
+## Anteprima
+
+Ogni push su `claude/**` pubblica il sito su
+https://andreagalanti91.github.io/leville/ (workflow `anteprima.yml`),
+compilato con `NOINDEX=true`. Ogni anteprima pubblica va compilata con
+`NOINDEX=true`.
 
 ## Cose su cui si sbaglia facilmente
 
@@ -73,6 +69,10 @@ formato di telefono ed email. È più affidabile di rileggere la configurazione.
 stratificato: alcune regole in coda sovrascrivono di proposito regole
 precedenti. Spostare un `@import` cambia il risultato a schermo. Stile nuovo:
 in fondo, o in un file importato per ultimo.
+
+**L'header è fisso e sta fuori dalla hero.** Un antenato con `transform` lo
+farebbe scorrere con la pagina. Le scene a tutto schermo (racconto,
+sistemazioni) tengono conto della sua altezza con `--header-h`.
 
 **`FillImage` e `PictureImage` non sono intercambiabili.** Le immagini usano
 `fill`, quindi si distendono sull'antenato posizionato più vicino.
@@ -85,8 +85,7 @@ collegamenti sono assoluti. Senza, le pagine cercano i file nella radice e si
 vede solo testo senza stile.
 
 **`SITE_URL` decide cosa dichiari ai motori di ricerca.** Da lì derivano
-sitemap, robots, dati strutturati e anteprime social. Un'anteprima compilata
-senza `SITE_URL` dichiara il dominio del cliente.
+sitemap, robots, dati strutturati e anteprime social.
 
 **Il CSS delle esperienze copre solo tre card** (`.exp-card-1/2/3`). Dalla
 quarta in poi servono le regole in `src/styles/parts/09-experiences.css`.
@@ -105,8 +104,7 @@ assegna a `never`.
 
 ## Prima di pubblicare
 
-- i testi di privacy e cookie policy vanno riletti e approvati dal cliente;
-  quelli di partenza descrivono un sito senza cookie, senza moduli di contatto
-  e senza servizi di terze parti
-- il CIN va esposto per le strutture ricettive (non per i ristoranti)
+- i testi di privacy e cookie policy vanno riletti e approvati dal cliente,
+  e il paragrafo su Amenitiz verificato con l'informativa del fornitore
+- il CIN va esposto (`brand.cin`): la validazione segnala che manca
 - niente `TODO` residui: lo verifica `npm run validate`

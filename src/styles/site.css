@@ -45,6 +45,6 @@
 @import "./parts/16-legal.css";
 @import "./parts/17-refinements-mobile.css";
 
-/* 9. Sezioni aggiunte dopo il progetto iniziale.
-      In coda per non disturbare la cascata di quanto precede. */
-@import "./parts/18-menu-gallery.css";
+/* 9. Header fisso e fascia di prenotazione, aggiunti dopo il progetto
+      iniziale. In coda per non disturbare la cascata di quanto precede. */
+@import "./parts/18-booking-header.css";
