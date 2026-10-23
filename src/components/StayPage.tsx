@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { site, whatsappUrl } from "../config";
+import { bookingUrl, site, whatsappUrl } from "../config";
 import { stayPageCopy } from "../lib/stay-routes";
 import { useLanguage } from "../lib/i18n";
 import type { Accommodation } from "../config/types";
@@ -51,6 +51,41 @@ export function StayPage({ stay }: { stay: Accommodation }) {
         </div>
       </section>
 
+      {stay.units?.length ? (
+        <section className="detail-units">
+          {copy.unitsLabel && <p className="eyebrow">{t(copy.unitsLabel)}</p>}
+          <div>
+            {stay.units.map((unit) => (
+              <article key={unit.name}>
+                <h3>{unit.name}</h3>
+                <p className="unit-layout">{t(unit.layout)}</p>
+                <p>{t(unit.text)}</p>
+                {unit.tags?.length ? (
+                  <ul>
+                    {unit.tags.map((tag, index) => (
+                      <li key={index}>{t(tag)}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {stay.amenities?.length ? (
+        <section className="detail-amenities">
+          {copy.amenitiesLabel && (
+            <p className="eyebrow">{t(copy.amenitiesLabel)}</p>
+          )}
+          <ul>
+            {stay.amenities.map((item, index) => (
+              <li key={index}>{t(item)}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section className="detail-gallery">
         <p className="eyebrow">{t(copy.galleryLabel)}</p>
         <div>
@@ -71,15 +106,30 @@ export function StayPage({ stay }: { stay: Accommodation }) {
           {site.brand.prefix} {site.brand.name}
         </p>
         <h2>{t(copy.ctaTitle)}</h2>
-        <a
-          className="button lime"
-          href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span>{t(copy.ctaLabel)}</span>
-          <i className="direction-mark" aria-hidden="true" />
-        </a>
+        {/* Con un motore di prenotazione la disponibilità si vede lì, in
+            tempo reale: è l'azione principale e WhatsApp passa a secondario. */}
+        <div className="detail-cta-actions">
+          {bookingUrl && (
+            <a
+              className="button lime"
+              href={bookingUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>{t(site.booking!.label)}</span>
+              <i className="direction-mark" aria-hidden="true" />
+            </a>
+          )}
+          <a
+            className={bookingUrl ? "button ghost" : "button lime"}
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>{t(copy.ctaLabel)}</span>
+            <i className="direction-mark" aria-hidden="true" />
+          </a>
+        </div>
       </section>
     </main>
   );

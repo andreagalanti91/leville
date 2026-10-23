@@ -6,7 +6,7 @@ import { useLanguage } from "../../lib/i18n";
 import { Brand } from "./Brand";
 
 /** Piè di pagina: logo, copyright, pagine legali, contatti diretti. */
-export function Footer({ brandHref = "#home" }: { brandHref?: string }) {
+export function Footer({ brandHref }: { brandHref?: string }) {
   const { nextLocaleName, cycleLocale, t } = useLanguage();
 
   return (
@@ -45,6 +45,16 @@ export function Footer({ brandHref = "#home" }: { brandHref?: string }) {
           </a>
         )}
         <a href={mailUrl}>Email</a>
+        {site.contact.social?.map((profile) => (
+          <a
+            key={profile.href}
+            href={profile.href}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {profile.label}
+          </a>
+        ))}
         <button onClick={cycleLocale}>{nextLocaleName}</button>
       </div>
     </footer>

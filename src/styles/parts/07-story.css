@@ -12,7 +12,7 @@
   --story-copy-y: 75px;
   position: relative;
   height: 210vh;
-  background: #101c16;
+  background: var(--story-bg);
   color: #f4f0e7;
 }
 
@@ -145,7 +145,7 @@
   width: min(24vw, 390px);
   height: 24%;
   overflow: hidden;
-  border: 8px solid #101c16;
+  border: 8px solid var(--story-bg);
   transform: translateY(var(--story-small-y));
   opacity: var(--story-fade);
 }

@@ -55,9 +55,9 @@
 .hero-shade {
     background: linear-gradient(
       0deg,
-      rgba(5, 12, 8, 0.82),
-      rgba(5, 12, 8, 0.05) 65%,
-      rgba(5, 12, 8, 0.5)
+      var(--hero-shade-bottom),
+      var(--hero-shade-clear) 65%,
+      var(--hero-shade-top)
     );
   }
 .hero-content {

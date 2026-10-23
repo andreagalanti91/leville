@@ -132,6 +132,57 @@ viene caricato dopo. Nel resto del CSS non compaiono colori o font scritti a
 mano: sempre `var(--nome)`. È ciò che permette di ricolorare un intero sito
 cambiando dieci righe.
 
+Oltre ai colori principali ci sono token per i fondi delle singole sezioni
+(`--story-bg`, `--stays-bg`, `--territory-bg`), per i testi secondari
+(`--muted`, `--muted-soft`), per le velature sulle foto e per le card delle
+esperienze. I valori di partenza sono quelli di Le Ville.
+
+Il tema lo importa `app/layout.tsx` come `@tenant/theme.css`: è un alias,
+definito in `next.config.ts`, che punta alla cartella del cliente indicato da
+`SITE_ID`. Un import scritto a mano in `globals.css` darebbe a tutti i
+clienti il tema di uno solo.
+
+I font conviene ospitarli nella cartella del cliente (`tenants/<id>/fonts/`)
+e dichiararli con `@font-face` in `theme.css`, con percorsi relativi: Next li
+copia nella build e funzionano anche con `BASE_PATH`. Vedi `tenants/nerbona/`.
+
+---
+
+## Le pagine interne
+
+Un cliente può avere, oltre alla homepage, delle pagine interne: `pages` in
+configurazione. Ogni pagina è un elenco di sezioni, esattamente come la
+homepage, e si apre con un `hero` (di solito `size: "compact"`). Le genera
+`app/[slug]/page.tsx`, la stessa rotta delle pagine legali: Next non ammette
+due segmenti dinamici allo stesso livello, e la validazione controlla che gli
+slug non si sovrappongano.
+
+Sezioni pensate soprattutto per le pagine interne:
+
+- `cards` — griglia di schede con foto facoltativa: servizi, esperienze
+- `reviews` — recensioni trascritte, con i collegamenti ai portali
+- `prose` — testo lungo con titolo, collegamenti e foto facoltativa
+
+Altre aggiunte utili a una struttura con più sedi o molti alloggi:
+
+- `stays.only` mostra nel carosello solo alcuni alloggi (la pagina di una sede)
+- `Accommodation.units` elenca nella pagina di dettaglio gli appartamenti
+  reali che appartengono a una tipologia, così il carosello mostra otto
+  tipologie invece di venti appartamenti
+- `feature.cta` aggiunge un collegamento al blocco foto
+
+### Collegamenti e menù
+
+I collegamenti in configurazione possono essere ancore (`#contatti`), pagine
+interne (`/servizi`) o indirizzi esterni. Li gestisce `SmartLink` in
+`src/lib/links.tsx`: le pagine interne passano da `next/link`, che aggiunge
+`BASE_PATH`; gli indirizzi esterni si aprono in una nuova scheda.
+
+Una voce di `nav` punta a una sezione della homepage (`target`) o a una pagina
+(`page`), e può avere un sottomenù (`children`). Dalle pagine interne le voci
+con `target` diventano `/#sezione`: i componenti sanno in che pagina si
+trovano con `useIsHome()`.
+
 ---
 
 ## Le immagini

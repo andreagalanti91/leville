@@ -12,7 +12,8 @@
  *   - ogni foto e video citati esistono davvero su disco
  *   - non sono rimasti segnaposto TODO
  *   - ogni testo è tradotto in tutte le lingue dichiarate
- *   - le voci di navigazione puntano a sezioni che esistono
+ *   - le voci di navigazione puntano a sezioni o pagine che esistono
+ *   - le pagine interne hanno slug unici, un'apertura e ancore valide
  *   - gli slug delle sistemazioni sono unici e validi per una URL
  *   - i contatti hanno un formato plausibile
  *   - segnala i casi che il CSS non copre (più di tre esperienze,
@@ -146,30 +147,91 @@ function validate(id, site) {
     );
   }
 
+  /* --- pagine interne ------------------------------------------- */
+
+  const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+  const pages = site.pages ?? [];
+  const pageSlugs = new Set();
+  const legalSlugs = new Set((site.legalPages ?? []).map((p) => p.slug));
+  for (const page of pages) {
+    if (!SLUG.test(page.slug)) err(`pages: slug non valido per una URL — "${page.slug}"`);
+    if (pageSlugs.has(page.slug)) err(`pages: slug duplicato — "${page.slug}"`);
+    /* Pagine interne e legali condividono la stessa rotta /<slug>. */
+    if (legalSlugs.has(page.slug)) err(`pages: "${page.slug}" è già lo slug di una pagina legale`);
+    if (page.slug === "sistemazioni") err(`pages: "sistemazioni" è riservato alle pagine degli alloggi`);
+    pageSlugs.add(page.slug);
+    const types = (page.sections ?? []).map((s) => s.type);
+    if (types[0] !== "hero") err(`pages[${page.slug}]: la prima sezione deve essere un hero`);
+    if (types.filter((t) => t === "hero").length > 1) err(`pages[${page.slug}]: c'è più di un hero`);
+    const ids = (page.sections ?? []).map((s) => s.id);
+    if (new Set(ids).size !== ids.length) err(`pages[${page.slug}]: ci sono id di sezione ripetuti`);
+  }
+
   /* --- navigazione ----------------------------------------------- */
 
   const sectionIds = new Set((site.sections ?? []).map((s) => s.id));
-  for (const item of site.nav ?? []) {
-    if (!sectionIds.has(item.target)) {
-      err(`nav: "${item.target}" non corrisponde a nessuna sezione`);
+  const checkNavLink = (item, where) => {
+    if (item.target && item.page) err(`${where}: indica target oppure page, non entrambi`);
+    if (item.target && !sectionIds.has(item.target)) {
+      err(`${where}: "${item.target}" non corrisponde a nessuna sezione della homepage`);
     }
+    if (item.page && !pageSlugs.has(item.page)) {
+      err(`${where}: "${item.page}" non corrisponde a nessuna pagina in pages`);
+    }
+  };
+  (site.nav ?? []).forEach((item, i) => {
+    if (!item.target && !item.page && !item.children?.length) {
+      err(`nav[${i}]: la voce non punta da nessuna parte`);
+    }
+    checkNavLink(item, `nav[${i}]`);
+    (item.children ?? []).forEach((child, j) => {
+      if (!child.target && !child.page) err(`nav[${i}].children[${j}]: la voce non punta da nessuna parte`);
+      checkNavLink(child, `nav[${i}].children[${j}]`);
+    });
+  });
+  if ((site.nav ?? []).length > 7) {
+    warn(`nav: ${site.nav.length} voci principali. Oltre sette l'header desktop si affolla: raggruppale con children`);
   }
 
-  /* Ancore interne usate dai pulsanti. */
-  const anchors = [];
-  const collectAnchors = (node, trail) => {
+  /* Collegamenti usati dai pulsanti. Le ancore valgono nella pagina in cui
+     stanno: un "#contatti" in una pagina interna deve trovare una sezione
+     "contatti" in quella pagina, non in homepage. */
+  const stayRoutes = new Set((site.accommodations ?? []).map((a) => `sistemazioni/${a.slug}`));
+  const collectLinks = (node, trail, out) => {
     if (!node || typeof node !== "object") return;
     for (const [key, value] of Object.entries(node)) {
-      if ((key === "href" || key === "ctaHref") && typeof value === "string" && value.startsWith("#")) {
-        anchors.push([value.slice(1), trail ? `${trail}.${key}` : key]);
+      const next = trail ? `${trail}.${key}` : key;
+      if ((key === "href" || key === "ctaHref") && typeof value === "string") {
+        out.push([value, next]);
       } else if (typeof value === "object") {
-        collectAnchors(value, trail ? `${trail}.${key}` : key);
+        collectLinks(value, next, out);
       }
     }
   };
-  collectAnchors(site, "");
-  for (const [target, where] of anchors) {
-    if (!sectionIds.has(target)) err(`${where}: l'ancora "#${target}" non punta a nessuna sezione`);
+  const checkLinks = (links, ids) => {
+    for (const [href, where] of links) {
+      if (href.startsWith("#")) {
+        if (!ids.has(href.slice(1))) err(`${where}: l'ancora "${href}" non punta a nessuna sezione di questa pagina`);
+      } else if (href.startsWith("/")) {
+        const [pathPart, hash] = href.slice(1).split("#");
+        const route = pathPart.replace(/\/+$/, "");
+        const known = route === "" || pageSlugs.has(route) || stayRoutes.has(route) ||
+          (legalSlugs.has(route) && !site.legalPages.find((p) => p.slug === route)?.externalUrl);
+        if (!known) err(`${where}: "${href}" non corrisponde a nessuna pagina del sito`);
+        if (route === "" && hash && !sectionIds.has(hash)) {
+          err(`${where}: "${href}" punta a una sezione che non esiste in homepage`);
+        }
+      }
+    }
+  };
+  const homeLinks = [];
+  const { pages: _pages, nav: _nav, ...rest } = site;
+  collectLinks(rest, "", homeLinks);
+  checkLinks(homeLinks, sectionIds);
+  for (const page of pages) {
+    const links = [];
+    collectLinks(page.sections, `pages[${page.slug}]`, links);
+    checkLinks(links, new Set((page.sections ?? []).map((s) => s.id)));
   }
 
   /* --- sistemazioni ---------------------------------------------- */
@@ -202,6 +264,17 @@ function validate(id, site) {
     err("stayPage: mancano i testi della pagina di dettaglio degli alloggi");
   }
 
+  const allSections = [...(site.sections ?? []), ...pages.flatMap((p) => p.sections ?? [])];
+  const staySlugs = new Set((site.accommodations ?? []).map((a) => a.slug));
+  for (const section of allSections) {
+    if (section.type === "stays" && !(site.accommodations ?? []).length) {
+      err(`sezione ${section.id}: c'è un carosello sistemazioni ma l'elenco accommodations è vuoto`);
+    }
+    for (const slug of section.type === "stays" ? section.only ?? [] : []) {
+      if (!staySlugs.has(slug)) err(`sezione ${section.id}.only: "${slug}" non è fra le sistemazioni`);
+    }
+  }
+
   const menu = (site.sections ?? []).find((s) => s.type === "menu");
   if (menu && !menu.courses?.length && !menu.documents?.length) {
     err("sezione menu: serve almeno un estratto (courses) o un documento (documents)");
@@ -209,8 +282,8 @@ function validate(id, site) {
 
   /* --- limiti noti del CSS --------------------------------------- */
 
-  const experiences = (site.sections ?? []).find((s) => s.type === "experiences");
-  if (experiences && experiences.items.length > 3) {
+  const experiences = allSections.find((s) => s.type === "experiences" && s.items.length > 3);
+  if (experiences) {
     warn(
       `esperienze: sono ${experiences.items.length}. Il CSS dà un'inquadratura ` +
         `dedicata solo alle prime tre (.exp-card-1/2/3): dalla quarta in poi ` +
@@ -218,7 +291,10 @@ function validate(id, site) {
     );
   }
 
-  const stayCount = (site.accommodations ?? []).length;
+  const stayCount = Math.max(
+    0,
+    ...allSections.filter((s) => s.type === "stays").map((s) => s.only?.length ?? (site.accommodations ?? []).length),
+  );
   if (stayCount > 12) {
     warn(
       `sistemazioni: sono ${stayCount}. Il carosello le mostra tutte, ma su ` +
@@ -362,7 +438,7 @@ for (const id of targets) {
   const stays = site.accommodations?.length ?? 0;
   const sections = site.sections?.length ?? 0;
   console.log(
-    `   ${sections} sezioni · ${stays} sistemazioni · ` +
+    `   ${sections} sezioni · ${site.pages?.length ?? 0} pagine · ${stays} sistemazioni · ` +
       `lingue: ${(site.locales ?? []).join(", ")}`,
   );
 

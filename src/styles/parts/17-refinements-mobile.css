@@ -33,7 +33,7 @@
     left: 0;
     align-items: flex-end;
     padding: 3.2vh 18px 2.3vh;
-    background: linear-gradient(180deg, #f3efe6 76%, rgba(243, 239, 230, 0));
+    background: linear-gradient(180deg, var(--stays-bg) 76%, var(--stays-bg-fade));
   }
   .stays-heading h2 {
     max-width: 82%;

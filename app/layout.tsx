@@ -3,6 +3,8 @@ import { asset, defaultLocale, site, siteUrl } from "../src/config";
 import { LanguageProvider } from "../src/lib/i18n";
 import { translate } from "../src/lib/translate";
 import "./globals.css";
+/* Dopo globals.css, così i valori del cliente vincono. Vedi next.config.ts. */
+import "@tenant/theme.css";
 
 /**
  * I metadati si generano dalla configurazione del cliente: titolo, descrizione,

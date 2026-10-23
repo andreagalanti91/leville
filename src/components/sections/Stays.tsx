@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Fragment, useRef, useState } from "react";
 import { accommodations } from "../../lib/stay-routes";
 import { useLanguage } from "../../lib/i18n";
+import { SmartLink } from "../../lib/links";
 import {
   scrollProgress,
   setVars,
@@ -32,7 +33,12 @@ export function Stays({ section }: { section: StaysSection }) {
   const track = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const stays = accommodations();
+  /* Con `only` la sezione mostra un sottoinsieme, nell'ordine indicato:
+     è il caso della pagina di una singola sede. */
+  const all = accommodations();
+  const stays = section.only
+    ? section.only.flatMap((slug) => all.filter((a) => a.slug === slug))
+    : all;
   const lastIndex = stays.length - 1;
 
   /* L'indice attivo cambia raramente rispetto ai frame: tenerne una copia qui
@@ -178,10 +184,10 @@ export function Stays({ section }: { section: StaysSection }) {
                 </Fragment>
               ))}
             </p>
-            <a href={section.endCard.cta.href}>
+            <SmartLink href={section.endCard.cta.href}>
               <span>{t(section.endCard.cta.label)}</span>
               <i className="direction-mark" aria-hidden="true" />
-            </a>
+            </SmartLink>
           </div>
         </div>
 

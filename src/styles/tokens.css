@@ -27,6 +27,41 @@
 
   /* Filetti e separatori */
   --line: rgba(23, 35, 28, 0.18);
+  --rule: #73806f; /* trattino davanti alle etichette */
+
+  /* Testo secondario su fondo chiaro */
+  --muted: #586159;
+  --muted-soft: #69736a;
+
+  /* Testo sopra il colore d'accento */
+  --on-lime: #14251b;
+
+  /* Fondi delle singole sezioni */
+  --hero-bg: #15251d;
+  --story-bg: #101c16;
+  --stays-bg: #f3efe6;
+  --stays-bg-fade: rgba(243, 239, 230, 0);
+  --territory-bg: #d9dfc4;
+  --forest-hover: #142a20;
+  --dock-panel: #f4f0e7;
+  --dock-bg: rgba(13, 28, 21, 0.94); /* pulsante contatti flottante */
+
+  /* Velature sopra le foto */
+  --shade-strong: rgba(10, 21, 15, 0.62);
+  --shade-soft: rgba(8, 17, 12, 0.45);
+  --hero-shade-bottom: rgba(5, 12, 8, 0.82);
+  --hero-shade-clear: rgba(5, 12, 8, 0.05);
+  --hero-shade-top: rgba(5, 12, 8, 0.5);
+
+  /* Esperienze: fondo, etichette e colore di ciascuna card */
+  --exp-bg: #120f0d;
+  --exp-intro-bg: #15120f;
+  --exp-kicker: #d2bd8c;
+  --exp-accent: #d5e4a6;
+  --exp-on-accent: #1d261c;
+  --exp-card-1: #6f3827;
+  --exp-card-2: #304134;
+  --exp-card-3: #4b252c;
 
   /* --- Tipografia -------------------------------------------------- */
 

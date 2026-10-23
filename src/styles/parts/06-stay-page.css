@@ -80,7 +80,7 @@
 .detail-intro > p:nth-child(2) {
   font:
     17px/1.7 var(--font-display);
-  color: #586159;
+  color: var(--muted);
 }
 
 .detail-intro > div {

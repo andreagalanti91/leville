@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import Image from "next/image";
 import { asset } from "../../config";
 import { useLanguage } from "../../lib/i18n";
+import { SmartLink } from "../../lib/links";
 import type { HeroSection } from "../../config/types";
 import { SiteHeader } from "../layout/SiteHeader";
 
@@ -24,7 +25,10 @@ export function Hero({
   const { t } = useLanguage();
 
   return (
-    <section className="hero hero-film" id={section.id}>
+    <section
+      className={`hero hero-film ${section.size === "compact" ? "hero-compact" : ""}`}
+      id={section.id}
+    >
       <div className="hero-media" aria-hidden="true">
         {section.video ? (
           <video
@@ -81,12 +85,12 @@ export function Hero({
         </h1>
         <div className="hero-lower">
           <p className="hero-intro">{t(section.intro)}</p>
-          <a className="hero-discover" href={section.cta.href}>
+          <SmartLink className="hero-discover" href={section.cta.href}>
             <span>{t(section.cta.label)}</span>
             <i>
               <b className="direction-mark" aria-hidden="true" />
             </i>
-          </a>
+          </SmartLink>
         </div>
       </div>
 

@@ -14,8 +14,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(10, 21, 15, 0.62), transparent 70%),
-    linear-gradient(0deg, rgba(8, 17, 12, 0.45), transparent 55%);
+    linear-gradient(90deg, var(--shade-strong), transparent 70%),
+    linear-gradient(0deg, var(--shade-soft), transparent 55%);
 }
 
 .pool-copy {
@@ -149,8 +149,7 @@
 
 .contact address {
   font:
-    normal 11px/1.7 Arial,
-    sans-serif;
+    normal 11px/1.7 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.6);

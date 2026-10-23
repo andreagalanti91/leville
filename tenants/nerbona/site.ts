@@ -1,42 +1,73 @@
 /**
- * AGRITURISMO FATTORIA NERBONA — DEMO COMMERCIALE
- * ===============================================
+ * AGRITURISMO FATTORIA NERBONA
+ * ============================
  *
- * ATTENZIONE: questa è una demo, non un sito pronto.
+ * Sito di prova costruito sulla struttura di agriturismoleville.it, con i
+ * contenuti reali di nerbona.com: testi, alloggi, servizi, esperienze,
+ * recensioni e fotografie vengono da lì, riscritti e riorganizzati.
  *
- * I contenuti sono stati ricostruiti dalle schede pubbliche della struttura
- * (Visit Tuscany, Agriturismo.it, Booking) perché il sito ufficiale blocca
- * l'accesso automatico. Servono a mostrare l'impostazione grafica, non a
- * essere pubblicati.
+ * COME È ORGANIZZATO. Il sito originale ha un menù di nove voci, due delle
+ * quali ("Nerbona" e "Casina") sono elenchi di tipologie di alloggio. Qui:
  *
- * Prima di trasformarla in un sito vero servono, dal cliente:
- *   - telefono, email e coordinate esatte (sotto sono segnati TODO)
- *   - nomi reali e dati di ogni alloggio
- *   - le fotografie
- *   - conferma o riscrittura di tutti i testi
+ *   - la homepage racconta la tenuta e mostra TUTTI gli alloggi in un unico
+ *     carosello, divisi per sede attraverso il campo `category`
+ *   - "Alloggi" nel menù apre le due sedi, ognuna con la propria pagina
+ *     (/nerbona, /la-casina) e il carosello dei soli suoi alloggi
+ *   - ogni voce del carosello è una TIPOLOGIA (Bilocali, Trilocali...); la
+ *     sua pagina elenca uno per uno gli appartamenti con il loro nome
+ *     (Mangiatoia, Granaio, Taverna...) attraverso `units`
+ *   - Servizi, Esperienze, Matrimoni, Toscana e Recensioni sono pagine
+ *     interne (`pages`), composte dalle stesse sezioni della homepage
  *
- * LE FOTO. Nessuna immagine è ancora presente in public/tenants/nerbona/.
- * Scaricale dal loro sito in prospects/nerbona/foto/ seguendo la struttura
- * descritta in scripts/prepare-media.mjs, poi lancia
- *   SITE_ID=nerbona npm run media:prepare
+ * LE FOTO vengono da nerbona.com e sono a 1080 px di larghezza: bastano per
+ * le schede, ma a tutto schermo su un monitor grande si ammorbidiscono. Prima
+ * di andare online conviene chiedere al cliente gli originali.
  *
- * COME SONO ORGANIZZATI GLI ALLOGGI. La struttura ha due sedi distinte,
- * Nerbona e La Casina. Non è servito aggiungere niente allo schema: il campo
- * `category` di ogni sistemazione porta il nome della sede, e nel carosello
- * compare come etichetta sopra al nome. È lo stesso meccanismo che a Le Ville
- * distingue "LA VILLA" da "GLI APPARTAMENTI".
+ * IL VIDEO è quello del canale YouTube della struttura (girato da
+ * Agriturismo.it): è stato tagliato per togliere titolo e filigrana, ed è
+ * senza audio, come richiede la riproduzione automatica.
  */
 
-import type { SiteConfig } from "../../src/config/types";
+import type { Localized, SiteConfig } from "../../src/config/types";
+
+/* Dotazioni della cucina, uguali in tutti gli appartamenti: scritte una
+   volta sola e riusate. */
+const KITCHEN: Localized = {
+  it: "Cucina attrezzata: piatti, posate, bicchieri, tazze, moka, insalatiera, tagliere, pentole, padelle e cavatappi",
+  en: "Equipped kitchen: plates, cutlery, glasses, cups, moka pot, salad bowl, chopping board, pots, pans and corkscrew",
+};
+const OUTDOOR: Localized = {
+  it: "Da Pasqua a ottobre spazio esterno privato con tavolo, sedie e ombrellone",
+  en: "From Easter to October, private outdoor space with table, chairs and parasol",
+};
+const WIFI_IN: Localized = { it: "Wi-Fi nell'alloggio", en: "Wi-Fi in the apartment" };
+const WIFI_OUT: Localized = {
+  it: "Wi-Fi nelle zone comuni, all'esterno dell'alloggio",
+  en: "Wi-Fi in the shared areas, outside the apartment",
+};
+const NETS: Localized = { it: "Zanzariere", en: "Mosquito nets" };
+const ACCESSIBLE: Localized = {
+  it: "Adatto a sedia a rotelle",
+  en: "Wheelchair accessible",
+};
+
+/* Le due sedi compaiono come etichetta sopra ogni alloggio. */
+const AT_NERBONA = (it: string, en: string): Localized => ({
+  it: `NERBONA · ${it}`,
+  en: `NERBONA · ${en}`,
+});
+const AT_CASINA = (it: string, en: string): Localized => ({
+  it: `LA CASINA · ${it}`,
+  en: `LA CASINA · ${en}`,
+});
 
 const site: SiteConfig = {
   brand: {
     id: "nerbona",
     prefix: "Agriturismo",
     name: "Fattoria Nerbona",
-    logo: "logo.png",
-    /* Codice Identificativo Nazionale: in Italia va esposto sul sito.
-       Compare da solo nel footer. */
+    logo: "logo.svg",
+    /* Codice Identificativo Nazionale, come pubblicato su nerbona.com. */
     cin: "IT052012B5BXRHWPRU",
   },
 
@@ -48,21 +79,26 @@ const site: SiteConfig = {
     phoneAlt: { number: "390577971066", display: "+39 0577 971066" },
     email: "info@nerbona.com",
     address: ["Località Nerbona", "53034 Colle di Val d'Elsa (SI)"],
-    /* Posizione approssimativa: da sostituire con quella esatta presa da
-       Google Maps (tasto destro sul punto). Incide sulla mappa del
-       territorio e sui dati strutturati per i motori di ricerca. */
-    coordinates: { lat: 43.3767, lng: 11.0731 },
+    /* Dal segnaposto di Google Maps collegato al sito ufficiale. */
+    coordinates: { lat: 43.3736, lng: 11.0647 },
+    social: [
+      { label: "Instagram", href: "https://www.instagram.com/nerbona/" },
+      {
+        label: "Facebook",
+        href: "https://www.facebook.com/AgriturismoFattoriaNerbona/",
+      },
+    ],
   },
 
   seo: {
-    domain: "https://andreagalanti.it/demo/nerbona",
+    domain: "https://www.nerbona.com",
     title: {
-      it: "Fattoria Nerbona | 600 ettari di Toscana",
-      en: "Fattoria Nerbona | 600 hectares of Tuscany",
+      it: "Agriturismo Fattoria Nerbona | Colle di Val d'Elsa, Toscana",
+      en: "Agriturismo Fattoria Nerbona | Colle di Val d'Elsa, Tuscany",
     },
     description: {
-      it: "Due strutture, due piscine e seicento ettari di campagna tra Siena e Firenze, a pochi minuti da Colle di Val d'Elsa.",
-      en: "Two estates, two pools and six hundred hectares of countryside between Siena and Florence.",
+      it: "Venti appartamenti in antiche case rurali, due strutture e due piscine nella campagna senese, tra Siena e Firenze.",
+      en: "Twenty apartments in old farm buildings, two sites and two pools in the Sienese countryside, between Siena and Florence.",
     },
     ogImage: "estate/aerial.webp",
   },
@@ -70,50 +106,77 @@ const site: SiteConfig = {
   locales: ["it", "en"],
   localeNames: { it: "Italiano", en: "English" },
 
-  mediaVersion: "2026-08-29",
+  mediaVersion: "2026-10-23",
 
+  /* Sei voci principali al posto delle nove dell'originale: le due sedi
+     stanno sotto "Alloggi", e "Prenota" è il bottone a destra. */
   nav: [
-    { target: "tenuta", label: { it: "La tenuta", en: "The estate" } },
-    { target: "sistemazioni", label: { it: "Alloggi", en: "Stays" } },
-    { target: "servizi", label: { it: "Servizi", en: "Facilities" } },
-    { target: "territorio", label: { it: "Territorio", en: "Explore" } },
+    {
+      target: "sistemazioni",
+      label: { it: "Alloggi", en: "Stay" },
+      children: [
+        {
+          page: "nerbona",
+          label: { it: "Nerbona · sede principale", en: "Nerbona · main site" },
+        },
+        {
+          page: "la-casina",
+          label: { it: "La Casina · a 1,5 km", en: "La Casina · 1.5 km away" },
+        },
+        {
+          target: "sistemazioni",
+          label: { it: "Tutti gli alloggi", en: "All apartments" },
+        },
+      ],
+    },
+    { page: "servizi", label: { it: "Servizi", en: "Services" } },
+    { page: "esperienze", label: { it: "Esperienze", en: "Experiences" } },
+    { page: "matrimoni", label: { it: "Matrimoni", en: "Weddings" } },
+    { page: "toscana", label: { it: "Toscana", en: "Tuscany" } },
+    { page: "recensioni", label: { it: "Recensioni", en: "Reviews" } },
   ],
 
   headerCta: { it: "Richiedi disponibilità", en: "Check availability" },
 
+  /* Beddy mostra disponibilità e prezzi in tempo reale. */
+  booking: {
+    url: "https://agriturismofattorianerbona.beddy.io/",
+    label: { it: "Prenota", en: "Book now" },
+  },
+
+  /* ================================================================ */
+  /* Homepage                                                          */
+  /* ================================================================ */
+
   sections: [
-    /* Niente video: la struttura non ne ha uno utilizzabile. L'apertura usa
-       una fotografia a tutto schermo, che lo schema già prevede. */
     {
       type: "hero",
       id: "home",
-      image: {
-        src: "estate/hero.webp",
-        alt: {
-          it: "La tenuta di Nerbona dall'alto",
-          en: "Nerbona estate from above",
-        },
+      video: {
+        desktop: "video/hero-desktop.mp4",
+        mobile: "video/hero-mobile.mp4",
+        poster: "video/hero-poster.webp",
       },
       labelParts: [
         { it: "Colle di Val d'Elsa", en: "Colle di Val d'Elsa" },
-        { it: "600 ettari", en: "600 hectares" },
+        { it: "Tra Siena e Firenze", en: "Between Siena and Florence" },
       ],
       titleLines: [
-        { it: "Seicento ettari", en: "Six hundred hectares" },
-        { it: "di silenzio.", en: "of silence." },
+        { it: "Due case nella", en: "Two homes in the" },
+        { it: "campagna senese.", en: "Sienese countryside." },
       ],
       intro: {
-        it: "Due strutture, due piscine, venti alloggi ricavati da antiche case coloniche.",
-        en: "Two estates, two pools, twenty homes carved from old farm buildings.",
+        it: "Venti appartamenti ricavati da antiche strutture rurali, due piscine e il silenzio delle colline toscane.",
+        en: "Twenty apartments carved from old farm buildings, two pools and the quiet of the Tuscan hills.",
       },
       cta: {
         label: { it: "Scopri la tenuta", en: "Discover the estate" },
         href: "#tenuta",
       },
       pillars: [
-        { it: "Due piscine", en: "Two pools" },
-        { it: "Sentieri e mountain bike", en: "Trails and mountain bikes" },
-        { it: "San Gimignano · 18 km", en: "San Gimignano · 18 km" },
+        { it: "Due strutture · due piscine", en: "Two sites · two pools" },
+        { it: "Fino a 88 ospiti", en: "Up to 88 guests" },
+        { it: "Siena 35 km · Firenze 60 km", en: "Siena 35 km · Florence 60 km" },
       ],
     },
 
@@ -122,7 +185,7 @@ const site: SiteConfig = {
       id: "tenuta",
       number: "01",
       numberLabel: { it: "LA TENUTA", en: "THE ESTATE" },
-      ghost: "600 ETTARI",
+      ghost: "NERBONA",
       titleLines: [
         { it: "Tra Siena e Firenze,", en: "Between Siena and Florence," },
         { it: "dove il tempo", en: "where time" },
@@ -130,25 +193,28 @@ const site: SiteConfig = {
       titleEmphasis: { it: "rallenta.", en: "slows down." },
       mainImage: {
         src: "estate/landscape.webp",
-        alt: { it: "Le colline della tenuta", en: "The hills of the estate" },
+        alt: {
+          it: "La casa padronale di Nerbona fra i pini",
+          en: "The Nerbona farmhouse among the pines",
+        },
         caption: {
-          it: "Seicento ettari attraversati da sentieri e scorci",
-          en: "Six hundred hectares crossed by paths and open views",
+          it: "Il viale di pini davanti alla sede principale",
+          en: "The pine avenue in front of the main house",
         },
       },
       aerialImage: {
         src: "estate/aerial.webp",
         alt: {
-          it: "La fattoria vista dall'alto",
-          en: "The farm seen from above",
+          it: "La tenuta vista dall'alto, con il viale di cipressi",
+          en: "The estate from above, with its cypress avenue",
         },
-        badge: "43°22′ N · 11°04′ E",
+        badge: "43°22′ N · 11°03′ E",
       },
       manifesto: {
-        label: { it: "DUE SEDI, UNA TENUTA", en: "TWO SITES, ONE ESTATE" },
+        label: { it: "DUE STRUTTURE, UNA TENUTA", en: "TWO SITES, ONE ESTATE" },
         text: {
-          it: "Nerbona si estende su seicento ettari di campagna senese, attraversati da sentieri e viali alberati. La sede principale raccoglie gli appartamenti, la villa e la piscina attorno all'aia; a un chilometro e mezzo, oltre un boschetto, La Casina custodisce cinque alloggi e una seconda piscina, per chi cerca più raccoglimento. Ogni casa è stata ricavata da un'antica struttura rurale e conserva travi a vista, spazi esterni privati e il carattere che le viene dalla sua storia.",
-          en: "Nerbona stretches across six hundred hectares of Sienese countryside, crossed by footpaths and tree-lined avenues. The main site gathers apartments, villa and pool around the farmyard; a kilometre and a half away, beyond a small wood, La Casina holds five homes and a second pool for those seeking greater seclusion. Every house was carved from an old rural building and keeps its exposed beams, private outdoor space and the character its history gave it.",
+          it: "A pochi minuti dal centro di Colle di Val d'Elsa, immersa nel verde delle colline, Nerbona è il posto dove ritrovare il legame con la natura che la fretta di ogni giorno fa dimenticare. La proprietà ha due strutture: Nerbona, la sede principale, e La Casina, a un chilometro e mezzo, raggiungibile in auto in pochi minuti o con una passeggiata nel bosco. Entrambe hanno piscina, barbecue, giochi e spazi aperti; ogni appartamento, ricavato da un'antica struttura rurale, ha la sua cucina e il suo spazio esterno privato.",
+          en: "A few minutes from the centre of Colle di Val d'Elsa, surrounded by green hills, Nerbona is the place to find again the bond with nature that everyday rush makes us forget. The property has two sites: Nerbona, the main one, and La Casina, a kilometre and a half away, a few minutes by car or a walk through the woods. Both have a pool, barbecue, games and open space; every apartment, carved from an old rural building, has its own kitchen and private outdoor area.",
         },
       },
       cursorLabel: { it: "ESPLORA", en: "EXPLORE" },
@@ -159,152 +225,259 @@ const site: SiteConfig = {
       id: "sistemazioni",
       kicker: { it: "DORMIRE A NERBONA", en: "STAY AT NERBONA" },
       title: {
-        it: "Venti case, due luoghi, un solo paesaggio.",
-        en: "Twenty homes, two places, one landscape.",
+        it: "Venti alloggi, due strutture, un solo paesaggio.",
+        en: "Twenty homes, two sites, one landscape.",
       },
-      sizeLabel: { it: "TIPOLOGIA", en: "TYPE" },
+      sizeLabel: { it: "ALLOGGI", en: "UNITS" },
       guestsLabel: { it: "OSPITI", en: "GUESTS" },
-      linkLabel: { it: "Scopri l'alloggio", en: "Explore this home" },
+      linkLabel: { it: "Scopri gli alloggi", en: "See the apartments" },
       scrollHint: { it: "SCORRI PER ESPLORARE", en: "SCROLL TO EXPLORE" },
       endCard: {
         lines: ["FATTORIA", "NERBONA"],
         cta: {
-          label: { it: "Chiedi disponibilità", en: "Ask about availability" },
+          label: { it: "Verifica disponibilità", en: "Check availability" },
           href: "#contatti",
         },
       },
     },
 
-    /* La piscina principale, con la vista sulle torri di San Gimignano. */
     {
       type: "feature",
-      id: "piscina",
+      id: "sede-nerbona",
       image: {
         src: "estate/pool-nerbona.webp",
         alt: { it: "La piscina di Nerbona", en: "The Nerbona pool" },
       },
-      kicker: { it: "La piscina", en: "The pool" },
+      kicker: { it: "Nerbona · sede principale", en: "Nerbona · main site" },
       title: {
-        it: "Da qui si vedono le torri di San Gimignano.",
-        en: "From here you can see the towers of San Gimignano.",
+        it: "Dodici appartamenti, due camere e Villa L'Aia.",
+        en: "Twelve apartments, two rooms and Villa L'Aia.",
       },
       text: {
-        it: "Diciotto chilometri in linea d'aria, e all'orizzonte il profilo che ha reso famosa questa valle.",
-        en: "Eighteen kilometres away, and on the horizon the skyline that made this valley famous.",
+        it: "Attorno all'aia: la piscina, la reception, la chiesetta di San Luigi, due barbecue e i campi da gioco. Fino a 64 ospiti.",
+        en: "Around the farmyard: the pool, reception, the little church of San Luigi, two barbecues and the playing fields. Up to 64 guests.",
+      },
+      cta: {
+        label: { it: "Scopri Nerbona", en: "Discover Nerbona" },
+        href: "/nerbona",
       },
     },
 
-    /* La seconda sede. Stesso tipo di sezione usato una seconda volta: è il
-       vantaggio di avere le sezioni come elenco riordinabile. */
     {
       type: "feature",
-      id: "casina",
+      id: "sede-casina",
       image: {
         src: "estate/casina.webp",
-        alt: { it: "La Casina", en: "La Casina" },
+        alt: { it: "La Casina in primavera", en: "La Casina in spring" },
       },
-      kicker: { it: "La Casina", en: "La Casina" },
+      kicker: { it: "La Casina · a 1,5 km", en: "La Casina · 1.5 km away" },
       title: {
-        it: "A un chilometro e mezzo, oltre il bosco.",
-        en: "A kilometre and a half away, beyond the wood.",
+        it: "Cinque appartamenti, oltre il bosco.",
+        en: "Five apartments, beyond the wood.",
       },
       text: {
-        it: "Cinque alloggi, una piscina tutta loro e il silenzio di chi è arrivato dove finisce la strada.",
-        en: "Five homes, a pool of their own, and the silence of somewhere the road ends.",
+        it: "Una struttura raccolta con piscina propria, barbecue e un portico per mangiare all'aperto. Fino a 24 ospiti, in un'atmosfera intima.",
+        en: "A secluded site with its own pool, barbecue and a portico for eating outdoors. Up to 24 guests, in an intimate atmosphere.",
+      },
+      cta: {
+        label: { it: "Scopri La Casina", en: "Discover La Casina" },
+        href: "/la-casina",
       },
     },
 
     {
       type: "experiences",
-      id: "servizi",
+      id: "giornate",
       kicker: { it: "GIORNATE A NERBONA", en: "DAYS AT NERBONA" },
       title: {
         it: "Tutto quello che serve per non ripartire.",
         en: "Everything you need to stay put.",
       },
       intro: {
-        it: "Tre modi di occupare il tempo, a pochi passi da casa.",
-        en: "Three ways to fill the day, a few steps from your door.",
+        it: "Acqua, sentieri e tavole all'aperto, a pochi passi dalla porta di casa.",
+        en: "Water, trails and outdoor tables, a few steps from your door.",
       },
       marquee: {
-        it: "BOSCO · ACQUA · TAVOLA · SENTIERI · GIOCO · ",
-        en: "WOODS · WATER · TABLE · TRAILS · PLAY · ",
+        it: "PISCINE · SENTIERI · BARBECUE · BOSCO · GIOCO · ",
+        en: "POOLS · TRAILS · BARBECUE · WOODS · PLAY · ",
       },
-      itemLabel: { it: "SERVIZIO", en: "FACILITY" },
-      ctaLabel: { it: "Scrivici per saperne di più", en: "Ask us about it" },
-      ctaHref: "#contatti",
-      /* Restano tre: il CSS dà un'inquadratura dedicata solo alle prime tre
-         card. Con una quarta servono le regole in 09-experiences.css. */
+      itemLabel: { it: "GIORNATA", en: "DAY" },
+      ctaLabel: { it: "Tutti i servizi", en: "All services" },
+      ctaHref: "/servizi",
       items: [
+        {
+          title: "Piscine",
+          word: { it: "ACQUA", en: "WATER" },
+          meta: {
+            it: "Due piscine · dal 25 aprile al 25 settembre",
+            en: "Two pools · 25 April to 25 September",
+          },
+          text: {
+            it: "Una per struttura, con lettini e ombrelloni e la vista aperta sulla campagna. Da quella della Casina lo sguardo arriva fino alle colline del Chianti.",
+            en: "One at each site, with loungers, parasols and an open view over the countryside. From La Casina's the eye reaches the Chianti hills.",
+          },
+          image: "experiences/pool.webp",
+        },
         {
           title: "Mountain bike",
           word: { it: "SENTIERI", en: "TRAILS" },
           meta: {
-            it: "600 ettari · Boschi · Colline",
-            en: "600 hectares · Woods · Hills",
+            it: "Noleggio in reception · da 5 € mezza giornata",
+            en: "Rental at reception · from €5 half day",
           },
           text: {
-            it: "Le biciclette si noleggiano in reception e i sentieri partono dall'aia. Seicento ettari di proprietà da attraversare senza incontrare una strada asfaltata.",
-            en: "Bikes are rented at reception and the trails start from the farmyard. Six hundred hectares of private land to cross without meeting a paved road.",
+            it: "Le biciclette si prendono in reception e i sentieri partono dal cancello: strade bianche, boschi e i percorsi ad anello che passano da La Casina.",
+            en: "Pick up a bike at reception and the trails start at the gate: white roads, woods and loop routes passing by La Casina.",
           },
           image: "experiences/bike.webp",
         },
         {
-          title: "Cucina in autogestione",
+          title: "Tavola all'aperto",
           word: { it: "TAVOLA", en: "TABLE" },
           meta: {
-            it: "Barbecue · Catering · Chef",
-            en: "Barbecue · Catering · Chef",
+            it: "Tre barbecue · forno a legna · portico",
+            en: "Three barbecues · wood oven · portico",
           },
           text: {
-            it: "Due aree barbecue e una cucina attrezzata per i gruppi. Ci si arrangia, si chiama un catering o si fa venire uno chef: decidete voi come mangiare.",
-            en: "Two barbecue areas and a kitchen equipped for groups. Cook for yourselves, call in catering, or have a chef come to you.",
+            it: "Due barbecue a Nerbona, uno alla Casina con il portico e la tavola lunga per le cene di gruppo. Il forno a legna si accende per chi affitta la struttura in esclusiva.",
+            en: "Two barbecues at Nerbona, one at La Casina with a portico and a long table for group dinners. The wood oven is lit for those who book the whole site.",
           },
-          image: "experiences/kitchen.webp",
-        },
-        {
-          title: "Spazi per giocare",
-          word: { it: "GIOCO", en: "PLAY" },
-          meta: {
-            it: "Ping pong · Calcio · Pallavolo",
-            en: "Table tennis · Football · Volleyball",
-          },
-          text: {
-            it: "Ping pong, biliardino, porte da calcio, rete da pallavolo e altalene. Gli spazi aperti sono abbastanza grandi da lasciar correre i bambini senza doverli guardare.",
-            en: "Table tennis, table football, goalposts, a volleyball net and swings. The open spaces are large enough to let children run without keeping an eye on them.",
-          },
-          image: "experiences/play.webp",
+          image: "experiences/table.webp",
         },
       ],
     },
 
     {
       type: "trail",
-      id: "sentieri",
+      id: "sentiero",
       mainImage: {
         src: "trail/main.webp",
-        alt: { it: "I sentieri della tenuta", en: "The estate trails" },
+        alt: {
+          it: "La strada bianca fra i campi",
+          en: "The white road between the fields",
+        },
       },
       detailImage: {
         src: "trail/detail.webp",
-        alt: {
-          it: "Il bosco fra le due strutture",
-          en: "The wood between the two sites",
-        },
+        alt: { it: "Il bosco in autunno", en: "The wood in autumn" },
       },
-      number: "600",
-      numberUnit: "ha",
-      kicker: { it: "La proprietà", en: "The property" },
+      number: "1,5",
+      numberUnit: "km",
+      kicker: { it: "Da una casa all'altra", en: "From one house to the other" },
       title: {
-        it: "Si cammina per un'ora senza uscire dalla tenuta.",
-        en: "You can walk for an hour without leaving the estate.",
+        it: "Da Nerbona alla Casina si va a piedi, attraverso il bosco.",
+        en: "From Nerbona to La Casina you walk, through the wood.",
       },
       text: {
-        it: "Il sentiero che collega Nerbona a La Casina attraversa un boschetto e si percorre a piedi in venti minuti. Da lì si aprono i percorsi più lunghi.",
-        en: "The path linking Nerbona to La Casina crosses a small wood and takes twenty minutes on foot. Longer routes open up from there.",
+        it: "Un chilometro e mezzo di sentiero fra querce e campi aperti. Da lì partono i percorsi ad anello più lunghi, da fare a piedi o in bicicletta.",
+        en: "A kilometre and a half of path among oaks and open fields. Longer loop routes start from there, on foot or by bike.",
       },
       startLabel: { it: "NERBONA", en: "NERBONA" },
       endLabel: { it: "LA CASINA", en: "LA CASINA" },
+    },
+
+    /* Indice delle pagine interne: chi arriva in homepage vede subito cosa
+       c'è oltre gli alloggi. */
+    {
+      type: "cards",
+      id: "scopri",
+      tone: "dark",
+      kicker: { it: "Oltre il soggiorno", en: "Beyond your stay" },
+      title: {
+        it: "Esperienze, feste e la Toscana intorno.",
+        en: "Experiences, celebrations and the Tuscany around you.",
+      },
+      items: [
+        {
+          meta: { it: "Cucina · falconeria · tartufo", en: "Cooking · falconry · truffles" },
+          title: { it: "Esperienze", en: "Experiences" },
+          text: {
+            it: "Lezioni di cucina, passeggiate col falco, caccia al tartufo, ceramica ed erbe spontanee con chi vive questo territorio.",
+            en: "Cooking classes, walks with falcons, truffle hunting, pottery and wild herbs with people who live this land.",
+          },
+          image: {
+            src: "experiences/cooking.webp",
+            alt: { it: "Pasta fatta a mano", en: "Handmade pasta" },
+          },
+          link: { label: { it: "Scopri", en: "Discover" }, href: "/esperienze" },
+        },
+        {
+          meta: { it: "In esclusiva", en: "Exclusive use" },
+          title: { it: "Matrimoni", en: "Weddings" },
+          text: {
+            it: "Per il vostro giorno vi lasciamo l'intera struttura, fra alberi secolari e viali di cipressi.",
+            en: "For your day the whole estate is yours, among age-old trees and cypress avenues.",
+          },
+          image: {
+            src: "weddings/01.webp",
+            alt: { it: "Sposi nel viale alberato", en: "Couple on the tree-lined avenue" },
+          },
+          link: { label: { it: "Scopri", en: "Discover" }, href: "/matrimoni" },
+        },
+        {
+          meta: { it: "Storia e tradizioni", en: "History and traditions" },
+          title: { it: "Toscana", en: "Tuscany" },
+          text: {
+            it: "Il paesaggio che si vede dalla piscina è lo stesso dei quadri degli Uffizi. Cosa vedere a mezz'ora e a un'ora da qui.",
+            en: "The landscape you see from the pool is the one in the Uffizi paintings. What to see half an hour and an hour away.",
+          },
+          image: {
+            src: "estate/park.webp",
+            alt: { it: "Il parco della tenuta", en: "The estate park" },
+          },
+          link: { label: { it: "Scopri", en: "Discover" }, href: "/toscana" },
+        },
+      ],
+    },
+
+    {
+      type: "reviews",
+      id: "ospiti",
+      kicker: { it: "Dicono di noi", en: "What guests say" },
+      title: {
+        it: "Chi viene, di solito torna.",
+        en: "Those who come usually come back.",
+      },
+      items: [
+        {
+          source: "Tripadvisor",
+          score: "5/5",
+          title: {
+            it: "Una garanzia ogni anno: relax, sport e staff super!",
+            en: "A sure thing every year: relaxation, sport and a great team!",
+          },
+          quote: {
+            it: "Torniamo in questo agriturismo ogni anno con gli amici ed è sempre una conferma. Immerso nel verde, offre una piscina splendida e campi da calcio e pallavolo per divertirsi in compagnia.",
+            en: "We come back to this farm stay every year with friends and it never disappoints. Surrounded by greenery, it has a beautiful pool and football and volleyball pitches to enjoy together.",
+          },
+          author: "Maurizio C.",
+          date: { it: "Dicembre 2025", en: "December 2025" },
+        },
+        {
+          source: "Google",
+          score: "5/5",
+          quote: {
+            it: "Siamo stati per un week end ed è stato tutto magnifico, la pace e la tranquillità di questo posto è unica. Ci siamo proprio rigenerati.",
+            en: "We stayed for a weekend and everything was wonderful; the peace and quiet of this place is unique. We really recharged.",
+          },
+          author: "Stefano B.",
+        },
+        {
+          source: "Google",
+          score: "5/5",
+          quote: {
+            it: "Dopo molti, molti anni siamo finalmente tornati nella meravigliosa Casina. Ci siamo subito innamorati di nuovo della casa e della zona. Anche i nostri cani sono stati ospiti graditi.",
+            en: "After many, many years we finally returned to the wonderful Casina. We fell in love with the house and the area all over again. Our dogs were welcome guests too.",
+          },
+          author: "Christina F.",
+        },
+      ],
+      links: [
+        {
+          label: { it: "Tutte le recensioni", en: "All reviews" },
+          href: "/recensioni",
+        },
+      ],
     },
 
     {
@@ -316,8 +489,8 @@ const site: SiteConfig = {
         en: "Between Siena and Florence, without having to choose.",
       },
       text: {
-        it: "Colle di Val d'Elsa a pochi minuti, San Gimignano all'orizzonte, e le due città d'arte a meno di un'ora.",
-        en: "Colle di Val d'Elsa minutes away, San Gimignano on the horizon, and both art cities within the hour.",
+        it: "Colle di Val d'Elsa a pochi minuti, San Gimignano e Volterra a mezz'ora, le due città d'arte a meno di un'ora.",
+        en: "Colle di Val d'Elsa minutes away, San Gimignano and Volterra within half an hour, both art cities within the hour.",
       },
       disclaimer: {
         it: "DISTANZE STRADALI INDICATIVE",
@@ -327,7 +500,7 @@ const site: SiteConfig = {
         it: "Mappa stilizzata delle distanze da Fattoria Nerbona",
         en: "Stylised map of distances from Fattoria Nerbona",
       },
-      gridLabels: { x: "43°22′ N", y: "11°04′ E" },
+      gridLabels: { x: "43°22′ N", y: "11°03′ E" },
       homeLabel: { lines: ["Fattoria", "Nerbona"], sub: "Colle di Val d'Elsa" },
       legend: {
         home: "Nerbona",
@@ -337,13 +510,8 @@ const site: SiteConfig = {
           en: "Approximate driving distances",
         },
       },
-
-      /* Qui si vede il vantaggio del calcolo automatico: sono state indicate
-         solo le coordinate, e posizione sulla mappa e rotta tratteggiata
-         vengono ricavate da src/lib/map-geometry.ts. A Le Ville quei valori
-         erano stati rifiniti a mano, uno per uno.
-         Da controllare a occhio prima di pubblicare: se due località finiscono
-         sovrapposte, si aggiunge `position` per spostarle. */
+      /* Solo coordinate: posizione e rotta sulla mappa le calcola
+         src/lib/map-geometry.ts. */
       items: [
         {
           id: "colle",
@@ -352,28 +520,28 @@ const site: SiteConfig = {
           coordinates: { lat: 43.4213, lng: 11.1275 },
         },
         {
-          id: "gimignano",
-          name: { it: "San Gimignano", en: "San Gimignano" },
-          distance: "18 km",
-          coordinates: { lat: 43.4677, lng: 11.0431 },
-        },
-        {
           id: "casole",
           name: { it: "Casole d'Elsa", en: "Casole d'Elsa" },
           distance: "9 km",
           coordinates: { lat: 43.3419, lng: 11.0439 },
         },
         {
-          id: "volterra",
-          name: { it: "Volterra", en: "Volterra" },
-          distance: "30 km",
-          coordinates: { lat: 43.4014, lng: 10.8608 },
+          id: "gimignano",
+          name: { it: "San Gimignano", en: "San Gimignano" },
+          distance: "22 km",
+          coordinates: { lat: 43.4677, lng: 11.0431 },
         },
         {
           id: "monteriggioni",
           name: { it: "Monteriggioni", en: "Monteriggioni" },
           distance: "22 km",
           coordinates: { lat: 43.3906, lng: 11.2244 },
+        },
+        {
+          id: "volterra",
+          name: { it: "Volterra", en: "Volterra" },
+          distance: "30 km",
+          coordinates: { lat: 43.4014, lng: 10.8608 },
         },
         {
           id: "siena",
@@ -393,12 +561,6 @@ const site: SiteConfig = {
           distance: "60 km",
           coordinates: { lat: 43.7696, lng: 11.2558 },
         },
-        {
-          id: "montalcino",
-          name: { it: "Montalcino", en: "Montalcino" },
-          distance: "70 km",
-          coordinates: { lat: 43.0576, lng: 11.4889 },
-        },
       ],
     },
 
@@ -408,18 +570,18 @@ const site: SiteConfig = {
       image: {
         src: "contact/main.webp",
         alt: {
-          it: "Fattoria Nerbona e le colline senesi",
-          en: "Fattoria Nerbona and the Sienese hills",
+          it: "La corte di Nerbona illuminata la sera",
+          en: "The Nerbona courtyard lit up at night",
         },
       },
       kicker: { it: "Il vostro soggiorno", en: "Your stay" },
       title: {
         it: "Vi aspettiamo a Nerbona.",
-        en: "We'll be waiting at Nerbona.",
+        en: "We look forward to welcoming you.",
       },
       text: {
-        it: "Scriveteci: vi aiutiamo a scegliere fra le due sedi e a trovare l'alloggio della misura giusta.",
-        en: "Get in touch: we'll help you choose between the two sites and find a home of the right size.",
+        it: "Disponibilità e prezzi si vedono in tempo reale sul nostro sistema di prenotazione. Per gruppi, matrimoni o domande sugli alloggi scriveteci: vi rispondiamo direttamente.",
+        en: "Availability and prices are live on our booking system. For groups, weddings or questions about the apartments, write to us: we reply in person.",
       },
       whatsappLabel: {
         it: "Scrivici su WhatsApp",
@@ -430,38 +592,1408 @@ const site: SiteConfig = {
   ],
 
   /* ================================================================ */
+  /* Pagine interne                                                    */
+  /* ================================================================ */
+
+  pages: [
+    /* --- Nerbona ---------------------------------------------------- */
+    {
+      slug: "nerbona",
+      title: { it: "Nerbona, la sede principale", en: "Nerbona, the main site" },
+      description: {
+        it: "Dodici appartamenti, due camere e Villa L'Aia attorno all'aia, con piscina, barbecue e campi da gioco. Fino a 64 ospiti.",
+        en: "Twelve apartments, two rooms and Villa L'Aia around the farmyard, with pool, barbecues and playing fields. Up to 64 guests.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "estate/pool-nerbona-2.webp",
+            alt: { it: "La piscina di Nerbona", en: "The Nerbona pool" },
+          },
+          labelParts: [
+            { it: "Sede principale", en: "Main site" },
+            { it: "Fino a 64 ospiti", en: "Up to 64 guests" },
+          ],
+          titleLines: [
+            { it: "Nerbona,", en: "Nerbona," },
+            { it: "la casa sull'aia.", en: "the house on the farmyard." },
+          ],
+          intro: {
+            it: "Dodici appartamenti, due camere e Villa L'Aia, ricavati dalle case coloniche della fattoria.",
+            en: "Twelve apartments, two rooms and Villa L'Aia, carved from the farm's old buildings.",
+          },
+          cta: {
+            label: { it: "Gli alloggi", en: "The apartments" },
+            href: "#alloggi",
+          },
+          pillars: [
+            { it: "Piscina", en: "Pool" },
+            { it: "Due barbecue", en: "Two barbecues" },
+            { it: "Chiesetta di San Luigi", en: "Chapel of San Luigi" },
+          ],
+        },
+        {
+          type: "prose",
+          id: "struttura",
+          kicker: { it: "La struttura principale", en: "The main site" },
+          title: {
+            it: "Una fattoria vera, con la sua chiesetta e il suo viale di pini.",
+            en: "A real farm, with its own chapel and pine avenue.",
+          },
+          paragraphs: [
+            {
+              it: "Nerbona è il cuore della tenuta. Gli alloggi sono distribuiti fra la casa padronale e gli edifici che un tempo servivano al lavoro dei campi: la mangiatoia, il granaio, il forno, la piccionaia. I nomi degli appartamenti vengono da lì.",
+              en: "Nerbona is the heart of the estate. The apartments are spread between the main house and the buildings that once served the work of the fields: the manger, the granary, the oven, the dovecote. The apartments take their names from them.",
+            },
+            {
+              it: "Qui si trovano anche la reception, la casa del custode e una piccola chiesa consacrata dedicata a San Luigi. Intorno, la piscina, due barbecue, le mountain bike, il ping pong, il biliardino, la rete da pallavolo, l'altalena e le porte da calcio.",
+              en: "Here you'll also find the reception, the caretaker's house and a small consecrated church dedicated to San Luigi. All around: the pool, two barbecues, mountain bikes, table tennis, table football, a volleyball net, a swing and football goals.",
+            },
+          ],
+          image: {
+            src: "estate/park.webp",
+            alt: { it: "Il parco di Nerbona", en: "The Nerbona park" },
+          },
+        },
+        {
+          type: "stays",
+          id: "alloggi",
+          kicker: { it: "GLI ALLOGGI DI NERBONA", en: "APARTMENTS AT NERBONA" },
+          title: {
+            it: "Dal bilocale per due alla villa per otto.",
+            en: "From a one-bedroom for two to a villa for eight.",
+          },
+          sizeLabel: { it: "ALLOGGI", en: "UNITS" },
+          guestsLabel: { it: "OSPITI", en: "GUESTS" },
+          linkLabel: { it: "Scopri gli alloggi", en: "See the apartments" },
+          scrollHint: { it: "SCORRI PER ESPLORARE", en: "SCROLL TO EXPLORE" },
+          endCard: {
+            lines: ["NERBONA"],
+            cta: {
+              label: { it: "Verifica disponibilità", en: "Check availability" },
+              href: "#contatti",
+            },
+          },
+          only: [
+            "nerbona-bilocali",
+            "nerbona-trilocali",
+            "nerbona-quadrilocale",
+            "villa-aia",
+            "nerbona-camere",
+          ],
+        },
+        {
+          type: "gallery",
+          id: "aree-extra",
+          kicker: { it: "Aree extra", en: "Extra areas" },
+          title: {
+            it: "Gli spazi in comune.",
+            en: "The shared spaces.",
+          },
+          text: {
+            it: "La corte, il forno a legna, la chiesetta e i barbecue: gli spazi che si condividono con gli altri ospiti.",
+            en: "The courtyard, wood oven, chapel and barbecues: the spaces shared with the other guests.",
+          },
+          images: [
+            {
+              src: "estate/pool-nerbona.webp",
+              alt: { it: "La piscina fra gli oleandri", en: "The pool among oleanders" },
+            },
+            {
+              src: "extra/nerbona-corte.webp",
+              alt: { it: "La corte", en: "The courtyard" },
+            },
+            {
+              src: "services/cappella.webp",
+              alt: { it: "La chiesetta di San Luigi", en: "The chapel of San Luigi" },
+            },
+            {
+              src: "extra/nerbona-forno.webp",
+              alt: { it: "Il forno a legna", en: "The wood oven" },
+            },
+            {
+              src: "services/barbecue.webp",
+              alt: { it: "Il barbecue nel prato", en: "The barbecue on the lawn" },
+            },
+            {
+              src: "estate/aerial.webp",
+              alt: { it: "Nerbona dall'alto", en: "Nerbona from above" },
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "estate/landscape.webp",
+            alt: { it: "La casa padronale", en: "The main house" },
+          },
+          kicker: { it: "Soggiornare a Nerbona", en: "Staying at Nerbona" },
+          title: {
+            it: "Scegliete l'alloggio, al resto pensiamo noi.",
+            en: "Choose your apartment, we'll take care of the rest.",
+          },
+          text: {
+            it: "Prenotate online o scriveteci: vi aiutiamo a trovare l'appartamento della misura giusta.",
+            en: "Book online or write to us: we'll help you find the right-sized apartment.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- La Casina -------------------------------------------------- */
+    {
+      slug: "la-casina",
+      title: { it: "La Casina, la seconda struttura", en: "La Casina, the second site" },
+      description: {
+        it: "Cinque appartamenti a un chilometro e mezzo da Nerbona, con piscina propria, barbecue e portico. Fino a 24 ospiti.",
+        en: "Five apartments a kilometre and a half from Nerbona, with their own pool, barbecue and portico. Up to 24 guests.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "extra/casina-piscina-rose.webp",
+            alt: { it: "La piscina della Casina", en: "La Casina's pool" },
+          },
+          labelParts: [
+            { it: "Seconda struttura", en: "Second site" },
+            { it: "Fino a 24 ospiti", en: "Up to 24 guests" },
+          ],
+          titleLines: [
+            { it: "La Casina,", en: "La Casina," },
+            { it: "oltre il bosco.", en: "beyond the wood." },
+          ],
+          intro: {
+            it: "Cinque appartamenti, una piscina tutta loro e un portico per le cene d'estate.",
+            en: "Five apartments, a pool of their own and a portico for summer dinners.",
+          },
+          cta: {
+            label: { it: "Gli alloggi", en: "The apartments" },
+            href: "#alloggi",
+          },
+          pillars: [
+            { it: "Piscina riservata", en: "Private pool" },
+            { it: "Portico e barbecue", en: "Portico and barbecue" },
+            { it: "Nerbona · 1,5 km", en: "Nerbona · 1.5 km" },
+          ],
+        },
+        {
+          type: "prose",
+          id: "struttura",
+          kicker: { it: "La seconda struttura", en: "The second site" },
+          title: {
+            it: "Per chi cerca il silenzio, un chilometro e mezzo più in là.",
+            en: "For those seeking quiet, a kilometre and a half further on.",
+          },
+          paragraphs: [
+            {
+              it: "Dalla sede principale si arriva alla Casina in pochi minuti d'auto, oppure a piedi attraverso un boschetto. È una struttura raccolta: cinque appartamenti soltanto, una piscina, il barbecue, l'altalena e le porte da calcio.",
+              en: "La Casina is a few minutes' drive from the main site, or a walk through a small wood. It's a secluded place: just five apartments, a pool, a barbecue, a swing and football goals.",
+            },
+            {
+              it: "Sotto il portico di pietra c'è una tavola lunga per mangiare tutti insieme; d'estate il glicine ci fa ombra. Il Wi-Fi è disponibile nelle zone comuni, all'esterno degli appartamenti: per molti ospiti è un pregio.",
+              en: "Under the stone portico there's a long table for eating together; in summer the wisteria gives shade. Wi-Fi is available in the shared areas, outside the apartments: many guests see that as a plus.",
+            },
+          ],
+          image: {
+            src: "estate/casina-aerial.webp",
+            alt: { it: "La Casina dall'alto", en: "La Casina from above" },
+          },
+        },
+        {
+          type: "stays",
+          id: "alloggi",
+          kicker: { it: "GLI ALLOGGI DELLA CASINA", en: "APARTMENTS AT LA CASINA" },
+          title: {
+            it: "Cinque case, un solo cortile.",
+            en: "Five homes, one courtyard.",
+          },
+          sizeLabel: { it: "ALLOGGI", en: "UNITS" },
+          guestsLabel: { it: "OSPITI", en: "GUESTS" },
+          linkLabel: { it: "Scopri gli alloggi", en: "See the apartments" },
+          scrollHint: { it: "SCORRI PER ESPLORARE", en: "SCROLL TO EXPLORE" },
+          endCard: {
+            lines: ["LA", "CASINA"],
+            cta: {
+              label: { it: "Verifica disponibilità", en: "Check availability" },
+              href: "#contatti",
+            },
+          },
+          only: ["casina-bilocale", "casina-trilocali", "casina-quadrilocale"],
+        },
+        {
+          type: "feature",
+          id: "piscina",
+          image: {
+            src: "estate/pool-casina.webp",
+            alt: { it: "La piscina della Casina", en: "La Casina's pool" },
+          },
+          kicker: { it: "La piscina", en: "The pool" },
+          title: {
+            it: "Una piscina per cinque appartamenti.",
+            en: "One pool for five apartments.",
+          },
+          text: {
+            it: "Aperta dal 25 aprile al 25 settembre, tempo permettendo, con la campagna senese tutto intorno.",
+            en: "Open from 25 April to 25 September, weather permitting, with the Sienese countryside all around.",
+          },
+        },
+        {
+          type: "gallery",
+          id: "aree-extra",
+          kicker: { it: "Aree extra", en: "Extra areas" },
+          title: { it: "Il portico, il prato, il glicine.", en: "The portico, the lawn, the wisteria." },
+          images: [
+            {
+              src: "extra/casina-capanna-tavola.webp",
+              alt: { it: "La tavola sotto il portico", en: "The table under the portico" },
+            },
+            {
+              src: "extra/casina-capanna-glicine.webp",
+              alt: { it: "Il portico e il glicine", en: "The portico and the wisteria" },
+            },
+            {
+              src: "extra/casina-capanna-fiori.webp",
+              alt: { it: "Il glicine in fiore", en: "The wisteria in bloom" },
+            },
+            {
+              src: "extra/casina-capanna.webp",
+              alt: { it: "Il portico in pietra", en: "The stone portico" },
+            },
+            {
+              src: "extra/casina-barbecue.webp",
+              alt: { it: "Il barbecue", en: "The barbecue" },
+            },
+            {
+              src: "extra/casina-finestra.webp",
+              alt: { it: "La piscina vista dalla finestra", en: "The pool from a window" },
+            },
+            {
+              src: "extra/casina-prato.webp",
+              alt: { it: "Il prato della Casina", en: "La Casina's lawn" },
+            },
+            {
+              src: "estate/casina-view.webp",
+              alt: { it: "La vista sulle colline", en: "The view over the hills" },
+            },
+            {
+              src: "extra/casina-piscina-rose.webp",
+              alt: { it: "Rose a bordo piscina", en: "Roses by the pool" },
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "estate/casina.webp",
+            alt: { it: "La Casina", en: "La Casina" },
+          },
+          kicker: { it: "Soggiornare alla Casina", en: "Staying at La Casina" },
+          title: {
+            it: "Cinque appartamenti, prenotateli per tempo.",
+            en: "Only five apartments: book early.",
+          },
+          text: {
+            it: "Per un gruppo fino a 24 persone si può prenotare l'intera struttura: scriveteci.",
+            en: "Groups of up to 24 can book the whole site: write to us.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- Servizi ---------------------------------------------------- */
+    {
+      slug: "servizi",
+      title: { it: "Servizi", en: "Services" },
+      description: {
+        it: "Colazione, due piscine, mountain bike, barbecue, Wi-Fi, parcheggio gratuito e animali ammessi: i servizi di Fattoria Nerbona.",
+        en: "Breakfast, two pools, mountain bikes, barbecues, Wi-Fi, free parking and pets welcome: the services at Fattoria Nerbona.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "estate/pool-nerbona-2.webp",
+            alt: { it: "La piscina di Nerbona", en: "The Nerbona pool" },
+          },
+          labelParts: [
+            { it: "Servizi", en: "Services" },
+            { it: "Nerbona e La Casina", en: "Nerbona and La Casina" },
+          ],
+          titleLines: [
+            { it: "Tutto a portata,", en: "Everything at hand," },
+            { it: "niente di troppo.", en: "nothing too much." },
+          ],
+          intro: {
+            it: "Quello che trovate in entrambe le strutture, e quello che vi serve sapere prima di arrivare.",
+            en: "What you'll find at both sites, and what you need to know before you arrive.",
+          },
+          cta: {
+            label: { it: "Il soggiorno", en: "Your stay" },
+            href: "#soggiorno",
+          },
+          pillars: [
+            { it: "Colazione da aprile a ottobre", en: "Breakfast April to October" },
+            { it: "Parcheggio gratuito", en: "Free parking" },
+            { it: "Animali ammessi", en: "Pets welcome" },
+          ],
+        },
+        {
+          type: "cards",
+          id: "soggiorno",
+          kicker: { it: "Il soggiorno", en: "Your stay" },
+          title: {
+            it: "Arrivo, colazione e piccole comodità.",
+            en: "Arrival, breakfast and small comforts.",
+          },
+          items: [
+            {
+              meta: { it: "Da aprile a ottobre", en: "April to October" },
+              title: { it: "Colazione", en: "Breakfast" },
+              text: {
+                it: "Colazione a buffet disponibile da aprile a ottobre compresi.",
+                en: "Buffet breakfast available from April to October inclusive.",
+              },
+            },
+            {
+              title: { it: "Reception", en: "Reception" },
+              text: {
+                it: "La reception è aperta secondo orari prestabiliti, esposti alla finestra dell'ufficio.",
+                en: "Reception opens at set times, posted on the office window.",
+              },
+              image: {
+                src: "services/reception.webp",
+                alt: { it: "La reception", en: "The reception" },
+              },
+            },
+            {
+              title: { it: "Check-in autonomo", en: "Self check-in" },
+              text: {
+                it: "Per chi arriva in tarda serata il check-in si può fare in autonomia, da concordare prima con la reception.",
+                en: "Arriving late in the evening? Self check-in is available, to be arranged in advance with reception.",
+              },
+            },
+            {
+              title: { it: "Parcheggio", en: "Parking" },
+              text: {
+                it: "Entrambe le strutture hanno un ampio parcheggio gratuito.",
+                en: "Both sites have ample free parking.",
+              },
+              link: {
+                label: { it: "Parcheggio Nerbona", en: "Nerbona parking" },
+                href: "https://maps.app.goo.gl/MKRP5QVBY4USvE9j9",
+              },
+            },
+            {
+              title: { it: "Wi-Fi gratuito", en: "Free Wi-Fi" },
+              text: {
+                it: "A Nerbona dentro gli alloggi e nelle zone comuni; alla Casina nelle zone comuni, all'esterno degli alloggi.",
+                en: "At Nerbona inside the apartments and in shared areas; at La Casina in shared areas, outside the apartments.",
+              },
+              image: {
+                src: "services/wifi.webp",
+                alt: { it: "Lavorare in giardino", en: "Working in the garden" },
+              },
+            },
+            {
+              title: { it: "Mini-sito informativo", en: "Digital guest guide" },
+              text: {
+                it: "Alla prenotazione ricevete il link a un mini-sito con tutte le informazioni utili e i contatti per organizzare il soggiorno.",
+                en: "When you book you receive a link to a mini-site with all the useful information and contacts to plan your stay.",
+              },
+            },
+            {
+              title: { it: "Lavatrici", en: "Washing machines" },
+              text: {
+                it: "Lavatrici a disposizione gratuita degli ospiti in entrambe le strutture. Il detersivo non è fornito.",
+                en: "Washing machines free for guests at both sites. Detergent is not provided.",
+              },
+              image: {
+                src: "services/lavatrici.webp",
+                alt: { it: "Lavatrice", en: "Washing machine" },
+              },
+            },
+            {
+              meta: { it: "Con supplemento", en: "Extra charge" },
+              title: { it: "Animali ammessi", en: "Pets welcome" },
+              text: {
+                it: "Gli animali domestici sono i benvenuti in tutti gli alloggi, tranne Villa L'Aia.",
+                en: "Pets are welcome in every apartment except Villa L'Aia.",
+              },
+              image: {
+                src: "services/animali.webp",
+                alt: { it: "Un cane nel giardino", en: "A dog in the garden" },
+              },
+            },
+          ],
+        },
+        {
+          type: "cards",
+          id: "tempo-libero",
+          tone: "dark",
+          kicker: { it: "Tempo libero", en: "Leisure" },
+          title: {
+            it: "Piscine, biciclette, giochi e brace.",
+            en: "Pools, bikes, games and barbecues.",
+          },
+          items: [
+            {
+              meta: { it: "Dal 25 aprile al 25 settembre", en: "25 April to 25 September" },
+              title: { it: "Due piscine", en: "Two pools" },
+              text: {
+                it: "Una per struttura, aperte compatibilmente con il meteo.",
+                en: "One at each site, open weather permitting.",
+              },
+              image: {
+                src: "estate/pool-nerbona.webp",
+                alt: { it: "La piscina di Nerbona", en: "The Nerbona pool" },
+              },
+            },
+            {
+              meta: { it: "Noleggio in reception", en: "Rental at reception" },
+              title: { it: "Mountain bike", en: "Mountain bikes" },
+              text: {
+                it: "Biciclette a noleggio per esplorare strade bianche e sentieri. Si chiede una cauzione in contanti o una carta di credito.",
+                en: "Bikes for hire to explore white roads and trails. A cash deposit or credit card is required.",
+              },
+              details: [
+                { it: "Mezza giornata: 5 € a bicicletta", en: "Half day: €5 per bike" },
+                { it: "Giornata intera: 10 € a bicicletta", en: "Full day: €10 per bike" },
+              ],
+              image: {
+                src: "experiences/bike.webp",
+                alt: { it: "Mountain bike sotto gli alberi", en: "Mountain bikes under the trees" },
+              },
+            },
+            {
+              meta: { it: "Palloni in reception, con cauzione", en: "Balls at reception, deposit required" },
+              title: { it: "Sport e giochi", en: "Sports and games" },
+              text: {
+                it: "Biliardino, ping pong, pallavolo e calcetto per grandi e bambini.",
+                en: "Table football, table tennis, volleyball and five-a-side for adults and children.",
+              },
+              image: {
+                src: "services/ping-pong.webp",
+                alt: { it: "Ping pong", en: "Table tennis" },
+              },
+            },
+            {
+              meta: { it: "La carbonella non è fornita", en: "Charcoal not provided" },
+              title: { it: "Barbecue", en: "Barbecues" },
+              text: {
+                it: "Due barbecue a Nerbona e uno alla Casina, per grigliate e serate all'aperto.",
+                en: "Two barbecues at Nerbona and one at La Casina, for grills and evenings outdoors.",
+              },
+              image: {
+                src: "extra/casina-barbecue.webp",
+                alt: { it: "Il barbecue della Casina", en: "La Casina's barbecue" },
+              },
+            },
+            {
+              meta: { it: "Solo in esclusiva", en: "Exclusive use only" },
+              title: { it: "Forno a legna", en: "Wood-fired oven" },
+              text: {
+                it: "A Nerbona c'è un forno a legna tradizionale, utilizzabile solo affittando l'intera struttura.",
+                en: "Nerbona has a traditional wood-fired oven, available only when renting the whole site.",
+              },
+              image: {
+                src: "services/forno.webp",
+                alt: { it: "Pizze nel forno a legna", en: "Pizzas in the wood oven" },
+              },
+            },
+            {
+              meta: { it: "A Nerbona", en: "At Nerbona" },
+              title: { it: "Cappella di San Luigi", en: "Chapel of San Luigi" },
+              text: {
+                it: "Una piccola chiesa consacrata, parte della fattoria da sempre.",
+                en: "A small consecrated church that has always been part of the farm.",
+              },
+              image: {
+                src: "services/cappella.webp",
+                alt: { it: "La cappella", en: "The chapel" },
+              },
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "extra/casina-capanna-tavola.webp",
+            alt: { it: "La tavola sotto il portico", en: "The table under the portico" },
+          },
+          kicker: { it: "Domande?", en: "Questions?" },
+          title: { it: "Chiedete pure.", en: "Just ask." },
+          text: {
+            it: "Per esigenze particolari, animali, arrivi tardi o gruppi scriveteci prima di prenotare.",
+            en: "For special requests, pets, late arrivals or groups, write to us before booking.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- Esperienze ------------------------------------------------- */
+    /* Le attività sono di collaboratori esterni: i loro recapiti vanno in
+       `details`, il sito in `link`. */
+    {
+      slug: "esperienze",
+      title: { it: "Esperienze", en: "Experiences" },
+      description: {
+        it: "Cooking class, passeggiate col falco, caccia al tartufo, ceramica ed erbe spontanee: esperienze in Val d'Elsa da Fattoria Nerbona.",
+        en: "Cooking classes, falconry walks, truffle hunting, pottery and wild herbs: experiences in Val d'Elsa from Fattoria Nerbona.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "trail/main.webp",
+            alt: { it: "Una strada bianca in Val d'Elsa", en: "A white road in Val d'Elsa" },
+          },
+          labelParts: [
+            { it: "Esperienze", en: "Experiences" },
+            { it: "Val d'Elsa", en: "Val d'Elsa" },
+          ],
+          titleLines: [
+            { it: "La Toscana,", en: "Tuscany," },
+            { it: "con le mani.", en: "hands-on." },
+          ],
+          intro: {
+            it: "Pasta fatta in casa, un falco sul braccio, un cane che fiuta il tartufo. Con chi vive questo territorio.",
+            en: "Homemade pasta, a falcon on your arm, a dog sniffing out truffles. With people who live this land.",
+          },
+          cta: {
+            label: { it: "Le esperienze", en: "The experiences" },
+            href: "#esperienze",
+          },
+          pillars: [
+            { it: "Cucina", en: "Cooking" },
+            { it: "Natura", en: "Nature" },
+            { it: "Artigianato", en: "Crafts" },
+          ],
+        },
+        {
+          type: "cards",
+          id: "esperienze",
+          kicker: { it: "Da prenotare", en: "To book" },
+          title: {
+            it: "Sei modi di conoscere la Val d'Elsa.",
+            en: "Six ways to get to know Val d'Elsa.",
+          },
+          text: {
+            it: "Le esperienze sono organizzate con professionisti della zona: per date e prezzi contattate direttamente i riferimenti indicati.",
+            en: "Experiences are run with local professionals: for dates and prices contact them directly using the details below.",
+          },
+          items: [
+            {
+              meta: { it: "Minimo 2 persone · circa 3 ore", en: "Minimum 2 people · about 3 hours" },
+              title: { it: "Lezione di cucina", en: "Cooking class" },
+              text: {
+                it: "Pasta fresca, ravioli di ricotta e tagliatelle al pomodoro, poi il tiramisù. Con una bottiglia di vino bianco locale ogni tre persone. Opzioni su misura per grandi gruppi.",
+                en: "Fresh pasta, ricotta ravioli and tagliatelle with tomato sauce, then tiramisù. With a bottle of local white wine for every three people. Tailored options for large groups.",
+              },
+              image: {
+                src: "experiences/cooking.webp",
+                alt: { it: "Ravioli fatti a mano", en: "Handmade ravioli" },
+              },
+              details: [
+                { it: "Su prenotazione in reception", en: "Book at reception" },
+              ],
+            },
+            {
+              meta: { it: "Percorsi ad anello da Nerbona", en: "Loop routes from Nerbona" },
+              title: { it: "Passeggiate", en: "Walks" },
+              text: {
+                it: "Itinerari ad anello che partono dalla fattoria, fra boschi, campi e strade bianche. Si seguono dal telefono.",
+                en: "Loop itineraries starting from the farm, through woods, fields and white roads. Follow them on your phone.",
+              },
+              image: {
+                src: "experiences/walk.webp",
+                alt: { it: "Un sentiero nel bosco", en: "A path through the wood" },
+              },
+              link: {
+                label: { it: "I percorsi su Komoot", en: "Routes on Komoot" },
+                href: "https://www.komoot.com/it-it/user/5424558277270/routes?type=planned",
+              },
+            },
+            {
+              meta: { it: "Wild Mood Tuscany", en: "Wild Mood Tuscany" },
+              title: { it: "Passeggiate col falco", en: "Walks with a falcon" },
+              text: {
+                it: "La falconeria è un'arte antica e poco conosciuta. Cosa vuol dire addestrare un rapace e lavorarci ogni giorno? Un'emozione inattesa.",
+                en: "Falconry is an ancient, little-known art. What does it mean to train a bird of prey and work with it every day? An unexpected thrill.",
+              },
+              image: {
+                src: "experiences/falconry.webp",
+                alt: { it: "Falconeria", en: "Falconry" },
+              },
+              details: [{ it: "Francesca · +39 366 494 7500", en: "Francesca · +39 366 494 7500" }],
+              link: {
+                label: { it: "wildmoodtuscany.it", en: "wildmoodtuscany.it" },
+                href: "https://www.wildmoodtuscany.it/",
+              },
+            },
+            {
+              meta: { it: "Casole Truffle", en: "Casole Truffle" },
+              title: { it: "Caccia al tartufo", en: "Truffle hunting" },
+              text: {
+                it: "Con tartufai esperti e i loro cani, nei boschi della Val d'Elsa: tradizione, mistero e sapori autentici.",
+                en: "With expert truffle hunters and their dogs in the Val d'Elsa woods: tradition, mystery and authentic flavours.",
+              },
+              image: {
+                src: "experiences/truffle.webp",
+                alt: { it: "Cani da tartufo", en: "Truffle dogs" },
+              },
+              details: [
+                { it: "Francesca · +39 366 494 7500", en: "Francesca · +39 366 494 7500" },
+                { it: "Amedeo · +39 340 221 7901", en: "Amedeo · +39 340 221 7901" },
+              ],
+              link: {
+                label: { it: "casoletruffle.com", en: "casoletruffle.com" },
+                href: "https://casoletruffle.com/",
+              },
+            },
+            {
+              meta: { it: "Workshop di 2–3 ore in struttura", en: "2–3 hour workshop on site" },
+              title: { it: "Laboratorio di ceramica", en: "Pottery workshop" },
+              text: {
+                it: "Adatto anche a chi non ha mai toccato l'argilla, in gruppo o in coppia. Si torna a casa con un oggetto unico, ricordo del luogo.",
+                en: "Suitable even if you've never touched clay, in a group or as a couple. You take home a unique piece, a keepsake of the place.",
+              },
+              image: {
+                src: "experiences/ceramics.webp",
+                alt: { it: "Mani che modellano l'argilla", en: "Hands shaping clay" },
+              },
+              details: [{ it: "Barbara · +39 351 925 9879", en: "Barbara · +39 351 925 9879" }],
+              link: {
+                label: { it: "barbaraceramics.com", en: "barbaraceramics.com" },
+                href: "https://www.barbaraceramics.com/",
+              },
+            },
+            {
+              meta: { it: "Wild Mood Tuscany", en: "Wild Mood Tuscany" },
+              title: { it: "Erbe spontanee", en: "Wild herbs" },
+              text: {
+                it: "Tra tradizioni agresti e saperi popolari, le cosiddette erbacce rivelano sapori e profumi inattesi, e diventano una risorsa in cucina.",
+                en: "Between country traditions and folk knowledge, so-called weeds reveal unexpected flavours and scents, and become a resource in the kitchen.",
+              },
+              image: {
+                src: "experiences/herbs.webp",
+                alt: { it: "Raccolta di erbe", en: "Foraging herbs" },
+              },
+              details: [{ it: "Francesca · +39 366 494 7500", en: "Francesca · +39 366 494 7500" }],
+              link: {
+                label: { it: "wildmoodtuscany.it", en: "wildmoodtuscany.it" },
+                href: "https://www.wildmoodtuscany.it/",
+              },
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "trail/detail.webp",
+            alt: { it: "Il bosco in autunno", en: "The wood in autumn" },
+          },
+          kicker: { it: "Organizzare il soggiorno", en: "Planning your stay" },
+          title: {
+            it: "Vi aiutiamo a incastrare tutto.",
+            en: "We'll help you fit it all in.",
+          },
+          text: {
+            it: "Diteci le date e cosa vi piacerebbe fare: vi mettiamo in contatto con le persone giuste.",
+            en: "Tell us your dates and what you'd like to do: we'll put you in touch with the right people.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- Matrimoni -------------------------------------------------- */
+    {
+      slug: "matrimoni",
+      title: { it: "Matrimoni in Toscana", en: "Weddings in Tuscany" },
+      description: {
+        it: "Matrimoni in esclusiva a Fattoria Nerbona: alberi secolari, viali di cipressi e venti alloggi per gli invitati, tra Siena e Firenze.",
+        en: "Exclusive weddings at Fattoria Nerbona: age-old trees, cypress avenues and twenty apartments for guests, between Siena and Florence.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "weddings/01.webp",
+            alt: { it: "Sposi nel viale di pini", en: "Couple on the pine avenue" },
+          },
+          labelParts: [
+            { it: "Matrimoni", en: "Weddings" },
+            { it: "In esclusiva", en: "Exclusive use" },
+          ],
+          titleLines: [
+            { it: "Il vostro giorno,", en: "Your day," },
+            { it: "tutta la tenuta.", en: "the whole estate." },
+          ],
+          intro: {
+            it: "Per un matrimonio vi lasciamo l'intera struttura, incorniciata da alberi secolari.",
+            en: "For a wedding the whole estate is yours, framed by age-old trees.",
+          },
+          cta: {
+            label: { it: "Scopri", en: "Discover" },
+            href: "#location",
+          },
+          pillars: [
+            { it: "Cerimonia nel parco", en: "Ceremony in the park" },
+            { it: "Fino a 88 ospiti a dormire", en: "Up to 88 guests staying" },
+            { it: "Forno a legna", en: "Wood-fired oven" },
+          ],
+        },
+        {
+          type: "prose",
+          id: "location",
+          kicker: { it: "La location", en: "The venue" },
+          title: {
+            it: "Un paesaggio che non ha bisogno di allestimenti.",
+            en: "A landscape that needs no decoration.",
+          },
+          paragraphs: [
+            {
+              it: "L'Agriturismo Fattoria Nerbona è incorniciato da alberi secolari, in un contesto paesaggistico che basta a sé stesso. Per il vostro giorno vi diamo in esclusiva l'intera struttura: il parco per la cerimonia, il viale di pini per le fotografie, i prati per la cena sotto le luci.",
+              en: "Agriturismo Fattoria Nerbona is framed by age-old trees, in a landscape that speaks for itself. For your day the whole site is exclusively yours: the park for the ceremony, the pine avenue for photographs, the lawns for dinner under the lights.",
+            },
+            {
+              it: "Gli invitati possono dormire qui: fra Nerbona e La Casina ci sono venti alloggi, fino a 88 posti letto. Con l'esclusiva si può usare anche il forno a legna.",
+              en: "Guests can stay here too: between Nerbona and La Casina there are twenty apartments, sleeping up to 88. Exclusive use also includes the wood-fired oven.",
+            },
+            {
+              it: "«Elena e Cristina sono state molto disponibili e ci hanno supportato durante l'intero processo di organizzazione.» — Aaron, sposo",
+              en: "“Elena and Cristina were very helpful and supported us throughout the entire planning process.” — Aaron, groom",
+            },
+          ],
+          image: {
+            src: "weddings/09.webp",
+            alt: { it: "Gli sposi fra i campi", en: "The couple among the fields" },
+          },
+        },
+        {
+          type: "gallery",
+          id: "galleria",
+          kicker: { it: "Matrimoni a Nerbona", en: "Weddings at Nerbona" },
+          title: { it: "Feste che abbiamo ospitato.", en: "Celebrations we have hosted." },
+          images: [
+            { src: "weddings/02.webp", alt: { it: "Tavolata nuziale", en: "Wedding table" } },
+            { src: "weddings/03.webp", alt: { it: "Il parco il giorno della festa", en: "The park on the wedding day" } },
+            { src: "weddings/04.webp", alt: { it: "Angolo lounge sul prato", en: "Lounge corner on the lawn" } },
+            { src: "weddings/05.webp", alt: { it: "Fiori sulla sedia", en: "Flowers on a chair" } },
+            { src: "weddings/06.webp", alt: { it: "Tavola nella limonaia", en: "Table in the lemon house" } },
+            { src: "weddings/07.webp", alt: { it: "Tavola all'aperto", en: "Outdoor table" } },
+            { src: "weddings/08.webp", alt: { it: "Cuscini e lanterne nel bosco", en: "Cushions and lanterns in the wood" } },
+            { src: "weddings/10.webp", alt: { it: "Sedie e girasoli", en: "Chairs and sunflowers" } },
+            { src: "weddings/11.webp", alt: { it: "Cena sotto il portico", en: "Dinner under the portico" } },
+            { src: "weddings/13.webp", alt: { it: "Ospiti alla cerimonia", en: "Guests at the ceremony" } },
+            { src: "weddings/18.webp", alt: { it: "La fattoria illuminata", en: "The farm lit up" } },
+            { src: "weddings/17.webp", alt: { it: "Altare nel parco", en: "Altar in the park" } },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "weddings/15.webp",
+            alt: { it: "Allestimento nel bosco", en: "Setting in the wood" },
+          },
+          kicker: { it: "Il vostro matrimonio", en: "Your wedding" },
+          title: {
+            it: "Raccontateci la vostra idea.",
+            en: "Tell us your idea.",
+          },
+          text: {
+            it: "Scriveteci la data e il numero di invitati: vi rispondiamo con disponibilità e una proposta.",
+            en: "Send us the date and number of guests: we'll reply with availability and a proposal.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- Toscana: storia e tradizioni -------------------------------- */
+    {
+      slug: "toscana",
+      title: { it: "Toscana: storia e tradizioni", en: "Tuscany: history and traditions" },
+      description: {
+        it: "Cultura, paesaggio e tradizione: la Toscana che si vede da Nerbona e i musei di Firenze a un'ora di strada.",
+        en: "Culture, landscape and tradition: the Tuscany you see from Nerbona and Florence's museums an hour away.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "estate/casina-view.webp",
+            alt: { it: "Le colline senesi", en: "The Sienese hills" },
+          },
+          labelParts: [
+            { it: "Toscana", en: "Tuscany" },
+            { it: "Storia e tradizioni", en: "History and traditions" },
+          ],
+          titleLines: [
+            { it: "Il silenzio toscano", en: "Tuscan silence" },
+            { it: "è una presenza.", en: "is a presence." },
+          ],
+          intro: {
+            it: "Lo stesso equilibrio fra uomo e natura che si vede nei quadri del Rinascimento si vede ancora dalla finestra.",
+            en: "The same balance between people and nature you see in Renaissance paintings is still visible from the window.",
+          },
+          cta: {
+            label: { it: "Leggi", en: "Read" },
+            href: "#storia",
+          },
+          pillars: [
+            { it: "Uffizi", en: "Uffizi" },
+            { it: "Galleria dell'Accademia", en: "Accademia Gallery" },
+            { it: "Pitti e Boboli", en: "Pitti and Boboli" },
+          ],
+        },
+        {
+          type: "prose",
+          id: "storia",
+          kicker: { it: "Storia e tradizioni", en: "History and traditions" },
+          title: {
+            it: "Una terra in cui cultura, paesaggio e tradizione convivono da secoli.",
+            en: "A land where culture, landscape and tradition have lived side by side for centuries.",
+          },
+          paragraphs: [
+            {
+              it: "La Toscana ha un'identità fatta di bellezza, silenzio e natura. Questa armonia si ritrova nelle grandi opere del Rinascimento, dove il paesaggio non è mai uno sfondo ma parte viva del racconto.",
+              en: "Tuscany has an identity made of beauty, silence and nature. This harmony runs through the great works of the Renaissance, where landscape is never a mere backdrop but a living part of the story.",
+            },
+            {
+              it: "Agli Uffizi, nelle opere di Botticelli e di Leonardo, la natura diventa simbolo, atmosfera, respiro. Alla Galleria dell'Accademia la forza del David di Michelangelo è una sintesi perfetta di silenzio, tensione e armonia. A Palazzo Pitti e nel Giardino di Boboli arte e natura si fondono in un paesaggio che invita alla contemplazione e al ritmo lento.",
+              en: "At the Uffizi, in the works of Botticelli and Leonardo, nature becomes symbol, atmosphere, breath. At the Accademia Gallery the strength of Michelangelo's David is a perfect synthesis of silence, tension and harmony. At Palazzo Pitti and the Boboli Gardens art and nature merge into a landscape that invites contemplation and a slower pace.",
+            },
+            {
+              it: "Nerbona si ispira a questa idea di Toscana autentica: rispetto per la natura, attenzione al territorio, ricerca di equilibrio. Qui il silenzio non è assenza ma presenza, un modo di vivere che riflette la stessa armonia dei paesaggi e delle opere della tradizione.",
+              en: "Nerbona draws on this idea of authentic Tuscany: respect for nature, care for the land, a search for balance. Here silence is not absence but presence, a way of living that reflects the same harmony as the landscapes and works of tradition.",
+            },
+          ],
+          links: [
+            { label: { it: "Gallerie degli Uffizi", en: "Uffizi Galleries" }, href: "https://www.uffizi.it/gli-uffizi" },
+            { label: { it: "Galleria dell'Accademia", en: "Accademia Gallery" }, href: "https://www.galleriaaccademiafirenze.it/" },
+            { label: { it: "Palazzo Pitti e Boboli", en: "Palazzo Pitti and Boboli" }, href: "https://www.uffizi.it/pagine/cumulativo-pitti-boboli" },
+            { label: { it: "Giardino di Boboli", en: "Boboli Gardens" }, href: "https://villegiardinimedicei.it/giardino-di-boboli/" },
+          ],
+          image: {
+            src: "estate/landscape.webp",
+            alt: { it: "Pini e casa colonica", en: "Pines and farmhouse" },
+          },
+        },
+        {
+          type: "territory",
+          id: "territorio",
+          kicker: "Heart of Tuscany",
+          title: {
+            it: "Tutto a meno di un'ora.",
+            en: "Everything within the hour.",
+          },
+          text: {
+            it: "Borghi medievali, città d'arte e le colline del Chianti: le distanze da Nerbona.",
+            en: "Medieval villages, art cities and the Chianti hills: distances from Nerbona.",
+          },
+          disclaimer: {
+            it: "DISTANZE STRADALI INDICATIVE",
+            en: "APPROXIMATE DRIVING DISTANCES",
+          },
+          mapLabel: {
+            it: "Mappa stilizzata delle distanze da Fattoria Nerbona",
+            en: "Stylised map of distances from Fattoria Nerbona",
+          },
+          gridLabels: { x: "43°22′ N", y: "11°03′ E" },
+          homeLabel: { lines: ["Fattoria", "Nerbona"], sub: "Colle di Val d'Elsa" },
+          legend: {
+            home: "Nerbona",
+            destinations: { it: "Destinazioni", en: "Destinations" },
+            note: {
+              it: "Distanze stradali indicative",
+              en: "Approximate driving distances",
+            },
+          },
+          items: [
+            {
+              id: "colle",
+              name: { it: "Colle di Val d'Elsa", en: "Colle di Val d'Elsa" },
+              distance: "10 km",
+              coordinates: { lat: 43.4213, lng: 11.1275 },
+            },
+            {
+              id: "gimignano",
+              name: { it: "San Gimignano", en: "San Gimignano" },
+              distance: "22 km",
+              coordinates: { lat: 43.4677, lng: 11.0431 },
+            },
+            {
+              id: "volterra",
+              name: { it: "Volterra", en: "Volterra" },
+              distance: "30 km",
+              coordinates: { lat: 43.4014, lng: 10.8608 },
+            },
+            {
+              id: "siena",
+              name: { it: "Siena", en: "Siena" },
+              distance: "35 km",
+              coordinates: { lat: 43.3188, lng: 11.3308 },
+            },
+            {
+              id: "florence",
+              name: { it: "Firenze", en: "Florence" },
+              distance: "60 km",
+              coordinates: { lat: 43.7696, lng: 11.2558 },
+            },
+            {
+              id: "montalcino",
+              name: { it: "Montalcino", en: "Montalcino" },
+              distance: "75 km",
+              coordinates: { lat: 43.0576, lng: 11.4889 },
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "estate/park.webp",
+            alt: { it: "Il parco di Nerbona", en: "The Nerbona park" },
+          },
+          kicker: { it: "Il vostro soggiorno", en: "Your stay" },
+          title: {
+            it: "La Toscana comincia dal cancello.",
+            en: "Tuscany starts at the gate.",
+          },
+          text: {
+            it: "Vi diamo volentieri qualche consiglio su cosa vedere, a seconda dei giorni che avete.",
+            en: "We're happy to suggest what to see, depending on how many days you have.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+
+    /* --- Recensioni ------------------------------------------------- */
+    /* Trascritte dalle schermate pubblicate su nerbona.com. I cognomi sono
+       abbreviati; le recensioni in lingua straniera sono tradotte. */
+    {
+      slug: "recensioni",
+      title: { it: "Recensioni", en: "Reviews" },
+      description: {
+        it: "Cosa dicono gli ospiti di Fattoria Nerbona su Google, Tripadvisor e Booking.com.",
+        en: "What guests say about Fattoria Nerbona on Google, Tripadvisor and Booking.com.",
+      },
+      sections: [
+        {
+          type: "hero",
+          id: "home",
+          size: "compact",
+          image: {
+            src: "estate/aerial.webp",
+            alt: { it: "La tenuta dall'alto", en: "The estate from above" },
+          },
+          labelParts: [
+            { it: "Recensioni", en: "Reviews" },
+            { it: "Google · Tripadvisor · Booking", en: "Google · Tripadvisor · Booking" },
+          ],
+          titleLines: [
+            { it: "Un angolo", en: "A corner" },
+            { it: "di paradiso.", en: "of paradise." },
+          ],
+          intro: {
+            it: "Le parole degli ospiti, così come le hanno scritte.",
+            en: "Our guests' words, just as they wrote them.",
+          },
+          cta: {
+            label: { it: "Leggi", en: "Read" },
+            href: "#recensioni",
+          },
+          pillars: [
+            { it: "5/5 su Google", en: "5/5 on Google" },
+            { it: "5/5 su Tripadvisor", en: "5/5 on Tripadvisor" },
+            { it: "10/10 su Booking.com", en: "10/10 on Booking.com" },
+          ],
+        },
+        {
+          type: "reviews",
+          id: "recensioni",
+          kicker: { it: "Dicono di noi", en: "What guests say" },
+          title: {
+            it: "Chi viene, di solito torna.",
+            en: "Those who come usually come back.",
+          },
+          items: [
+            {
+              source: "Tripadvisor",
+              score: "5/5",
+              title: {
+                it: "Una garanzia ogni anno: relax, sport e staff super!",
+                en: "A sure thing every year: relaxation, sport and a great team!",
+              },
+              quote: {
+                it: "Torniamo in questo agriturismo ogni anno con gli amici ed è sempre una conferma. Immerso nel verde, offre una piscina splendida e campi da calcio e pallavolo per divertirsi in compagnia. Un ringraziamento speciale a tutto lo staff: sempre disponibili, gentili e pronti a risolvere ogni esigenza. Ci fate sentire a casa ogni volta. Alla prossima!",
+                en: "We come back to this farm stay every year with friends and it never disappoints. Surrounded by greenery, it has a beautiful pool and football and volleyball pitches to enjoy together. Special thanks to all the staff: always available, kind and ready to help with anything. You make us feel at home every time. See you next time!",
+              },
+              author: "Maurizio C.",
+              date: { it: "Dicembre 2025 · con amici", en: "December 2025 · with friends" },
+            },
+            {
+              source: "Tripadvisor",
+              score: "5/5",
+              title: {
+                it: "Tipica e meravigliosa Toscana",
+                en: "Typical, wonderful Tuscany",
+              },
+              quote: {
+                it: "Un posto incantevole e tipicamente toscano. I padroni di casa sono disponibili e generosi. Eravamo due coppie e abbiamo adorato i nostri appartamenti. Vicino a diversi borghi e città, tra cui Siena e Firenze. Consigliamo vivamente questo posto.",
+                en: "A charming, typically Tuscan place. The hosts are helpful and generous. We were two couples and loved our apartments. Close to several villages and towns, including Siena and Florence. We highly recommend it.",
+              },
+              author: "Anne L.",
+              date: { it: "Ottobre 2025 · in coppia", en: "October 2025 · as a couple" },
+            },
+            {
+              source: "Booking.com",
+              score: "10/10",
+              title: {
+                it: "Un angolo di paradiso immerso nel verde e nel silenzio delle campagne toscane",
+                en: "A corner of paradise in the green and silence of the Tuscan countryside",
+              },
+              quote: {
+                it: "Davvero un posto speciale. Un angolo di paradiso.",
+                en: "A truly special place. A corner of paradise.",
+              },
+              author: "Fabio",
+              date: { it: "Agosto 2025 · famiglia", en: "August 2025 · family" },
+            },
+            {
+              source: "Google",
+              score: "5/5",
+              quote: {
+                it: "Siamo stati per un week end ed è stato tutto magnifico, la pace e la tranquillità di questo posto è unica. Ci siamo proprio rigenerati. Posizione ottimale per chi vuole visitare le città dell'entroterra toscano. Personale accogliente e preparato.",
+                en: "We stayed for a weekend and everything was wonderful; the peace and quiet of this place is unique. We really recharged. A great location for visiting the towns of inland Tuscany. Welcoming, knowledgeable staff.",
+              },
+              author: "Stefano B.",
+            },
+            {
+              source: "Booking.com",
+              score: "10/10",
+              title: { it: "Eccezionale", en: "Exceptional" },
+              quote: {
+                it: "Posto vivamente consigliato se si vuole staccare la spina e godere delle bellezze toscane. Ottimo rapporto qualità-prezzo.",
+                en: "Highly recommended if you want to unplug and enjoy the beauty of Tuscany. Excellent value for money.",
+              },
+              author: "Erick",
+              date: { it: "Ottobre 2025 · famiglia", en: "October 2025 · family" },
+            },
+            {
+              source: "Google",
+              score: "5/5",
+              quote: {
+                it: "Dopo molti, molti anni siamo finalmente tornati in vacanza nella meravigliosa Casina. Ci siamo subito innamorati di nuovo della casa e della zona. Anche i nostri cani sono stati ospiti graditi. Non avremmo potuto immaginare una vacanza più bella. Torneremo molto volentieri! (tradotta dal tedesco)",
+                en: "After many, many years we finally came back on holiday to the wonderful Casina. We fell in love with the house and the area all over again. Our dogs were welcome guests too. We couldn't have imagined a lovelier holiday. We'd love to come back! (translated from German)",
+              },
+              author: "Christina F.",
+            },
+            {
+              source: "Google",
+              score: "5/5",
+              quote: {
+                it: "Abbiamo scelto l'Agriturismo Nerbona come location per il nostro matrimonio. Siamo rimasti molto soddisfatti della splendida location, del personale attento e accogliente e delle camere pulite e confortevoli. Elena e Cristina sono state molto disponibili e ci hanno supportato durante l'intero processo di organizzazione. Consiglio VIVAMENTE questa splendida location a chiunque sia interessato a un matrimonio indimenticabile in Toscana. (tradotta dall'inglese)",
+                en: "We chose Agriturismo Nerbona for our wedding venue. We were very happy with the beautiful location, caring and welcoming staff, and the rooms were clean and comfortable. Elena and Cristina were very helpful and supported us throughout the entire planning process. I would HIGHLY recommend this beautiful location to anyone interested in a memorable Tuscany wedding.",
+              },
+              author: "Aaron G.",
+            },
+          ],
+          links: [
+            {
+              label: { it: "Leggi su Google", en: "Read on Google" },
+              href: "https://maps.app.goo.gl/Ad3fcrkMNsXYzxQS7",
+            },
+          ],
+        },
+        {
+          type: "contact",
+          id: "contatti",
+          image: {
+            src: "extra/casina-capanna-glicine.webp",
+            alt: { it: "Il portico della Casina", en: "La Casina's portico" },
+          },
+          kicker: { it: "Il vostro soggiorno", en: "Your stay" },
+          title: {
+            it: "La prossima recensione potrebbe essere la vostra.",
+            en: "The next review could be yours.",
+          },
+          text: {
+            it: "Prenotate online o scriveteci per qualsiasi domanda.",
+            en: "Book online or write to us with any question.",
+          },
+          whatsappLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
+          emailLabel: { it: "Invia una email", en: "Send us an email" },
+        },
+      ],
+    },
+  ],
+
+  /* ================================================================ */
   /* Alloggi                                                           */
   /* ================================================================ */
 
-  /* La struttura ne ha venti: dodici appartamenti, due camere e Villa Aia a
-     Nerbona, cinque appartamenti a La Casina.
-
-     Qui sotto sono rappresentate le TIPOLOGIE documentate, non i venti
-     alloggi reali: nomi, metrature e posti letto di ciascuno non sono
-     pubblici. Appena il cliente li fornisce, ogni voce si duplica e si
-     completa, e le foto seguono la convenzione <slug>-01.webp.
-
-     Il campo `category` porta il nome della sede, così nel carosello si
-     capisce a colpo d'occhio dove si trova ogni alloggio. */
+  /* Una voce per TIPOLOGIA, come nel menù del sito originale; i venti
+     appartamenti reali sono elencati in `units`. Così il carosello resta di
+     otto card invece di venti. `size` mostra quanti alloggi raggruppa. */
 
   accommodations: [
     {
-      slug: "villa-aia",
-      name: "Villa Aia",
-      category: { it: "NERBONA · LA VILLA", en: "NERBONA · THE VILLA" },
-      size: "Villa",
-      guests: "12",
+      slug: "nerbona-bilocali",
+      name: "Bilocali",
+      category: AT_NERBONA("SEI APPARTAMENTI", "SIX APARTMENTS"),
+      size: "6",
+      guests: "2–4",
       layout: {
-        it: "Più camere · più bagni · giardino e spazi propri",
-        en: "Several bedrooms · several bathrooms · private garden",
+        it: "Soggiorno con cucina · 1 camera · 1 bagno",
+        en: "Living room with kitchen · 1 bedroom · 1 bathroom",
       },
       blurb: {
-        it: "La casa più grande della tenuta, pensata per due famiglie o un gruppo che vuole stare insieme.",
-        en: "The largest house on the estate, made for two families or a group that wants to stay together.",
+        it: "Una camera, la cucina e una porta che si apre sulla corte o sul giardino.",
+        en: "One bedroom, a kitchen and a door opening onto the courtyard or the garden.",
       },
       description: {
-        it: "Villa Aia è l'alloggio più ampio di Nerbona: spazi generosi all'interno, altrettanti all'aperto, e la libertà di organizzarsi le giornate senza dipendere da nessuno. Si affaccia sull'aia della sede principale, a pochi passi dalla piscina e dalle aree gioco. È la scelta di chi arriva in gruppo e vuole una casa sola invece di appartamenti separati.",
-        en: "Villa Aia is the largest home at Nerbona: generous inside, just as generous outdoors, and free to organise your days however you like. It looks onto the main farmyard, a few steps from the pool and the play areas. The choice for groups who want one house rather than separate apartments.",
+        it: "Sei bilocali ricavati dagli edifici di lavoro della fattoria, quasi tutti al piano terra: cucina-soggiorno, una camera da letto e un bagno. Granaio è pensato anche per chi usa la sedia a rotelle. Da Pasqua a ottobre ognuno ha il suo spazio esterno privato.",
+        en: "Six one-bedroom apartments carved from the farm's working buildings, almost all on the ground floor: kitchen-living room, one bedroom and one bathroom. Granaio is also designed for wheelchair users. From Easter to October each has its own private outdoor space.",
+      },
+      cover: "stays/nerbona-bilocali-01.webp",
+      detail: "stays/nerbona-bilocali-02.webp",
+      gallery: [
+        "stays/nerbona-bilocali-03.webp",
+        "stays/nerbona-bilocali-04.webp",
+        "stays/nerbona-bilocali-05.webp",
+        "stays/nerbona-bilocali-06.webp",
+        "stays/nerbona-bilocali-07.webp",
+        "stays/nerbona-bilocali-08.webp",
+        "stays/nerbona-bilocali-09.webp",
+        "stays/nerbona-bilocali-10.webp",
+        "stays/nerbona-bilocali-11.webp",
+        "stays/nerbona-bilocali-12.webp",
+        "stays/nerbona-bilocali-13.webp",
+        "stays/nerbona-bilocali-14.webp",
+        "stays/nerbona-bilocali-15.webp",
+        "stays/nerbona-bilocali-16.webp",
+        "stays/nerbona-bilocali-17.webp",
+        "stays/nerbona-bilocali-18.webp",
+      ],
+      units: [
+        {
+          name: "Mangiatoia",
+          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Cucina-soggiorno, una camera da letto e un bagno, con Wi-Fi.",
+            en: "Kitchen-living room, one bedroom and one bathroom, with Wi-Fi.",
+          },
+        },
+        {
+          name: "Granaio",
+          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Bagno senza bidet, con doccia a filo pavimento e water rialzato: l'appartamento è adatto anche a chi usa la sedia a rotelle.",
+            en: "Bathroom without bidet, with a walk-in shower and raised toilet: the apartment is also suitable for wheelchair users.",
+          },
+          tags: [ACCESSIBLE],
+        },
+        {
+          name: "Taverna",
+          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Cucina-soggiorno, una camera da letto e un bagno, con Wi-Fi.",
+            en: "Kitchen-living room, one bedroom and one bathroom, with Wi-Fi.",
+          },
+        },
+        {
+          name: "Rostra 2",
+          layout: { it: "Primo piano · 1 camera · 1 bagno", en: "First floor · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Al primo piano, con zanzariere. Lo spazio esterno privato è al piano terra.",
+            en: "On the first floor, with mosquito nets. The private outdoor space is on the ground floor.",
+          },
+          tags: [NETS],
+        },
+        {
+          name: "Forno 1",
+          layout: { it: "Piano terra, lato giardino · 1 camera · 1 bagno", en: "Ground floor, garden side · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Si affaccia sul giardino. Cucina-soggiorno, una camera e un bagno.",
+            en: "Looks onto the garden. Kitchen-living room, one bedroom and one bathroom.",
+          },
+        },
+        {
+          name: "Forno 2",
+          layout: { it: "Piano terra, lato giardino · 1 camera · 1 bagno", en: "Ground floor, garden side · 1 bedroom · 1 bathroom" },
+          text: {
+            it: "Accanto a Forno 1, sullo stesso giardino. Cucina-soggiorno, una camera e un bagno.",
+            en: "Next to Forno 1, on the same garden. Kitchen-living room, one bedroom and one bathroom.",
+          },
+        },
+      ],
+      amenities: [WIFI_IN, OUTDOOR, KITCHEN],
+    },
+    {
+      slug: "nerbona-trilocali",
+      name: "Trilocali",
+      category: AT_NERBONA("CINQUE APPARTAMENTI", "FIVE APARTMENTS"),
+      size: "5",
+      guests: "4–6",
+      layout: {
+        it: "Soggiorno con cucina · 2 camere · 1 o 2 bagni",
+        en: "Living room with kitchen · 2 bedrooms · 1 or 2 bathrooms",
+      },
+      blurb: {
+        it: "Il taglio più richiesto: due camere, cucina attrezzata e un tavolo fuori dalla porta.",
+        en: "The most popular size: two bedrooms, an equipped kitchen and a table outside the door.",
+      },
+      description: {
+        it: "Cinque trilocali fra la casa padronale e gli annessi: due camere da letto, cucina-soggiorno, uno o due bagni. Piccionaia e Solaio stanno all'ultimo piano, Trinciatoio al piano terra ed è adatto anche a chi usa la sedia a rotelle.",
+        en: "Five two-bedroom apartments between the main house and its outbuildings: two bedrooms, kitchen-living room, one or two bathrooms. Piccionaia and Solaio are on the top floor; Trinciatoio is on the ground floor and also suitable for wheelchair users.",
+      },
+      cover: "stays/nerbona-trilocali-01.webp",
+      detail: "stays/nerbona-trilocali-02.webp",
+      gallery: [
+        "stays/nerbona-trilocali-03.webp",
+        "stays/nerbona-trilocali-04.webp",
+        "stays/nerbona-trilocali-05.webp",
+        "stays/nerbona-trilocali-06.webp",
+        "stays/nerbona-trilocali-07.webp",
+        "stays/nerbona-trilocali-08.webp",
+        "stays/nerbona-trilocali-09.webp",
+        "stays/nerbona-trilocali-10.webp",
+        "stays/nerbona-trilocali-11.webp",
+        "stays/nerbona-trilocali-12.webp",
+        "stays/nerbona-trilocali-13.webp",
+        "stays/nerbona-trilocali-14.webp",
+        "stays/nerbona-trilocali-15.webp",
+        "stays/nerbona-trilocali-16.webp",
+        "stays/nerbona-trilocali-17.webp",
+        "stays/nerbona-trilocali-18.webp",
+        "stays/nerbona-trilocali-19.webp",
+      ],
+      units: [
+        {
+          name: "Piccionaia",
+          layout: { it: "Secondo piano · 2 camere · 1 bagno", en: "Second floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Nella vecchia piccionaia, all'ultimo piano. Lo spazio esterno privato è in cortile.",
+            en: "In the old dovecote, on the top floor. The private outdoor space is in the courtyard.",
+          },
+          tags: [NETS],
+        },
+        {
+          name: "Solaio",
+          layout: { it: "Secondo piano · 2 camere · 1 bagno", en: "Second floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "All'ultimo piano, accanto alla Piccionaia. Lo spazio esterno privato è in cortile.",
+            en: "On the top floor, next to Piccionaia. The private outdoor space is in the courtyard.",
+          },
+          tags: [NETS],
+        },
+        {
+          name: "Trinciatoio",
+          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Bagno senza bidet, con doccia a filo pavimento e water rialzato: adatto anche a chi usa la sedia a rotelle.",
+            en: "Bathroom without bidet, with a walk-in shower and raised toilet: also suitable for wheelchair users.",
+          },
+          tags: [ACCESSIBLE],
+        },
+        {
+          name: "Rostra 1",
+          layout: { it: "Primo piano · 2 camere · 2 bagni", en: "First floor · 2 bedrooms · 2 bathrooms" },
+          text: {
+            it: "L'unico trilocale con due bagni. Lo spazio esterno privato è al piano terra.",
+            en: "The only two-bedroom apartment with two bathrooms. The private outdoor space is on the ground floor.",
+          },
+          tags: [NETS],
+        },
+        {
+          name: "Cappella",
+          layout: { it: "Piano rialzato · 2 camere · 1 bagno", en: "Raised ground floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Accanto alla chiesetta di San Luigi, da cui prende il nome.",
+            en: "Next to the little church of San Luigi, which gives it its name.",
+          },
+        },
+      ],
+      amenities: [WIFI_IN, OUTDOOR, KITCHEN],
+    },
+    {
+      slug: "nerbona-quadrilocale",
+      name: "Mansarda",
+      category: AT_NERBONA("QUADRILOCALE", "THREE-BEDROOM"),
+      size: "1",
+      guests: "6–8",
+      layout: {
+        it: "Primo piano · 3 camere · 2 bagni",
+        en: "First floor · 3 bedrooms · 2 bathrooms",
+      },
+      blurb: {
+        it: "Tre camere e due bagni sotto le travi del tetto, per le famiglie grandi.",
+        en: "Three bedrooms and two bathrooms under the roof beams, for larger families.",
+      },
+      description: {
+        it: "Il quadrilocale di Nerbona: cucina-soggiorno, tre camere da letto e due bagni al primo piano. Una delle camere ha il tetto basso mansardato, che di solito piace molto ai bambini ed è adatta a chi non è troppo alto. Lo spazio esterno privato è in cortile, al piano terra.",
+        en: "Nerbona's three-bedroom apartment: kitchen-living room, three bedrooms and two bathrooms on the first floor. One of the bedrooms has a low sloping ceiling that children usually love, best for guests who aren't too tall. The private outdoor space is in the courtyard, on the ground floor.",
+      },
+      cover: "stays/nerbona-quadrilocale-01.webp",
+      detail: "stays/nerbona-quadrilocale-02.webp",
+      gallery: [
+        "stays/nerbona-quadrilocale-03.webp",
+        "stays/nerbona-quadrilocale-04.webp",
+        "stays/nerbona-quadrilocale-05.webp",
+        "stays/nerbona-quadrilocale-06.webp",
+        "stays/nerbona-quadrilocale-07.webp",
+        "stays/nerbona-quadrilocale-08.webp",
+      ],
+      amenities: [WIFI_IN, NETS, OUTDOOR, KITCHEN],
+    },
+    {
+      slug: "villa-aia",
+      name: "Villa L'Aia",
+      category: AT_NERBONA("LA VILLA", "THE VILLA"),
+      size: "1",
+      guests: "6–8",
+      layout: {
+        it: "Due saloni · 3 camere · 3 bagni · lavatrice privata",
+        en: "Two living rooms · 3 bedrooms · 3 bathrooms · private washer",
+      },
+      blurb: {
+        it: "Una casa indipendente dentro la tenuta, con due saloni e lo spazio esterno tutto suo.",
+        en: "An independent house within the estate, with two living rooms and outdoor space of its own.",
+      },
+      description: {
+        it: "Villa L'Aia è una struttura indipendente nella sede principale: due ampi saloni, una cucina con lavastoviglie, tre camere da letto (due matrimoniali e una con due letti singoli per bambini) e tre bagni, di cui uno di servizio. Ha una lavatrice a uso privato e, da Pasqua a ottobre, uno spazio esterno con tavolo, sedie e ombrelloni. Gli animali non sono ammessi.",
+        en: "Villa L'Aia is an independent building on the main site: two large living rooms, a kitchen with dishwasher, three bedrooms (two doubles and one with two single beds for children) and three bathrooms, one of them a guest WC. It has its own washing machine and, from Easter to October, an outdoor area with table, chairs and parasols. Pets are not allowed.",
       },
       cover: "stays/villa-aia-01.webp",
       detail: "stays/villa-aia-02.webp",
@@ -469,177 +2001,235 @@ const site: SiteConfig = {
         "stays/villa-aia-03.webp",
         "stays/villa-aia-04.webp",
         "stays/villa-aia-05.webp",
+        "stays/villa-aia-06.webp",
+        "stays/villa-aia-07.webp",
+        "stays/villa-aia-08.webp",
+        "stays/villa-aia-09.webp",
+        "stays/villa-aia-10.webp",
+        "stays/villa-aia-11.webp",
+        "stays/villa-aia-12.webp",
+        "stays/villa-aia-13.webp",
+        "stays/villa-aia-14.webp",
+        "stays/villa-aia-15.webp",
+        "stays/villa-aia-16.webp",
+      ],
+      amenities: [
+        { it: "Lavastoviglie", en: "Dishwasher" },
+        { it: "Lavatrice privata", en: "Private washing machine" },
+        { it: "Animali non ammessi", en: "No pets" },
+        OUTDOOR,
+        KITCHEN,
       ],
     },
     {
-      slug: "quadrilocale",
-      name: "Quadrilocale",
-      category: { it: "NERBONA · APPARTAMENTI", en: "NERBONA · APARTMENTS" },
-      size: "3 camere",
-      guests: "8",
-      layout: {
-        it: "3 camere · 2 bagni · spazio esterno privato",
-        en: "3 bedrooms · 2 bathrooms · private outdoor space",
-      },
-      blurb: {
-        it: "Tre camere e due bagni, per chi viaggia in tanti senza voler rinunciare agli spazi.",
-        en: "Three bedrooms and two bathrooms, for larger groups who still want room to breathe.",
-      },
-      description: {
-        it: "Il taglio più ampio fra gli appartamenti di Nerbona: tre camere, due bagni, cucina completamente attrezzata e uno spazio esterno privato con tavolo, sedie e ombrellone. Come tutti gli alloggi della fattoria è ricavato da un'antica struttura rurale, con travi in legno a vista e i dettagli che la ristrutturazione ha conservato.",
-        en: "The most spacious of the Nerbona apartments: three bedrooms, two bathrooms, a fully equipped kitchen and a private outdoor area with table, chairs and parasol. Like every home on the farm it was carved from an old rural building, with exposed timber beams and the details the restoration kept.",
-      },
-      cover: "stays/quadrilocale-01.webp",
-      detail: "stays/quadrilocale-02.webp",
-      gallery: [
-        "stays/quadrilocale-03.webp",
-        "stays/quadrilocale-04.webp",
-        "stays/quadrilocale-05.webp",
-      ],
-    },
-    {
-      slug: "trilocale",
-      name: "Trilocale",
-      category: { it: "NERBONA · APPARTAMENTI", en: "NERBONA · APARTMENTS" },
-      size: "2 camere",
-      guests: "6",
-      layout: {
-        it: "2 camere · 1 o 2 bagni · spazio esterno privato",
-        en: "2 bedrooms · 1 or 2 bathrooms · private outdoor space",
-      },
-      blurb: {
-        it: "Il taglio più richiesto: due camere, cucina attrezzata e un tavolo fuori dalla porta.",
-        en: "The most popular size: two bedrooms, equipped kitchen and a table just outside the door.",
-      },
-      description: {
-        it: "Due camere da letto, uno o due bagni a seconda dell'alloggio, e una zona giorno con cucina completamente attrezzata. Fuori, uno spazio riservato con tavolo, sedie e ombrellone, dove si finisce per passare gran parte della giornata. Alcuni appartamenti di questa tipologia sono accessibili anche a persone con disabilità.",
-        en: "Two bedrooms, one or two bathrooms depending on the unit, and a living area with a fully equipped kitchen. Outside, a reserved space with table, chairs and parasol where most of the day tends to be spent. Some apartments of this type are also accessible to guests with disabilities.",
-      },
-      cover: "stays/trilocale-01.webp",
-      detail: "stays/trilocale-02.webp",
-      gallery: [
-        "stays/trilocale-03.webp",
-        "stays/trilocale-04.webp",
-        "stays/trilocale-05.webp",
-      ],
-    },
-    {
-      slug: "bilocale",
-      name: "Bilocale",
-      category: { it: "NERBONA · APPARTAMENTI", en: "NERBONA · APARTMENTS" },
-      size: "1 camera",
-      guests: "4",
-      layout: {
-        it: "1 camera · 1 bagno · spazio esterno privato",
-        en: "1 bedroom · 1 bathroom · private outdoor space",
-      },
-      blurb: {
-        it: "Una camera, tutto il necessario, e la porta che si apre sulla campagna.",
-        en: "One bedroom, everything you need, and a door that opens onto the countryside.",
-      },
-      description: {
-        it: "Il taglio più raccolto: una camera, un bagno e una zona giorno con cucina attrezzata. Pensato per una coppia o una famiglia piccola, con lo stesso spazio esterno privato degli alloggi più grandi.",
-        en: "The most compact option: one bedroom, one bathroom and a living area with an equipped kitchen. Made for a couple or a small family, with the same private outdoor space as the larger homes.",
-      },
-      cover: "stays/bilocale-01.webp",
-      detail: "stays/bilocale-02.webp",
-      gallery: [
-        "stays/bilocale-03.webp",
-        "stays/bilocale-04.webp",
-        "stays/bilocale-05.webp",
-      ],
-    },
-    {
-      slug: "camera",
-      name: "Camera",
-      category: { it: "NERBONA · CAMERE", en: "NERBONA · ROOMS" },
-      size: "Camera",
+      slug: "nerbona-camere",
+      name: "Camere",
+      category: AT_NERBONA("DUE CAMERE", "TWO ROOMS"),
+      size: "2",
       guests: "2",
       layout: {
-        it: "1 camera · bagno privato",
-        en: "1 bedroom · private bathroom",
+        it: "Camera con bagno privato · aria condizionata",
+        en: "Room with private bathroom · air conditioning",
       },
       blurb: {
-        it: "Due camere nella sede principale, per soggiorni brevi.",
-        en: "Two rooms in the main building, for shorter stays.",
+        it: "Per soggiorni brevi: una camera con bagno, senza cucina, al piano terra.",
+        en: "For short stays: a room with bathroom, no kitchen, on the ground floor.",
       },
       description: {
-        it: "Nella sede principale ci sono due camere con bagno privato, senza cucina: la soluzione per chi si ferma poche notti o preferisce appoggiarsi ai servizi comuni della fattoria.",
-        en: "The main building has two rooms with private bathroom and no kitchen: the option for those staying a few nights or preferring to rely on the farm's shared facilities.",
+        it: "Lavanda e Ortensia sono due camere al piano terra con bagno privato (senza bidet e senza finestra). Non hanno cucina, ma frigorifero, TV, bollitore, zanzariera e aria condizionata. Da Pasqua a ottobre anche loro hanno uno spazio esterno privato.",
+        en: "Lavanda and Ortensia are two ground-floor rooms with private bathroom (no bidet, no window). They have no kitchen, but a fridge, TV, kettle, mosquito net and air conditioning. From Easter to October they too have a private outdoor space.",
       },
-      cover: "stays/camera-01.webp",
-      detail: "stays/camera-02.webp",
-      gallery: ["stays/camera-03.webp", "stays/camera-04.webp"],
+      cover: "stays/nerbona-camere-01.webp",
+      detail: "stays/nerbona-camere-02.webp",
+      gallery: [
+        "stays/nerbona-camere-03.webp",
+        "stays/nerbona-camere-04.webp",
+        "stays/nerbona-camere-05.webp",
+        "stays/nerbona-camere-06.webp",
+        "stays/nerbona-camere-07.webp",
+      ],
+      units: [
+        {
+          name: "Lavanda",
+          layout: { it: "Piano terra · bagno privato", en: "Ground floor · private bathroom" },
+          text: {
+            it: "Frigorifero, TV, bollitore elettrico, zanzariera e aria condizionata.",
+            en: "Fridge, TV, electric kettle, mosquito net and air conditioning.",
+          },
+        },
+        {
+          name: "Ortensia",
+          layout: { it: "Piano terra · bagno privato", en: "Ground floor · private bathroom" },
+          text: {
+            it: "Frigorifero, TV, bollitore elettrico, zanzariera e aria condizionata.",
+            en: "Fridge, TV, electric kettle, mosquito net and air conditioning.",
+          },
+        },
+      ],
+      amenities: [
+        { it: "Aria condizionata", en: "Air conditioning" },
+        { it: "Frigorifero e bollitore", en: "Fridge and kettle" },
+        OUTDOOR,
+      ],
     },
     {
-      slug: "casina-appartamento",
-      name: "Appartamento La Casina",
-      category: {
-        it: "LA CASINA · APPARTAMENTI",
-        en: "LA CASINA · APARTMENTS",
-      },
-      size: "1-2 camere",
-      guests: "5",
+      slug: "casina-bilocale",
+      name: "Leccio",
+      category: AT_CASINA("BILOCALE", "ONE-BEDROOM"),
+      size: "1",
+      guests: "2–4",
       layout: {
-        it: "1 o 2 camere · piscina riservata · spazio esterno",
-        en: "1 or 2 bedrooms · own pool · outdoor space",
+        it: "Piano terra · 1 camera · 1 bagno",
+        en: "Ground floor · 1 bedroom · 1 bathroom",
       },
       blurb: {
-        it: "Cinque alloggi oltre il bosco, con una piscina che serve solo loro.",
-        en: "Five homes beyond the wood, with a pool that serves only them.",
+        it: "Il più raccolto della Casina, al piano terra, con il prato davanti.",
+        en: "La Casina's most intimate apartment, on the ground floor, with the lawn in front.",
       },
       description: {
-        it: "La Casina è la seconda sede della fattoria, a un chilometro e mezzo da quella principale, raggiungibile in auto in pochi minuti o a piedi attraverso un boschetto. Cinque appartamenti soltanto, una piscina, barbecue, altalena e porte da calcio: chi cerca il silenzio sceglie questa.",
-        en: "La Casina is the farm's second site, a kilometre and a half from the main one, a few minutes by car or a walk through a small wood. Just five apartments, a pool, barbecue, swing and goalposts: the choice for those seeking quiet.",
+        it: "Leccio è il bilocale della Casina: cucina-soggiorno, una camera da letto e un bagno al piano terra, con zanzariere. Da Pasqua a ottobre ha il suo spazio esterno privato. Il Wi-Fi è disponibile all'esterno dell'appartamento.",
+        en: "Leccio is La Casina's one-bedroom apartment: kitchen-living room, one bedroom and one bathroom on the ground floor, with mosquito nets. From Easter to October it has its own private outdoor space. Wi-Fi is available outside the apartment.",
       },
-      cover: "stays/casina-appartamento-01.webp",
-      detail: "stays/casina-appartamento-02.webp",
+      cover: "stays/casina-bilocale-01.webp",
+      detail: "stays/casina-bilocale-02.webp",
       gallery: [
-        "stays/casina-appartamento-03.webp",
-        "stays/casina-appartamento-04.webp",
-        "stays/casina-appartamento-05.webp",
+        "stays/casina-bilocale-03.webp",
+        "stays/casina-bilocale-04.webp",
+        "stays/casina-bilocale-05.webp",
       ],
+      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
+    },
+    {
+      slug: "casina-trilocali",
+      name: "Trilocali",
+      category: AT_CASINA("TRE APPARTAMENTI", "THREE APARTMENTS"),
+      size: "3",
+      guests: "4–6",
+      layout: {
+        it: "Soggiorno con cucina · 2 camere · 1 bagno",
+        en: "Living room with kitchen · 2 bedrooms · 1 bathroom",
+      },
+      blurb: {
+        it: "Tre appartamenti con due camere: uno al primo piano con terrazzino, due al piano terra sul prato.",
+        en: "Three two-bedroom apartments: one upstairs with a terrace, two on the ground floor by the lawn.",
+      },
+      description: {
+        it: "I tre trilocali della Casina hanno due camere da letto, cucina e un bagno, tutti con zanzariere. Corbezzolo è al primo piano e ha un terrazzino; Olivo e Melo sono al piano terra, e Melo ha due spazi esterni, uno dal lato dell'ingresso e uno dal lato di una camera. Il Wi-Fi è disponibile all'esterno degli appartamenti.",
+        en: "La Casina's three two-bedroom apartments each have two bedrooms, a kitchen and a bathroom, all with mosquito nets. Corbezzolo is upstairs with a small terrace; Olivo and Melo are on the ground floor, and Melo has two outdoor areas, one by the entrance and one by a bedroom. Wi-Fi is available outside the apartments.",
+      },
+      cover: "stays/casina-trilocali-01.webp",
+      detail: "stays/casina-trilocali-02.webp",
+      gallery: [
+        "stays/casina-trilocali-03.webp",
+        "stays/casina-trilocali-04.webp",
+        "stays/casina-trilocali-05.webp",
+        "stays/casina-trilocali-06.webp",
+        "stays/casina-trilocali-07.webp",
+        "stays/casina-trilocali-08.webp",
+        "stays/casina-trilocali-09.webp",
+        "stays/casina-trilocali-10.webp",
+        "stays/casina-trilocali-11.webp",
+        "stays/casina-trilocali-12.webp",
+        "stays/casina-trilocali-13.webp",
+        "stays/casina-trilocali-14.webp",
+        "stays/casina-trilocali-15.webp",
+      ],
+      units: [
+        {
+          name: "Corbezzolo",
+          layout: { it: "Primo piano · 2 camere · 1 bagno", en: "First floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Al primo piano, con un terrazzino arredato con tavolo e sedie.",
+            en: "On the first floor, with a small terrace furnished with table and chairs.",
+          },
+          tags: [{ it: "Terrazzino", en: "Terrace" }],
+        },
+        {
+          name: "Olivo",
+          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Al piano terra, con spazio esterno privato con tavolo, sedie e ombrellone.",
+            en: "On the ground floor, with a private outdoor area with table, chairs and parasol.",
+          },
+        },
+        {
+          name: "Melo",
+          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
+          text: {
+            it: "Due spazi esterni privati: uno dal lato dell'ingresso, l'altro dal lato di una camera.",
+            en: "Two private outdoor areas: one by the entrance, the other by one of the bedrooms.",
+          },
+          tags: [{ it: "Due spazi esterni", en: "Two outdoor areas" }],
+        },
+      ],
+      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
+    },
+    {
+      slug: "casina-quadrilocale",
+      name: "Quercia",
+      category: AT_CASINA("QUADRILOCALE", "THREE-BEDROOM"),
+      size: "1",
+      guests: "6–8",
+      layout: {
+        it: "Primo piano · 3 camere · 2 bagni · terrazzino",
+        en: "First floor · 3 bedrooms · 2 bathrooms · terrace",
+      },
+      blurb: {
+        it: "Tre camere, due bagni e un terrazzino affacciato sugli ulivi.",
+        en: "Three bedrooms, two bathrooms and a small terrace overlooking the olive trees.",
+      },
+      description: {
+        it: "Quercia è l'appartamento più grande della Casina: al primo piano, cucina-soggiorno, tre camere da letto e due bagni, con zanzariere. Da Pasqua a ottobre il terrazzino ha tavolo, sedie e ombrellone. Il Wi-Fi è disponibile all'esterno dell'appartamento.",
+        en: "Quercia is La Casina's largest apartment: on the first floor, with kitchen-living room, three bedrooms and two bathrooms, and mosquito nets. From Easter to October the terrace has a table, chairs and parasol. Wi-Fi is available outside the apartment.",
+      },
+      cover: "stays/casina-quadrilocale-01.webp",
+      detail: "stays/casina-quadrilocale-02.webp",
+      gallery: [
+        "stays/casina-quadrilocale-03.webp",
+        "stays/casina-quadrilocale-04.webp",
+        "stays/casina-quadrilocale-05.webp",
+        "stays/casina-quadrilocale-06.webp",
+      ],
+      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
     },
   ],
 
   stayPage: {
-    back: { it: "Tutti gli alloggi", en: "All stays" },
+    back: { it: "Tutti gli alloggi", en: "All apartments" },
     kicker: { it: "La vostra casa a Nerbona", en: "Your home at Nerbona" },
-    sizeLabel: { it: "Tipologia", en: "Type" },
+    sizeLabel: { it: "Alloggi", en: "Units" },
     guestsLabel: { it: "Ospiti", en: "Guests" },
-    galleryLabel: { it: "Dentro la casa", en: "Inside the home" },
+    galleryLabel: { it: "Dentro la casa", en: "Inside" },
+    unitsLabel: { it: "Gli appartamenti", en: "The apartments" },
+    amenitiesLabel: { it: "In tutti gli alloggi", en: "In every apartment" },
     ctaTitle: {
       it: "Questa potrebbe essere la vostra estate.",
       en: "This could be your summer.",
     },
-    ctaLabel: { it: "Richiedi disponibilità", en: "Check availability" },
+    ctaLabel: { it: "Scrivici su WhatsApp", en: "Message us on WhatsApp" },
   },
 
   dock: {
     enabled: true,
     triggerKicker: { it: "PARLA CON NOI", en: "TALK TO US" },
     triggerLabel: { it: "Contattaci", en: "Contact us" },
-    panelKicker: { it: "PRENOTA DIRETTAMENTE", en: "BOOK DIRECTLY" },
+    panelKicker: { it: "PRENOTA DIRETTAMENTE", en: "BOOK DIRECT" },
     panelTitle: { it: "Iniziamo da qui.", en: "Let's start here." },
     panelText: {
-      it: "Vi rispondiamo direttamente, senza intermediari.",
-      en: "We reply directly, with no intermediaries.",
+      it: "Prenotando sul nostro sito o scrivendoci, ci parlate direttamente, senza intermediari.",
+      en: "Booking on our site or writing to us, you deal with us directly, with no intermediaries.",
     },
     phoneLabel: { it: "Telefono", en: "Phone" },
   },
 
   footer: {
-    copyright: "© 2026 Fattoria Nerbona",
+    copyright: "© 2026 Agriturismo Fattoria Nerbona",
   },
 
-  /* Testi di partenza, da riscrivere con il cliente prima di qualsiasi
-     pubblicazione reale. Nella versione definitiva vanno inclusi il codice
-     identificativo nazionale della struttura e i dati della società. */
-  /* La struttura gestisce già le proprie informative su Iubenda. Meglio
-     rimandare al loro documento, che resta aggiornato da chi lo mantiene,
-     che tenerne una copia qui destinata a invecchiare.
-     La cookie policy va chiesta al cliente: su Iubenda di solito esiste allo
-     stesso indirizzo con /cookie-policy in coda, ma va verificata. */
+  /* La struttura gestisce già le proprie informative su Iubenda: meglio
+     rimandare al loro documento, che resta aggiornato da chi lo mantiene.
+     La cookie policy all'indirizzo con /cookie-policy va verificata con il
+     cliente. */
   legalPages: [
     {
       slug: "privacy-policy",

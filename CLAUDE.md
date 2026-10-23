@@ -25,7 +25,7 @@ al prossimo cambio se ne dimentica uno.
 
 ```
 tenants/<id>/site.ts      contenuto del cliente — qui si lavora quasi sempre
-tenants/<id>/theme.css    colori e font del cliente
+tenants/<id>/theme.css    colori e font del cliente (font in tenants/<id>/fonts/)
 public/tenants/<id>/      foto e video del cliente
 src/config/types.ts       lo schema: cosa può cambiare da cliente a cliente
 src/components/sections/  una sezione della homepage per file
@@ -38,11 +38,13 @@ app/                      rotte Next, sottili
 | id | chi è | stato |
 |---|---|---|
 | `le-ville` | Agriturismo Le Ville, Colle di Val d'Elsa | **in produzione** su agriturismoleville.it |
-| `nerbona` | Fattoria Nerbona, Colle di Val d'Elsa | demo, foto segnaposto |
+| `nerbona` | Fattoria Nerbona, Colle di Val d'Elsa | prova multipagina, contenuti e foto reali da nerbona.com |
 | `belmicolle` | Trattoria Bel Mi Colle, Colle di Val d'Elsa | demo, foto segnaposto |
 
-`le-ville` è online: ogni modifica lì finisce su un sito vero. Gli altri due
-sono anteprime commerciali con immagini generate al posto delle fotografie.
+`le-ville` è online: ogni modifica lì finisce su un sito vero. `belmicolle` è
+un'anteprima commerciale con immagini generate al posto delle fotografie.
+`nerbona` è il primo cliente con pagine interne (`pages`), sottomenù e
+alloggi raggruppati per tipologia: è il riferimento per un sito multipagina.
 
 ## Comandi
 
@@ -93,6 +95,12 @@ quarta in poi servono le regole in `src/styles/parts/09-experiences.css`.
 
 **Oltre dodici sistemazioni** il carosello su desktop diventa lunghissimo da
 scorrere. La validazione avvisa.
+
+**Le pagine interne usano le stesse sezioni della homepage.** Una pagina nuova
+si aggiunge in `pages` nel `site.ts` del cliente, non con una cartella in
+`app/`. I collegamenti a pagine interne (`/servizi`) funzionano anche con
+`BASE_PATH` perché passano da `SmartLink`: non scrivere `<a href="/...">` a
+mano nei componenti.
 
 ## Aggiungere un tipo di sezione
 

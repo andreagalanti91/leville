@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "../../lib/i18n";
+import { SmartLink } from "../../lib/links";
 import type { FeatureSection } from "../../config/types";
 import { FillImage } from "../Media";
 
@@ -25,6 +26,12 @@ export function Feature({ section }: { section: FeatureSection }) {
         <p className="eyebrow light">{t(section.kicker)}</p>
         <h2>{t(section.title)}</h2>
         <p>{t(section.text)}</p>
+        {section.cta && (
+          <SmartLink className="button lime feature-cta" href={section.cta.href}>
+            <span>{t(section.cta.label)}</span>
+            <i className="direction-mark" aria-hidden="true" />
+          </SmartLink>
+        )}
       </div>
     </section>
   );

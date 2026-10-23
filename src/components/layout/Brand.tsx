@@ -3,18 +3,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { asset, site } from "../../config";
+import { useIsHome } from "../../lib/links";
 
 /**
  * Logo del cliente. Compare nell'header, nel footer e nelle pagine interne.
  * `href` cambia perché in homepage è un'ancora, altrove un link alla home.
+ * Se non è indicato lo si ricava dalla pagina in cui ci si trova.
  */
 export function Brand({
-  href = "#home",
+  href: explicitHref,
   size = 46,
 }: {
   href?: string;
   size?: number;
 }) {
+  const home = useIsHome();
+  const href = explicitHref ?? (home ? "#home" : "/");
   const content = (
     <>
       <Image

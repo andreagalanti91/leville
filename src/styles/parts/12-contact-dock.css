@@ -31,7 +31,7 @@
   padding: 11px 12px 11px 15px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 3px;
-  background: rgba(13, 28, 21, 0.94);
+  background: var(--dock-bg);
   color: #fff;
   box-shadow: 0 16px 42px rgba(8, 18, 13, 0.24);
   backdrop-filter: blur(16px);
@@ -44,7 +44,7 @@
 
 .contact-dock-trigger:hover {
   transform: translateY(-2px);
-  background: #142a20;
+  background: var(--forest-hover);
 }
 
 .contact-dock-trigger > span:nth-child(2) {
@@ -113,7 +113,7 @@
   bottom: calc(100% + 12px);
   width: 336px;
   padding: 27px;
-  background: #f4f0e7;
+  background: var(--dock-panel);
   color: var(--ink);
   box-shadow: 0 25px 70px rgba(8, 18, 13, 0.28);
   opacity: 0;
@@ -136,7 +136,7 @@
   margin: 0 0 18px;
   font-size: 7px;
   letter-spacing: 0.2em;
-  color: #68746c;
+  color: var(--muted-soft);
 }
 
 .contact-dock-panel h2 {
@@ -153,7 +153,7 @@
   margin-bottom: 24px;
   font:
     13px/1.5 var(--font-display);
-  color: #5b665f;
+  color: var(--muted);
 }
 
 .contact-dock-close {

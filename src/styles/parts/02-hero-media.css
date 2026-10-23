@@ -8,7 +8,7 @@
   min-height: 100svh;
   overflow: hidden;
   color: #fffef8;
-  background: #15251d;
+  background: var(--hero-bg);
 }
 
 .hero-media,
@@ -19,8 +19,9 @@
 
 .hero-media {
   overflow: hidden;
-  background: url("/images/demo-20260826/general-01.webp") center/cover
-    no-repeat;
+  /* Nessuna immagine di riserva: mentre il video carica si vede il poster,
+     e sotto il colore di fondo dell'apertura. */
+  background: var(--hero-bg);
 }
 
 .hero-shade {

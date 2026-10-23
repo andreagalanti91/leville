@@ -124,8 +124,7 @@
   color: var(--lime);
   padding: 15px 0;
   font:
-    12px Arial,
-    sans-serif;
+    12px var(--font-body);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }

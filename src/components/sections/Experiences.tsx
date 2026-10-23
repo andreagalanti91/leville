@@ -2,6 +2,7 @@
 
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { useLanguage } from "../../lib/i18n";
+import { SmartLink } from "../../lib/links";
 import { prefersReducedMotion, setVars } from "../../lib/use-scroll-effect";
 import type { ExperiencesSection } from "../../config/types";
 import { FillImage } from "../Media";
@@ -82,12 +83,12 @@ export function Experiences({ section }: { section: ExperiencesSection }) {
               </p>
               <h3>{experience.title}</h3>
               <p>{t(experience.text)}</p>
-              <a href={section.ctaHref}>
+              <SmartLink href={section.ctaHref}>
                 <span>{t(section.ctaLabel)}</span>
                 <i>
                   <b className="direction-mark" aria-hidden="true" />
                 </i>
-              </a>
+              </SmartLink>
             </div>
           </article>
         ))}

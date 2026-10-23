@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 /**
@@ -28,8 +29,22 @@ const rawBasePath = (process.env.BASE_PATH ?? "").trim().replace(/\/+$/, "");
 const basePath =
   rawBasePath && !rawBasePath.startsWith("/") ? `/${rawBasePath}` : rawBasePath;
 
+/* Il tema del cliente (colori e font) sta in tenants/<id>/theme.css. Lo
+   importa app/layout.tsx attraverso questo alias, che punta alla cartella del
+   cliente che si sta compilando: un import scritto a mano in globals.css
+   finirebbe per dare a tutti i clienti il tema di uno solo. */
+const siteId = process.env.SITE_ID ?? "le-ville";
+const tenantTheme = `./tenants/${siteId}/theme.css`;
+
 const nextConfig: NextConfig = {
   output: staticExport ? "export" : undefined,
+  turbopack: {
+    resolveAlias: { "@tenant/theme.css": tenantTheme },
+  },
+  webpack: (config) => {
+    config.resolve.alias["@tenant/theme.css"] = path.resolve(tenantTheme);
+    return config;
+  },
   trailingSlash: staticExport,
   basePath: basePath || undefined,
   images: {
@@ -38,7 +53,7 @@ const nextConfig: NextConfig = {
   },
   env: {
     /* Resi disponibili al codice client. */
-    NEXT_PUBLIC_SITE_ID: process.env.SITE_ID ?? "le-ville",
+    NEXT_PUBLIC_SITE_ID: siteId,
     NEXT_PUBLIC_BASE_PATH: basePath,
     /* Dominio pubblico. Se assente si usa quello in configurazione. */
     NEXT_PUBLIC_SITE_URL: process.env.SITE_URL ?? "",

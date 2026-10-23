@@ -2,14 +2,18 @@
 
 import { useState } from "react";
 import { site } from "../config";
-import type { Section } from "../config/types";
+import type { ContentPage, Section } from "../config/types";
+import { PageScope } from "../lib/links";
 import { ContactDock } from "./layout/ContactDock";
 import { Footer } from "./layout/Footer";
+import { Cards } from "./sections/Cards";
 import { Contact } from "./sections/Contact";
 import { Experiences } from "./sections/Experiences";
 import { Feature } from "./sections/Feature";
 import { Gallery } from "./sections/Gallery";
 import { Menu } from "./sections/Menu";
+import { Prose } from "./sections/Prose";
+import { Reviews } from "./sections/Reviews";
 import { Hero } from "./sections/Hero";
 import { Stays } from "./sections/Stays";
 import { Story } from "./sections/Story";
@@ -31,6 +35,10 @@ import { Trail } from "./sections/Trail";
  *   2. scrivi il componente in src/components/sections/
  *   3. aggiungi il suo caso qui sotto
  * TypeScript segnala da solo se dimentichi il terzo passaggio.
+ *
+ * Le pagine interne (`pages` in configurazione) sono fatte allo stesso modo:
+ * un elenco di sezioni. Per questo il motore è uno solo, `SectionsPage`, e
+ * homepage e pagine interne si differenziano solo per i collegamenti.
  */
 
 function renderSection(
@@ -60,6 +68,12 @@ function renderSection(
       return <Menu key={section.id} section={section} />;
     case "gallery":
       return <Gallery key={section.id} section={section} />;
+    case "cards":
+      return <Cards key={section.id} section={section} />;
+    case "reviews":
+      return <Reviews key={section.id} section={section} />;
+    case "prose":
+      return <Prose key={section.id} section={section} />;
     default: {
       /* Se questa riga smette di compilare, manca un caso qui sopra. */
       const unhandled: never = section;
@@ -68,16 +82,33 @@ function renderSection(
   }
 }
 
-export function HomePage() {
+function SectionsPage({
+  sections,
+  home,
+}: {
+  sections: Section[];
+  home: boolean;
+}) {
   /* Il menù mobile è dentro l'header, ma il pulsante contatti flottante deve
      sapere quando è aperto per togliersi di mezzo. */
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <main>
-      {site.sections.map((section) => renderSection(section, setMenuOpen))}
-      <ContactDock hidden={menuOpen} />
-      <Footer />
-    </main>
+    <PageScope home={home}>
+      <main className={home ? undefined : "content-page"}>
+        {sections.map((section) => renderSection(section, setMenuOpen))}
+        <ContactDock hidden={menuOpen} />
+        <Footer />
+      </main>
+    </PageScope>
   );
+}
+
+export function HomePage() {
+  return <SectionsPage sections={site.sections} home />;
+}
+
+/** Pagina interna: /<slug>. Stesse sezioni, collegamenti verso la homepage. */
+export function ContentPageView({ page }: { page: ContentPage }) {
+  return <SectionsPage sections={page.sections} home={false} />;
 }

@@ -6,7 +6,7 @@
 .stays-journey {
   --stay-progress: 0;
   position: relative;
-  background: #f3efe6;
+  background: var(--stays-bg);
   color: var(--ink);
 }
 
@@ -27,7 +27,7 @@
   align-items: flex-end;
   justify-content: space-between;
   padding: 4.2vh 5vw 2.6vh;
-  background: linear-gradient(180deg, #f3efe6 72%, rgba(243, 239, 230, 0));
+  background: linear-gradient(180deg, var(--stays-bg) 72%, var(--stays-bg-fade));
   pointer-events: none;
 }
 
@@ -112,7 +112,7 @@
   width: 38%;
   height: 44%;
   margin: 0;
-  border: 8px solid #f3efe6;
+  border: 8px solid var(--stays-bg);
   overflow: hidden;
 }
 
@@ -138,7 +138,7 @@
   margin-bottom: 16px;
   font-size: 8px;
   letter-spacing: 0.18em;
-  color: #69736a;
+  color: var(--muted-soft);
 }
 
 .stay-chapter-copy h3 {
@@ -153,7 +153,7 @@
   margin-bottom: 28px;
   font:
     15px/1.6 var(--font-display);
-  color: #586159;
+  color: var(--muted);
 }
 
 .stay-facts {
@@ -173,7 +173,7 @@
 .stay-facts small {
   font-size: 7px;
   letter-spacing: 0.15em;
-  color: #6c746e;
+  color: var(--muted-soft);
 }
 
 .stay-facts b {
@@ -186,7 +186,7 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #596159;
+  color: var(--muted);
 }
 
 .stay-link {

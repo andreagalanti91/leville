@@ -48,3 +48,7 @@
 /* 9. Sezioni aggiunte dopo il progetto iniziale.
       In coda per non disturbare la cascata di quanto precede. */
 @import "./parts/18-menu-gallery.css";
+
+/* 10. Siti multipagina: sottomenù, pagine interne, schede, recensioni.
+       In coda per la stessa ragione del blocco precedente. */
+@import "./parts/19-pages.css";

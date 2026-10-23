@@ -143,9 +143,12 @@ valore del menù è `lat, lng`.
 
 I valori di partenza stanno in `src/styles/tokens.css`.
 
-Se usi un font da Google Fonts, aggiungi l'`@import` in cima a `theme.css`.
-Tienine conto per le prestazioni: un font esterno è una richiesta di rete in
-più che blocca il primo disegno del testo.
+Per un font diverso, meglio ospitarlo insieme al sito che caricarlo da Google
+Fonts: niente richieste a servizi esterni (che andrebbero dichiarate
+nell'informativa) e un disegno del testo più rapido. Scarica i `.woff2` (per
+esempio con `npm pack @fontsource/<nome>`), mettili in `tenants/<id>/fonts/`
+con la licenza, e dichiarali con `@font-face` e percorsi relativi in
+`theme.css`. `tenants/nerbona/theme.css` è l'esempio da copiare.
 
 ---
 

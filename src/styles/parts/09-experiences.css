@@ -5,7 +5,7 @@
 
 .exp-stage {
   position: relative;
-  background: #120f0d;
+  background: var(--exp-bg);
   color: #fff;
 }
 
@@ -18,14 +18,14 @@
   flex-direction: column;
   padding: 8vw 6vw;
   overflow: hidden;
-  background: #15120f;
+  background: var(--exp-intro-bg);
 }
 
 .exp-kicker {
   margin-bottom: 28px;
   font-size: 9px;
   letter-spacing: 0.22em;
-  color: #d2bd8c;
+  color: var(--exp-kicker);
 }
 
 .exp-intro h2 {
@@ -86,15 +86,15 @@
 }
 
 .exp-card-1 {
-  background: #6f3827;
+  background: var(--exp-card-1);
 }
 
 .exp-card-2 {
-  background: #304134;
+  background: var(--exp-card-2);
 }
 
 .exp-card-3 {
-  background: #4b252c;
+  background: var(--exp-card-3);
 }
 
 .exp-media,
@@ -185,7 +185,7 @@
   margin-bottom: 18px;
   font-size: 8px;
   letter-spacing: 0.2em;
-  color: #d5e4a6;
+  color: var(--exp-accent);
 }
 
 .exp-copy h3 {
@@ -225,8 +225,8 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: #d5e4a6;
-  color: #1d261c;
+  background: var(--exp-accent);
+  color: var(--exp-on-accent);
   font-style: normal;
   font-size: 16px;
   transition: transform 0.25s;

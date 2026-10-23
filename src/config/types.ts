@@ -66,6 +66,8 @@ export interface Contact {
   vat?: string;
   /** Coordinate della struttura: servono alla mappa e ai dati strutturati SEO. */
   coordinates: { lat: number; lng: number };
+  /** Profili social, mostrati nel footer. Es. { label: "Instagram", href: "https://..." } */
+  social?: { label: string; href: string }[];
 }
 
 export interface Seo {
@@ -103,6 +105,24 @@ export interface Accommodation {
   detail: string;
   /** Galleria della pagina di dettaglio. Generabile con `npm run media:scan`. */
   gallery: string[];
+  /**
+   * Gli alloggi reali che appartengono a questa voce. Serve quando una voce
+   * del carosello rappresenta una tipologia ("Trilocali") che raggruppa più
+   * appartamenti con un nome proprio: nella pagina di dettaglio compaiono
+   * uno per uno, con la loro descrizione.
+   */
+  units?: AccommodationUnit[];
+  /** Dotazioni comuni a tutta la voce, mostrate come elenco. */
+  amenities?: Localized[];
+}
+
+export interface AccommodationUnit {
+  name: string;
+  /** Riga tecnica breve. Es. "Piano terra · 2 camere · 1 bagno" */
+  layout: Localized;
+  text: Localized;
+  /** Etichette brevi. Es. "Accessibile", "Zanzariere" */
+  tags?: Localized[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -133,6 +153,12 @@ export interface HeroSection {
   cta: { label: Localized; href: string };
   /** Le tre etichette in fondo allo schermo. */
   pillars: Localized[];
+  /**
+   * "full" (predefinito) occupa tutto lo schermo, come in homepage.
+   * "compact" è l'apertura delle pagine interne: più bassa, così il
+   * contenuto si vede senza scorrere.
+   */
+  size?: "full" | "compact";
 }
 
 /** Sezione 1 — racconto in parallasse con foto e manifesto. */
@@ -167,6 +193,12 @@ export interface StaysSection {
   scrollHint: Localized;
   /** Card finale del carosello. */
   endCard: { lines: string[]; cta: { label: Localized; href: string } };
+  /**
+   * Slug delle sistemazioni da mostrare, nell'ordine dato. Se assente le
+   * mostra tutte. Serve a una struttura con più sedi: ogni pagina di sede
+   * mostra solo i propri alloggi.
+   */
+  only?: string[];
 }
 
 /** Sezione riutilizzabile — foto a tutto schermo con testo sovrapposto. */
@@ -177,6 +209,8 @@ export interface FeatureSection {
   kicker: Localized;
   title: Localized;
   text: Localized;
+  /** Collegamento facoltativo, per esempio alla pagina che approfondisce. */
+  cta?: { label: Localized; href: string };
 }
 
 export interface Experience {
@@ -342,6 +376,73 @@ export interface GallerySection {
   images: ImageRef[];
 }
 
+/* --- Sezioni per le pagine interne -------------------------------- */
+
+export interface CardItem {
+  title: Localized;
+  /** Riga piccola sopra il titolo. Es. "Da aprile a ottobre" */
+  meta?: Localized;
+  text: Localized;
+  image?: ImageRef;
+  /** Righe di dettaglio: prezzi, orari, recapiti. */
+  details?: Localized[];
+  /** Collegamento esterno o interno. */
+  link?: { label: Localized; href: string };
+}
+
+/**
+ * Griglia di schede: servizi, esperienze, attività. Pensata per elenchi
+ * lunghi, dove le card impilate delle esperienze diventerebbero pesanti.
+ */
+export interface CardsSection {
+  type: "cards";
+  id: string;
+  kicker: Localized;
+  title: Localized;
+  text?: Localized;
+  /** "light" (predefinito) su fondo chiaro, "dark" su fondo scuro. */
+  tone?: "light" | "dark";
+  items: CardItem[];
+}
+
+export interface Review {
+  quote: Localized;
+  /** Titolo della recensione, se il portale ne ha uno. */
+  title?: Localized;
+  author: string;
+  /** Es. "Google", "Tripadvisor", "Booking.com" */
+  source: string;
+  /** Es. "Ottobre 2025" */
+  date?: Localized;
+  /** Es. "5/5", "10/10" */
+  score?: string;
+}
+
+/** Recensioni degli ospiti, con i collegamenti ai portali. */
+export interface ReviewsSection {
+  type: "reviews";
+  id: string;
+  kicker: Localized;
+  title: Localized;
+  text?: Localized;
+  items: Review[];
+  links?: { label: Localized; href: string }[];
+}
+
+/**
+ * Testo lungo con titolo: racconti, storia, approfondimenti. I paragrafi
+ * sono testo semplice; i collegamenti vanno in `links`.
+ */
+export interface ProseSection {
+  type: "prose";
+  id: string;
+  kicker: Localized;
+  title: Localized;
+  paragraphs: Localized[];
+  links?: { label: Localized; href: string }[];
+  image?: ImageRef;
+}
+
 export type Section =
   | HeroSection
   | StorySection
@@ -352,16 +453,34 @@ export type Section =
   | TerritorySection
   | ContactSection
   | MenuSection
-  | GallerySection;
+  | GallerySection
+  | CardsSection
+  | ReviewsSection
+  | ProseSection;
 
 /* ------------------------------------------------------------------ */
 /* Elementi ricorrenti                                                 */
 /* ------------------------------------------------------------------ */
 
-export interface NavItem {
+/**
+ * Una voce di menù punta a una sezione della homepage (`target`) oppure a
+ * una pagina interna (`page`). Una delle due, non entrambe.
+ */
+export interface NavLink {
   /** Ancora sulla homepage, senza "#". Deve coincidere con l'`id` di una sezione. */
-  target: string;
+  target?: string;
+  /** Slug di una voce di `pages`. */
+  page?: string;
   label: Localized;
+}
+
+export interface NavItem extends NavLink {
+  /**
+   * Sottomenù. Su desktop si apre al passaggio del mouse, su telefono le voci
+   * compaiono rientrate sotto quella principale. Se la voce principale non ha
+   * né `target` né `page` fa solo da intestazione.
+   */
+  children?: NavLink[];
 }
 
 /** Pulsante contatti fisso in basso a destra. */
@@ -384,6 +503,10 @@ export interface StayPageCopy {
   galleryLabel: Localized;
   ctaTitle: Localized;
   ctaLabel: Localized;
+  /** Titolo dell'elenco degli alloggi, se la voce ha `units`. */
+  unitsLabel?: Localized;
+  /** Titolo dell'elenco delle dotazioni, se la voce ha `amenities`. */
+  amenitiesLabel?: Localized;
 }
 
 export interface LegalPage {
@@ -401,6 +524,19 @@ export interface LegalPage {
    * Ignorato quando c'è `externalUrl`.
    */
   body?: Localized;
+}
+
+/**
+ * Pagina interna: /<slug>. È composta dalle stesse sezioni della homepage,
+ * quindi non serve un componente nuovo per ogni pagina. La prima sezione deve
+ * essere un `hero`, di solito con `size: "compact"`.
+ */
+export interface ContentPage {
+  slug: string;
+  /** Titolo nella scheda del browser e nei risultati di ricerca. */
+  title: Localized;
+  description: Localized;
+  sections: Section[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -447,6 +583,9 @@ export interface SiteConfig {
 
   /** Le sezioni della homepage, nell'ordine in cui appaiono. */
   sections: Section[];
+
+  /** Pagine interne, raggiungibili dal menù. Facoltative. */
+  pages?: ContentPage[];
 
   /**
    * Alloggi. Vuoto o assente per un'attività che non ne ha (un ristorante):

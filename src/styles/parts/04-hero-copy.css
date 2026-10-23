@@ -29,7 +29,7 @@
   content: "";
   width: 42px;
   height: 1px;
-  background: #73806f;
+  background: var(--rule);
 }
 
 .eyebrow.light:before {
@@ -123,7 +123,7 @@
 
 .lime {
   background: var(--lime);
-  color: #14251b;
+  color: var(--on-lime);
 }
 
 .hero-foot {

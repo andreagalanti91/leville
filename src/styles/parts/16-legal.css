@@ -89,7 +89,7 @@
   letter-spacing: 0.15em;
   line-height: 1.7;
   text-transform: uppercase;
-  color: #6b756e;
+  color: var(--muted-soft);
 }
 
 .legal-body {
@@ -123,7 +123,7 @@
 .legal-body li {
   font:
     15px/1.72 var(--font-display);
-  color: #505c54;
+  color: var(--muted);
 }
 
 .legal-body ul {

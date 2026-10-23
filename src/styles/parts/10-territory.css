@@ -10,7 +10,7 @@
   gap: 7vw;
   min-height: 100svh;
   padding: 9vw 5vw;
-  background: #d9dfc4;
+  background: var(--territory-bg);
 }
 
 .territory-copy h2 {
@@ -26,7 +26,7 @@
   margin-bottom: 48px;
   font:
     16px/1.7 var(--font-display);
-  color: #4e5b51;
+  color: var(--muted);
 }
 
 .territory-copy > span {
