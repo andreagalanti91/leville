@@ -10,3 +10,6 @@ dist/
 dist/
 # Materiale di lavoro raccolto per i preventivi (foto grezze, note)
 prospects/*/foto/
+
+# Pacchetti delle anteprime da caricare via FTP
+*-demo.zip
