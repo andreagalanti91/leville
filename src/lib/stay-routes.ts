@@ -17,6 +17,17 @@ export function hasAccommodations(): boolean {
   return accommodations().length > 0;
 }
 
+/** Le pagine degli alloggi stanno alla radice del sito invece che in una cartella. */
+export function staysAtRoot(): boolean {
+  return site.stayPath === "";
+}
+
+/** Indirizzo della pagina di un alloggio: /sistemazioni/<slug> o /<slug>. */
+export function stayHref(slug: string): string {
+  const folder = site.stayPath ?? "sistemazioni";
+  return folder ? `/${folder}/${slug}` : `/${slug}`;
+}
+
 /**
  * Testi della pagina di dettaglio. Se un cliente ha alloggi ma non li ha
  * scritti, la validazione lo segnala; qui si ripiega su etichette neutre

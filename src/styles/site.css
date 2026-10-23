@@ -52,3 +52,6 @@
 /* 10. Siti multipagina: sottomenù, pagine interne, schede, recensioni.
        In coda per la stessa ragione del blocco precedente. */
 @import "./parts/19-pages.css";
+
+/* 11. Impaginazione editoriale delle pagine interne. */
+@import "./parts/20-editorial.css";

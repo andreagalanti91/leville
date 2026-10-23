@@ -171,7 +171,9 @@ function validate(id, site) {
 
   const sectionIds = new Set((site.sections ?? []).map((s) => s.id));
   const checkNavLink = (item, where) => {
-    if (item.target && item.page) err(`${where}: indica target oppure page, non entrambi`);
+    if ([item.target, item.page, item.href].filter(Boolean).length > 1) {
+      err(`${where}: indica uno solo fra target, page e href`);
+    }
     if (item.target && !sectionIds.has(item.target)) {
       err(`${where}: "${item.target}" non corrisponde a nessuna sezione della homepage`);
     }
@@ -180,12 +182,12 @@ function validate(id, site) {
     }
   };
   (site.nav ?? []).forEach((item, i) => {
-    if (!item.target && !item.page && !item.children?.length) {
+    if (!item.target && !item.page && !item.href && !item.children?.length) {
       err(`nav[${i}]: la voce non punta da nessuna parte`);
     }
     checkNavLink(item, `nav[${i}]`);
     (item.children ?? []).forEach((child, j) => {
-      if (!child.target && !child.page) err(`nav[${i}].children[${j}]: la voce non punta da nessuna parte`);
+      if (!child.target && !child.page && !child.href) err(`nav[${i}].children[${j}]: la voce non punta da nessuna parte`);
       checkNavLink(child, `nav[${i}].children[${j}]`);
     });
   });
@@ -196,7 +198,19 @@ function validate(id, site) {
   /* Collegamenti usati dai pulsanti. Le ancore valgono nella pagina in cui
      stanno: un "#contatti" in una pagina interna deve trovare una sezione
      "contatti" in quella pagina, non in homepage. */
-  const stayRoutes = new Set((site.accommodations ?? []).map((a) => `sistemazioni/${a.slug}`));
+  const stayFolder = site.stayPath ?? "sistemazioni";
+  const stayRoutes = new Set(
+    (site.accommodations ?? []).map((a) => (stayFolder ? `${stayFolder}/${a.slug}` : a.slug)),
+  );
+  /* Con gli alloggi alla radice, il loro slug divide lo spazio con pagine
+     interne e legali. */
+  if (!stayFolder) {
+    for (const stay of site.accommodations ?? []) {
+      if (pageSlugs.has(stay.slug) || legalSlugs.has(stay.slug)) {
+        err(`accommodations: "${stay.slug}" coincide con lo slug di una pagina`);
+      }
+    }
+  }
   const collectLinks = (node, trail, out) => {
     if (!node || typeof node !== "object") return;
     for (const [key, value] of Object.entries(node)) {
@@ -225,7 +239,7 @@ function validate(id, site) {
     }
   };
   const homeLinks = [];
-  const { pages: _pages, nav: _nav, ...rest } = site;
+  const { pages: _pages, ...rest } = site;
   collectLinks(rest, "", homeLinks);
   checkLinks(homeLinks, sectionIds);
   for (const page of pages) {

@@ -160,8 +160,24 @@ slug non si sovrappongano.
 Sezioni pensate soprattutto per le pagine interne:
 
 - `cards` — griglia di schede con foto facoltativa: servizi, esperienze
-- `reviews` — recensioni trascritte, con i collegamenti ai portali
+- `reviews` — recensioni trascritte, con i collegamenti ai portali;
+  `layout: "editorial"` mette la prima in grande e le altre in elenco
 - `prose` — testo lungo con titolo, collegamenti e foto facoltativa
+- `chapters` — capitoli alternati foto/testo con una parola gigante che
+  scorre di lato insieme alla pagina
+- `facts` — informazioni pratiche, etichetta e valore, da leggere al volo
+
+L'apertura `hero` con `size: "editorial"` è la versione da rivista: fondo
+chiaro, titolo maiuscolo centrato, foto incorniciata. Insieme a `chapters` e
+`facts` forma l'impaginazione editoriale (`parts/20-editorial.css`), usata da
+Nerbona per Servizi, Matrimoni, Toscana e Recensioni.
+
+### Indirizzi degli alloggi
+
+Le pagine degli alloggi stanno di norma in `/sistemazioni/<slug>`. Con
+`stayPath: ""` stanno alla radice, `/<slug>`, e le genera `app/[slug]`:
+serve a mantenere gli indirizzi del sito precedente del cliente. La
+validazione controlla che non collidano con pagine interne o legali.
 
 Altre aggiunte utili a una struttura con più sedi o molti alloggi:
 
@@ -178,8 +194,10 @@ interne (`/servizi`) o indirizzi esterni. Li gestisce `SmartLink` in
 `src/lib/links.tsx`: le pagine interne passano da `next/link`, che aggiunge
 `BASE_PATH`; gli indirizzi esterni si aprono in una nuova scheda.
 
-Una voce di `nav` punta a una sezione della homepage (`target`) o a una pagina
-(`page`), e può avere un sottomenù (`children`). Dalle pagine interne le voci
+Una voce di `nav` punta a una sezione della homepage (`target`), a una pagina
+(`page`) o a un indirizzo qualsiasi (`href`, per esempio la pagina di un
+alloggio), e può avere un sottomenù (`children`). Una voce senza indirizzo fa
+solo da intestazione del sottomenù. Dalle pagine interne le voci
 con `target` diventano `/#sezione`: i componenti sanno in che pagina si
 trovano con `useIsHome()`.
 

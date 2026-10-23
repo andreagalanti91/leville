@@ -84,7 +84,7 @@ export interface Seo {
 /* ------------------------------------------------------------------ */
 
 export interface Accommodation {
-  /** Usato nell'URL: /sistemazioni/<slug> */
+  /** Usato nell'URL: /sistemazioni/<slug>, oppure /<slug> se `stayPath` è vuoto. */
   slug: string;
   name: string;
   /** Etichetta di categoria mostrata sopra il nome. Es. "GLI APPARTAMENTI" */
@@ -157,8 +157,10 @@ export interface HeroSection {
    * "full" (predefinito) occupa tutto lo schermo, come in homepage.
    * "compact" è l'apertura delle pagine interne: più bassa, così il
    * contenuto si vede senza scorrere.
+   * "editorial" è un'apertura da rivista su fondo chiaro: titolo grande
+   * centrato e foto incorniciata sotto, invece che a tutto schermo.
    */
-  size?: "full" | "compact";
+  size?: "full" | "compact" | "editorial";
 }
 
 /** Sezione 1 — racconto in parallasse con foto e manifesto. */
@@ -405,6 +407,51 @@ export interface CardsSection {
   items: CardItem[];
 }
 
+export interface ChapterItem {
+  /** Parola gigante che scorre di lato. Es. "PISCINE" */
+  word: Localized;
+  kicker: Localized;
+  title: Localized;
+  text: Localized;
+  image?: ImageRef;
+  /** Righe di dettaglio: orari, prezzi, recapiti. */
+  details?: Localized[];
+  link?: { label: Localized; href: string };
+}
+
+/**
+ * Capitoli alternati: foto incorniciata da una parte, dall'altra una parola
+ * gigante che scorre con la pagina e il testo. Per pagine da sfogliare, dove
+ * ogni tema merita uno spazio proprio: servizi, matrimoni, luoghi.
+ */
+export interface ChaptersSection {
+  type: "chapters";
+  id: string;
+  kicker?: Localized;
+  title?: Localized;
+  items: ChapterItem[];
+}
+
+export interface FactItem {
+  label: Localized;
+  value: Localized;
+  note?: Localized;
+}
+
+/**
+ * Informazioni pratiche in forma di elenco: etichetta a sinistra, valore a
+ * destra. Si legge in pochi secondi: orari, check-in, parcheggio, animali.
+ */
+export interface FactsSection {
+  type: "facts";
+  id: string;
+  kicker: Localized;
+  title: Localized;
+  text?: Localized;
+  image?: ImageRef;
+  items: FactItem[];
+}
+
 export interface Review {
   quote: Localized;
   /** Titolo della recensione, se il portale ne ha uno. */
@@ -427,6 +474,13 @@ export interface ReviewsSection {
   text?: Localized;
   items: Review[];
   links?: { label: Localized; href: string }[];
+  /**
+   * "grid" (predefinito): schede affiancate. "editorial": la prima
+   * recensione in grande al centro, le altre in un elenco a due colonne.
+   */
+  layout?: "grid" | "editorial";
+  /** Punteggi per portale, mostrati in testa. Es. { score: "5/5", label: "Google" } */
+  summary?: { score: string; label: Localized }[];
 }
 
 /**
@@ -456,17 +510,22 @@ export type Section =
   | GallerySection
   | CardsSection
   | ReviewsSection
-  | ProseSection;
+  | ProseSection
+  | ChaptersSection
+  | FactsSection;
 
 /* ------------------------------------------------------------------ */
 /* Elementi ricorrenti                                                 */
 /* ------------------------------------------------------------------ */
 
 /**
- * Una voce di menù punta a una sezione della homepage (`target`) oppure a
- * una pagina interna (`page`). Una delle due, non entrambe.
+ * Una voce di menù punta a una sezione della homepage (`target`), a una
+ * pagina interna (`page`) oppure a un indirizzo qualsiasi (`href`: la pagina
+ * di un alloggio, un sito esterno). Una sola delle tre.
  */
 export interface NavLink {
+  /** Es. "/trilocale" (pagina di un alloggio) o "https://..." */
+  href?: string;
   /** Ancora sulla homepage, senza "#". Deve coincidere con l'`id` di una sezione. */
   target?: string;
   /** Slug di una voce di `pages`. */
@@ -586,6 +645,14 @@ export interface SiteConfig {
 
   /** Pagine interne, raggiungibili dal menù. Facoltative. */
   pages?: ContentPage[];
+
+  /**
+   * Cartella delle pagine degli alloggi: "sistemazioni" (predefinito) dà
+   * /sistemazioni/<slug>. Con "" le pagine stanno alla radice, /<slug>: serve
+   * a mantenere gli indirizzi del sito precedente del cliente, che i motori di
+   * ricerca conoscono già.
+   */
+  stayPath?: string;
 
   /**
    * Alloggi. Vuoto o assente per un'attività che non ne ha (un ristorante):

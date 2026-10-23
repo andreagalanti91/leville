@@ -7,8 +7,10 @@ import { PageScope } from "../lib/links";
 import { ContactDock } from "./layout/ContactDock";
 import { Footer } from "./layout/Footer";
 import { Cards } from "./sections/Cards";
+import { Chapters } from "./sections/Chapters";
 import { Contact } from "./sections/Contact";
 import { Experiences } from "./sections/Experiences";
+import { Facts } from "./sections/Facts";
 import { Feature } from "./sections/Feature";
 import { Gallery } from "./sections/Gallery";
 import { Menu } from "./sections/Menu";
@@ -74,6 +76,10 @@ function renderSection(
       return <Reviews key={section.id} section={section} />;
     case "prose":
       return <Prose key={section.id} section={section} />;
+    case "chapters":
+      return <Chapters key={section.id} section={section} />;
+    case "facts":
+      return <Facts key={section.id} section={section} />;
     default: {
       /* Se questa riga smette di compilare, manca un caso qui sopra. */
       const unhandled: never = section;

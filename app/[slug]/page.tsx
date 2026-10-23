@@ -6,13 +6,16 @@ import { LegalPage } from "../../src/components/LegalPage";
 import { ContentPageView } from "../../src/components/HomePage";
 import { legalRoutes, findLegalRoute } from "../../src/lib/legal-routes";
 import { contentPages, findContentPage } from "../../src/lib/page-routes";
+import { accommodations, staysAtRoot } from "../../src/lib/stay-routes";
+import { StayPage } from "../../src/components/StayPage";
 
 /**
- * Pagine al primo livello: /<slug>. Una rotta sola copre due famiglie.
+ * Pagine al primo livello: /<slug>. Una rotta sola copre tre famiglie.
  *
  *  - le pagine interne (`pages`): servizi, esperienze, matrimoni...
  *    composte dalle stesse sezioni della homepage
  *  - le pagine legali (`legalPages`): privacy, cookie
+ *  - le pagine degli alloggi, solo se `stayPath` è vuoto
  *
  * Stanno nella stessa rotta perché Next non ammette due segmenti dinamici
  * allo stesso livello. Gli slug arrivano dalla configurazione, quindi un
@@ -22,8 +25,14 @@ import { contentPages, findContentPage } from "../../src/lib/page-routes";
  * Le pagine legali con `externalUrl` non vengono generate: i collegamenti
  * puntano direttamente al documento del cliente.
  */
+/** Alloggi serviti da questa rotta: nessuno, salvo con `stayPath: ""`. */
+function rootStays() {
+  return staysAtRoot() ? accommodations() : [];
+}
+
 export function generateStaticParams() {
   return [
+    ...rootStays().map(({ slug }) => ({ slug })),
     ...contentPages().map(({ slug }) => ({ slug })),
     ...legalRoutes().map(({ slug }) => ({ slug })),
   ];
@@ -39,6 +48,15 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  const stay = rootStays().find((a) => a.slug === slug);
+  if (stay) {
+    return {
+      title: `${stay.name} | ${brandName}`,
+      description: translate(stay.blurb, defaultLocale),
+      openGraph: { images: [asset(stay.cover)] },
+    };
+  }
 
   const page = findContentPage(slug);
   if (page) {
@@ -66,6 +84,8 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const stay = rootStays().find((a) => a.slug === slug);
+  if (stay) return <StayPage stay={stay} />;
   const page = findContentPage(slug);
   if (page) return <ContentPageView page={page} />;
   const legal = findLegalRoute(slug);

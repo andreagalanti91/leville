@@ -24,6 +24,56 @@ export function Hero({
 }) {
   const { t } = useLanguage();
 
+  /* Apertura editoriale: fondo chiaro, titolo centrato, foto incorniciata.
+     Niente video: è pensata per le pagine interne da leggere. */
+  if (section.size === "editorial") {
+    return (
+      <section className="hero hero-editorial" id={section.id}>
+        <SiteHeader onMenuChange={onMenuChange} />
+
+        <div className="editorial-head">
+          <p className="editorial-kicker">
+            {section.labelParts.map((part) => t(part)).join(" · ")}
+          </p>
+          <h1>
+            {section.titleLines.map((line, index) => (
+              <span className="hero-title-line" key={index}>
+                {t(line)}
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        {section.image && (
+          <figure className="editorial-frame">
+            <Image
+              src={asset(section.image.src)}
+              alt={t(section.image.alt)}
+              fill
+              sizes="(max-width: 900px) 92vw, 64vw"
+              className="cover"
+              priority
+            />
+          </figure>
+        )}
+
+        <div className="editorial-lead">
+          <p>{t(section.intro)}</p>
+          <div>
+            <ul>
+              {section.pillars.map((pillar, index) => (
+                <li key={index}>{t(pillar)}</li>
+              ))}
+            </ul>
+            <SmartLink className="editorial-button" href={section.cta.href}>
+              {t(section.cta.label)}
+            </SmartLink>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       className={`hero hero-film ${section.size === "compact" ? "hero-compact" : ""}`}

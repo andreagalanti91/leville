@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Fragment, useRef, useState } from "react";
-import { accommodations } from "../../lib/stay-routes";
+import { accommodations, stayHref } from "../../lib/stay-routes";
 import { useLanguage } from "../../lib/i18n";
 import { SmartLink } from "../../lib/links";
 import {
@@ -167,7 +167,7 @@ export function Stays({ section }: { section: StaysSection }) {
 
                 <p className="stay-layout">{t(stay.layout)}</p>
 
-                <Link href={`/sistemazioni/${stay.slug}`} className="stay-link">
+                <Link href={stayHref(stay.slug)} className="stay-link">
                   <span>{t(section.linkLabel)}</span>
                   <i className="direction-mark" aria-hidden="true" />
                 </Link>

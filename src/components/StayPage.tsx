@@ -9,7 +9,8 @@ import { PictureImage } from "./Media";
 import { Brand } from "./layout/Brand";
 
 /**
- * Pagina di dettaglio di una sistemazione: /sistemazioni/<slug>.
+ * Pagina di dettaglio di una sistemazione: /sistemazioni/<slug> oppure /<slug>
+ * (vedi `stayPath`).
  * Viene generata automaticamente per ogni voce di `accommodations`.
  */
 export function StayPage({ stay }: { stay: Accommodation }) {

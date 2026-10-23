@@ -12,11 +12,15 @@
 
 .desktop-nav > a,
 .nav-parent {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
   line-height: 1;
 }
 
 .nav-group {
   position: relative;
+  display: flex;
 }
 
 .nav-parent {
@@ -41,7 +45,7 @@
   height: 5px;
   border-right: 1px solid currentColor;
   border-bottom: 1px solid currentColor;
-  transform: translateY(-3px) rotate(45deg);
+  transform: translateY(-2px) rotate(45deg);
 }
 
 .nav-group:hover .nav-parent,

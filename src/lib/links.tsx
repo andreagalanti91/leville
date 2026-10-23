@@ -40,6 +40,7 @@ export function useIsHome(): boolean {
 
 /** Indirizzo di una voce di menù, o undefined se è solo un'intestazione. */
 export function navHref(item: NavLink, home: boolean): string | undefined {
+  if (item.href) return item.href;
   if (item.page) return `/${item.page}`;
   if (item.target) return home ? `#${item.target}` : `/#${item.target}`;
   return undefined;

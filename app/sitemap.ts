@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site, siteUrl } from "../src/config";
-import { accommodations } from "../src/lib/stay-routes";
+import { accommodations, stayHref } from "../src/lib/stay-routes";
 import { contentPages } from "../src/lib/page-routes";
 
 /* Necessario con output: export — dice a Next che il file è statico. */
@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     })),
     ...accommodations().map((stay) => ({
-      url: `${base}/sistemazioni/${stay.slug}`,
+      url: `${base}${stayHref(stay.slug)}`,
       priority: 0.8,
     })),
     ...site.legalPages
