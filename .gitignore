@@ -13,3 +13,6 @@ prospects/*/foto/
 
 # Pacchetti delle anteprime da caricare via FTP
 *-demo.zip
+
+# Cache di TypeScript
+*.tsbuildinfo

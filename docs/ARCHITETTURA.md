@@ -182,9 +182,15 @@ validazione controlla che non collidano con pagine interne o legali.
 Altre aggiunte utili a una struttura con più sedi o molti alloggi:
 
 - `stays.only` mostra nel carosello solo alcuni alloggi (la pagina di una sede)
-- `Accommodation.units` elenca nella pagina di dettaglio gli appartamenti
-  reali che appartengono a una tipologia, così il carosello mostra otto
-  tipologie invece di venti appartamenti
+- `stayTabs` è l'alternativa al carosello: alloggi divisi in schede (per
+  esempio una per sede), con il nome di ogni appartamento e il collegamento
+  diretto al suo riquadro
+- `Accommodation.units` elenca gli appartamenti reali che appartengono a una
+  tipologia. Con le loro foto (`images`) la pagina della tipologia li
+  presenta uno per uno: galleria sfogliabile, posti letto, descrizione,
+  "Prenota" (con `bookingUrl` proprio o quello generale) e "Chiedi
+  informazioni" su WhatsApp con il nome dell'appartamento già scritto
+  (`stayPage.askMessage`). Ogni appartamento ha un'ancora: /trilocale#solaio
 - `feature.cta` aggiunge un collegamento al blocco foto
 
 ### Collegamenti e menù

@@ -117,12 +117,27 @@ export interface Accommodation {
 }
 
 export interface AccommodationUnit {
+  /**
+   * Ancora nella pagina della tipologia: /trilocale#solaio. Serve ai
+   * collegamenti diretti all'appartamento, per esempio dalle schede della
+   * homepage.
+   */
+  slug: string;
   name: string;
   /** Riga tecnica breve. Es. "Piano terra · 2 camere · 1 bagno" */
   layout: Localized;
   text: Localized;
+  /** Posti letto massimi. Es. "4" */
+  guests?: string;
   /** Etichette brevi. Es. "Accessibile", "Zanzariere" */
   tags?: Localized[];
+  /** Foto dell'appartamento, la prima fa da copertina. */
+  images?: string[];
+  /**
+   * Prenotazione diretta di questo appartamento. Se assente si usa
+   * `booking.url`: il pulsante "Prenota" c'è comunque per ogni appartamento.
+   */
+  bookingUrl?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -378,6 +393,30 @@ export interface GallerySection {
   images: ImageRef[];
 }
 
+/**
+ * Alloggi divisi in schede: una per sede (o per qualsiasi raggruppamento),
+ * con le tipologie e i nomi dei singoli appartamenti, ciascuno con il suo
+ * collegamento. Alternativa al carosello quando conta far scegliere in
+ * fretta più che far sfogliare.
+ */
+export interface StayTabsSection {
+  type: "stayTabs";
+  id: string;
+  kicker: Localized;
+  title: Localized;
+  text?: Localized;
+  tabs: {
+    label: Localized;
+    /** Riga sotto le schede, quando la scheda è attiva. */
+    text?: Localized;
+    /** Slug delle sistemazioni della scheda, nell'ordine. */
+    stays: string[];
+    link?: { label: Localized; href: string };
+  }[];
+  guestsLabel: Localized;
+  linkLabel: Localized;
+}
+
 /* --- Sezioni per le pagine interne -------------------------------- */
 
 export interface CardItem {
@@ -512,7 +551,8 @@ export type Section =
   | ReviewsSection
   | ProseSection
   | ChaptersSection
-  | FactsSection;
+  | FactsSection
+  | StayTabsSection;
 
 /* ------------------------------------------------------------------ */
 /* Elementi ricorrenti                                                 */
@@ -564,6 +604,13 @@ export interface StayPageCopy {
   ctaLabel: Localized;
   /** Titolo dell'elenco degli alloggi, se la voce ha `units`. */
   unitsLabel?: Localized;
+  /** Etichetta del pulsante che chiede informazioni su un appartamento. */
+  askLabel?: Localized;
+  /**
+   * Messaggio WhatsApp precompilato per un appartamento; "{name}" diventa il
+   * suo nome. Es. "Buongiorno, vorrei informazioni su {name}."
+   */
+  askMessage?: Localized;
   /** Titolo dell'elenco delle dotazioni, se la voce ha `amenities`. */
   amenitiesLabel?: Localized;
 }

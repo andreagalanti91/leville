@@ -6,16 +6,30 @@ import { stayPageCopy } from "../lib/stay-routes";
 import { useLanguage } from "../lib/i18n";
 import type { Accommodation } from "../config/types";
 import { PictureImage } from "./Media";
+import { UnitGallery } from "./UnitGallery";
 import { Brand } from "./layout/Brand";
 
 /**
  * Pagina di dettaglio di una sistemazione: /sistemazioni/<slug> oppure /<slug>
  * (vedi `stayPath`).
- * Viene generata automaticamente per ogni voce di `accommodations`.
+ *
+ * Se la voce raggruppa più appartamenti (`units`) con le loro foto, la pagina
+ * li presenta uno per uno, ciascuno con galleria, descrizione e i propri
+ * pulsanti di prenotazione e di richiesta informazioni: è la struttura che
+ * gli ospiti si aspettano da un agriturismo con appartamenti dal nome
+ * proprio. Altrimenti mostra la galleria della voce.
  */
 export function StayPage({ stay }: { stay: Accommodation }) {
   const { t, switchLabel, cycleLocale } = useLanguage();
   const copy = stayPageCopy();
+  const units = (stay.units ?? []).filter((unit) => unit.images?.length);
+
+  /* WhatsApp con il nome dell'appartamento già scritto: chi scrive non deve
+     spiegare di cosa sta parlando, e chi risponde lo sa subito. */
+  const askUrl = (name: string) =>
+    copy.askMessage
+      ? `${whatsappUrl}?text=${encodeURIComponent(t(copy.askMessage).replace("{name}", name))}`
+      : whatsappUrl;
 
   return (
     <main className="detail-page">
@@ -52,28 +66,6 @@ export function StayPage({ stay }: { stay: Accommodation }) {
         </div>
       </section>
 
-      {stay.units?.length ? (
-        <section className="detail-units">
-          {copy.unitsLabel && <p className="eyebrow">{t(copy.unitsLabel)}</p>}
-          <div>
-            {stay.units.map((unit) => (
-              <article key={unit.name}>
-                <h3>{unit.name}</h3>
-                <p className="unit-layout">{t(unit.layout)}</p>
-                <p>{t(unit.text)}</p>
-                {unit.tags?.length ? (
-                  <ul>
-                    {unit.tags.map((tag, index) => (
-                      <li key={index}>{t(tag)}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
       {stay.amenities?.length ? (
         <section className="detail-amenities">
           {copy.amenitiesLabel && (
@@ -87,20 +79,85 @@ export function StayPage({ stay }: { stay: Accommodation }) {
         </section>
       ) : null}
 
-      <section className="detail-gallery">
-        <p className="eyebrow">{t(copy.galleryLabel)}</p>
-        <div>
-          {stay.gallery.map((image, index) => (
-            <figure key={image}>
-              <PictureImage
-                src={image}
-                alt={`${stay.name} — ${index + 1}`}
-                sizes="(max-width: 700px) 100vw, 50vw"
-              />
-            </figure>
-          ))}
-        </div>
-      </section>
+      {units.length ? (
+        <>
+          {units.length > 1 && (
+            <nav className="unit-index" aria-label={copy.unitsLabel ? t(copy.unitsLabel) : undefined}>
+              {copy.unitsLabel && <p className="eyebrow">{t(copy.unitsLabel)}</p>}
+              <div>
+                {units.map((unit) => (
+                  <a key={unit.slug} href={`#${unit.slug}`}>
+                    {unit.name}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )}
+
+          <div className="unit-list">
+            {units.map((unit, index) => (
+              <article className="unit" id={unit.slug} key={unit.slug}>
+                <UnitGallery images={unit.images!} name={unit.name} />
+                <div className="unit-copy">
+                  <p className="unit-number">
+                    {String(index + 1).padStart(2, "0")} / {String(units.length).padStart(2, "0")}
+                  </p>
+                  <h2>{unit.name}</h2>
+                  <p className="unit-layout">{t(unit.layout)}</p>
+                  {unit.guests && (
+                    <p className="unit-guests">
+                      <b>{unit.guests}</b> {t(copy.guestsLabel)}
+                    </p>
+                  )}
+                  <p className="unit-text">{t(unit.text)}</p>
+                  {unit.tags?.length ? (
+                    <ul className="unit-tags">
+                      {unit.tags.map((tag, tagIndex) => (
+                        <li key={tagIndex}>{t(tag)}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  <div className="unit-actions">
+                    {(unit.bookingUrl ?? bookingUrl) && (
+                      <a
+                        className="editorial-button"
+                        href={unit.bookingUrl ?? bookingUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {t(site.booking?.label ?? copy.ctaLabel)}
+                      </a>
+                    )}
+                    <a
+                      className="unit-ask"
+                      href={askUrl(unit.name)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t(copy.askLabel ?? copy.ctaLabel)}
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <section className="detail-gallery">
+          <p className="eyebrow">{t(copy.galleryLabel)}</p>
+          <div>
+            {stay.gallery.map((image, index) => (
+              <figure key={image}>
+                <PictureImage
+                  src={image}
+                  alt={`${stay.name} — ${index + 1}`}
+                  sizes="(max-width: 700px) 100vw, 50vw"
+                />
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="detail-cta">
         <p className="eyebrow light">

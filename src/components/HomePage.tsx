@@ -18,6 +18,7 @@ import { Prose } from "./sections/Prose";
 import { Reviews } from "./sections/Reviews";
 import { Hero } from "./sections/Hero";
 import { Stays } from "./sections/Stays";
+import { StayTabs } from "./sections/StayTabs";
 import { Story } from "./sections/Story";
 import { Territory } from "./sections/Territory";
 import { Trail } from "./sections/Trail";
@@ -80,6 +81,8 @@ function renderSection(
       return <Chapters key={section.id} section={section} />;
     case "facts":
       return <Facts key={section.id} section={section} />;
+    case "stayTabs":
+      return <StayTabs key={section.id} section={section} />;
     default: {
       /* Se questa riga smette di compilare, manca un caso qui sopra. */
       const unhandled: never = section;

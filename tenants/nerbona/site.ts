@@ -18,16 +18,22 @@
  *   /matrimoni-toscana-nerbona · Toscana /storia-e-tradizioni ·
  *   Recensioni /recensioni · Prenota → Beddy
  *
- *   - la homepage racconta la tenuta e mostra tutti gli alloggi in un unico
- *     carosello, divisi per sede attraverso il campo `category`
- *   - ogni alloggio è una TIPOLOGIA (Bilocali, Trilocali...): la sua pagina
- *     elenca gli appartamenti con il loro nome (Mangiatoia, Granaio...)
- *     attraverso `units`. Le pagine stanno alla radice (`stayPath: ""`)
+ *   - la homepage mostra gli alloggi in due schede, Nerbona e La Casina, con
+ *     il nome di ogni appartamento e il collegamento diretto al suo riquadro
+ *   - ogni alloggio è una TIPOLOGIA (Bilocali, Trilocali...): la sua pagina,
+ *     come su nerbona.com, presenta uno per uno gli appartamenti (Mangiatoia,
+ *     Granaio...) con foto, posti letto, "Prenota" e "Chiedi informazioni".
+ *     Le pagine stanno alla radice (`stayPath: ""`)
  *   - le "Aree extra" raccontano ciascuna sede: spazi comuni, struttura e
  *     carosello dei soli suoi alloggi
  *   - Servizi, Matrimoni, Toscana e Recensioni hanno un'impaginazione
  *     editoriale (apertura chiara con foto incorniciata, capitoli con parole
  *     giganti), sul modello di sanfelice.com
+ *
+ * ALTRE FONTI. Posti letto, soggiorni minimi, lingue, colazione su
+ * prenotazione, punteggi dei portali e dintorni vengono dalle schede
+ * pubbliche (Visit Tuscany, Bed-and-Breakfast.it, Trip.com) e dal motore di
+ * prenotazione Beddy. Da far confermare al cliente.
  *
  * LE FOTO vengono da nerbona.com e sono a 1080 px di larghezza: bastano per
  * le schede, ma a tutto schermo su un monitor grande si ammorbidiscono. Prima
@@ -239,25 +245,55 @@ const site: SiteConfig = {
       cursorLabel: { it: "ESPLORA", en: "EXPLORE" },
     },
 
+    /* Alloggi a schede, una per sede: chi arriva in homepage sceglie la
+       struttura e trova subito il nome di ogni appartamento, con il
+       collegamento diretto al suo riquadro. */
     {
-      type: "stays",
+      type: "stayTabs",
       id: "sistemazioni",
-      kicker: { it: "DORMIRE A NERBONA", en: "STAY AT NERBONA" },
+      kicker: { it: "Dormire a Nerbona", en: "Stay at Nerbona" },
       title: {
         it: "Venti alloggi, due strutture, un solo paesaggio.",
         en: "Twenty homes, two sites, one landscape.",
       },
-      sizeLabel: { it: "ALLOGGI", en: "UNITS" },
-      guestsLabel: { it: "OSPITI", en: "GUESTS" },
-      linkLabel: { it: "Scopri gli alloggi", en: "See the apartments" },
-      scrollHint: { it: "SCORRI PER ESPLORARE", en: "SCROLL TO EXPLORE" },
-      endCard: {
-        lines: ["FATTORIA", "NERBONA"],
-        cta: {
-          label: { it: "Verifica disponibilità", en: "Check availability" },
-          href: "#contatti",
-        },
+      text: {
+        it: "Ogni appartamento ha un nome, quello dell'edificio rurale da cui è stato ricavato, una cucina attrezzata e uno spazio esterno privato.",
+        en: "Every apartment has a name, that of the farm building it was carved from, an equipped kitchen and a private outdoor space.",
       },
+      tabs: [
+        {
+          label: { it: "Nerbona", en: "Nerbona" },
+          text: {
+            it: "La sede principale: dodici appartamenti, due camere e Villa L'Aia attorno all'aia, con piscina, reception e chiesetta. Fino a 64 ospiti.",
+            en: "The main site: twelve apartments, two rooms and Villa L'Aia around the farmyard, with pool, reception and chapel. Up to 64 guests.",
+          },
+          stays: [
+            "nerbona-bilocale",
+            "trilocale",
+            "quadrilocale-nerbona",
+            "villa-aia",
+            "camere-nerbona",
+          ],
+          link: {
+            label: { it: "Aree extra Nerbona", en: "Nerbona extra areas" },
+            href: "/aree-extra-nerbona",
+          },
+        },
+        {
+          label: { it: "La Casina", en: "La Casina" },
+          text: {
+            it: "A un chilometro e mezzo, oltre il bosco: cinque appartamenti, una piscina panoramica tutta loro e il portico per le cene. Fino a 24 ospiti.",
+            en: "A kilometre and a half away, beyond the wood: five apartments, a panoramic pool of their own and the portico for dinners. Up to 24 guests.",
+          },
+          stays: ["bilocale-casina", "trilocali-casina", "quadrilocale-casina"],
+          link: {
+            label: { it: "Aree extra Casina", en: "Casina extra areas" },
+            href: "/aree-extra-casina",
+          },
+        },
+      ],
+      guestsLabel: { it: "ospiti", en: "guests" },
+      linkLabel: { it: "Foto e dettagli", en: "Photos and details" },
     },
 
     {
@@ -599,8 +635,8 @@ const site: SiteConfig = {
         en: "We look forward to welcoming you.",
       },
       text: {
-        it: "Disponibilità e prezzi si vedono in tempo reale sul nostro sistema di prenotazione. Per gruppi, matrimoni o domande sugli alloggi scriveteci: vi rispondiamo direttamente.",
-        en: "Availability and prices are live on our booking system. For groups, weddings or questions about the apartments, write to us: we reply in person.",
+        it: "Disponibilità e prezzi si vedono in tempo reale sul nostro sistema di prenotazione. Per gruppi, matrimoni o domande sugli alloggi scriveteci: Elena e Cristina vi rispondono direttamente.",
+        en: "Availability and prices are live on our booking system. For groups, weddings or questions about the apartments, write to us: Elena and Cristina reply in person.",
       },
       whatsappLabel: {
         it: "Scrivici su WhatsApp",
@@ -862,8 +898,8 @@ const site: SiteConfig = {
               en: "La Casina is a few minutes' drive from the main site, or a walk through a small wood. It's a secluded place: just five apartments, a pool, a barbecue, a swing and football goals.",
             },
             {
-              it: "Sotto il portico di pietra c'è una tavola lunga per mangiare tutti insieme; d'estate il glicine ci fa ombra. Il Wi-Fi è disponibile nelle zone comuni, all'esterno degli appartamenti: per molti ospiti è un pregio.",
-              en: "Under the stone portico there's a long table for eating together; in summer the wisteria gives shade. Wi-Fi is available in the shared areas, outside the apartments: many guests see that as a plus.",
+              it: "Sotto il portico di pietra, con le sedute e un lavello con acqua calda, c'è una tavola lunga per mangiare tutti insieme; d'estate il glicine ci fa ombra. La piscina è un po' più piccola di quella di Nerbona, ma ha la vista più aperta sulla campagna. Il Wi-Fi è disponibile nelle zone comuni, all'esterno degli appartamenti: per molti ospiti è un pregio.",
+              en: "Under the stone portico, with seating and a sink with hot water, there's a long table for eating together; in summer the wisteria gives shade. The pool is a little smaller than Nerbona's, but has the most open view over the countryside. Wi-Fi is available in the shared areas, outside the apartments: many guests see that as a plus.",
             },
           ],
           image: {
@@ -989,7 +1025,26 @@ const site: SiteConfig = {
             {
               label: { it: "Colazione", en: "Breakfast" },
               value: { it: "A buffet, da aprile a ottobre", en: "Buffet, April to October" },
-              note: { it: "Mesi di aprile e ottobre compresi.", en: "April and October included." },
+              note: {
+                it: "Mesi di aprile e ottobre compresi. Va prenotata almeno tre giorni prima.",
+                en: "April and October included. To be booked at least three days in advance.",
+              },
+            },
+            {
+              label: { it: "Soggiorno minimo", en: "Minimum stay" },
+              value: { it: "Due notti negli appartamenti", en: "Two nights in the apartments" },
+              note: {
+                it: "Una notte nelle camere Lavanda e Ortensia, tre notti a Villa L'Aia.",
+                en: "One night in the Lavanda and Ortensia rooms, three nights at Villa L'Aia.",
+              },
+            },
+            {
+              label: { it: "Chi vi accoglie", en: "Your hosts" },
+              value: { it: "Elena e Cristina", en: "Elena and Cristina" },
+              note: {
+                it: "Parliamo italiano, inglese, francese, tedesco e spagnolo.",
+                en: "We speak Italian, English, French, German and Spanish.",
+              },
             },
             {
               label: { it: "Reception", en: "Reception" },
@@ -1023,6 +1078,22 @@ const site: SiteConfig = {
               label: { it: "Animali", en: "Pets" },
               value: { it: "Benvenuti, con supplemento", en: "Welcome, for a fee" },
               note: { it: "In tutti gli alloggi tranne Villa L'Aia.", en: "In every apartment except Villa L'Aia." },
+            },
+            {
+              label: { it: "Famiglie", en: "Families" },
+              value: { it: "Giochi e seggiolini per bambini", en: "Games and child seats" },
+              note: {
+                it: "Spazi aperti, area giochi e seggiolini per le biciclette.",
+                en: "Open spaces, a play area and child seats for the bikes.",
+              },
+            },
+            {
+              label: { it: "Sostenibilità", en: "Sustainability" },
+              value: { it: "Energia da fonti rinnovabili", en: "Renewable energy" },
+              note: {
+                it: "Raccolta differenziata, saponi ecologici nei bagni, attenzione al risparmio di acqua ed energia.",
+                en: "Waste sorting, eco-friendly soaps in the bathrooms, care for saving water and energy.",
+              },
             },
           ],
         },
@@ -1564,6 +1635,53 @@ const site: SiteConfig = {
           ],
         },
         {
+          type: "facts",
+          id: "dintorni",
+          kicker: { it: "A pochi minuti", en: "A few minutes away" },
+          title: { it: "Dietro l'angolo", en: "Around the corner" },
+          text: {
+            it: "Prima ancora di Siena e Firenze, la Val d'Elsa ha molto da vedere a pochi chilometri dal cancello.",
+            en: "Even before Siena and Florence, Val d'Elsa has plenty to see a few kilometres from the gate.",
+          },
+          image: {
+            src: "estate/park.webp",
+            alt: { it: "Il parco di Nerbona", en: "The Nerbona park" },
+          },
+          items: [
+            {
+              label: { it: "3 km", en: "3 km" },
+              value: { it: "Badia a Coneo", en: "Badia a Coneo" },
+              note: { it: "Abbazia romanica in pietra, fra i campi.", en: "A Romanesque stone abbey among the fields." },
+            },
+            {
+              label: { it: "4 km", en: "4 km" },
+              value: { it: "Casole d'Elsa", en: "Casole d'Elsa" },
+              note: { it: "Borgo medievale con il suo museo archeologico.", en: "A medieval village with its archaeological museum." },
+            },
+            {
+              label: { it: "6 km", en: "6 km" },
+              value: { it: "Le Caldane", en: "Le Caldane" },
+              note: {
+                it: "Le sorgenti calde che danno all'Elsa il suo colore turchese. Lungo il fiume corre il Sentierelsa, facile e quasi tutto in piano, con i punti per fare il bagno.",
+                en: "The warm springs that give the Elsa its turquoise colour. Along the river runs the Sentierelsa, an easy, almost flat trail with spots for a swim.",
+              },
+            },
+            {
+              label: { it: "7 km", en: "7 km" },
+              value: { it: "Colle di Val d'Elsa", en: "Colle di Val d'Elsa" },
+              note: {
+                it: "Il borgo alto, il Duomo, il Museo Archeologico Bianchi Bandinelli e le botteghe del cristallo.",
+                en: "The upper town, the cathedral, the Bianchi Bandinelli Archaeological Museum and the crystal workshops.",
+              },
+            },
+            {
+              label: { it: "18 km", en: "18 km" },
+              value: { it: "San Gimignano", en: "San Gimignano" },
+              note: { it: "Le sue torri si vedono dalla piscina di Nerbona.", en: "Its towers can be seen from the Nerbona pool." },
+            },
+          ],
+        },
+        {
           type: "territory",
           id: "territorio",
           kicker: "Heart of Tuscany",
@@ -1651,6 +1769,17 @@ const site: SiteConfig = {
           type: "reviews",
           id: "recensioni",
           layout: "editorial",
+          /* Medie pubblicate dai portali: aggiornarle quando cambiano. */
+          summary: [
+            {
+              score: "9,3",
+              label: {
+                it: "Bed-and-Breakfast.it · Eccellenza 2026",
+                en: "Bed-and-Breakfast.it · Excellence 2026",
+              },
+            },
+            { score: "8,8", label: { it: "Trip.com", en: "Trip.com" } },
+          ],
           kicker: { it: "Dicono di noi", en: "What guests say" },
           title: {
             it: "Chi viene, di solito torna.",
@@ -1773,16 +1902,32 @@ const site: SiteConfig = {
   /* ================================================================ */
 
   /* Una voce per TIPOLOGIA, come nel menù del sito originale; i venti
-     appartamenti reali sono elencati in `units`. Così il carosello resta di
-     otto card invece di venti. `size` mostra quanti alloggi raggruppa. */
+     appartamenti reali sono elencati in `units`, ognuno con le sue foto (le
+     stesse, nello stesso ordine, di nerbona.com), i posti letto e un'ancora
+     per il collegamento diretto: /trilocale#solaio.
+     `size` mostra quanti appartamenti raggruppa la voce.
+
+     PRENOTAZIONE. Su Beddy ogni appartamento ha un proprio codice (fra
+     parentesi qui sotto), ma il motore non accetta link diretti a un singolo
+     alloggio: ogni "Prenota" porta alla ricerca. Se Beddy fornisce un
+     indirizzo per appartamento, va in `bookingUrl` della relativa voce.
+       Lavanda 23126 · Ortensia 23127 · Mangiatoia 23128 · Taverna 23129 ·
+       Granaio 23130 · Rostra 2 23131 · Forno 1 23132 · Forno 2 23133 ·
+       Solaio 23134 · Piccionaia 23135 · Trinciatoio 23136 · Cappella 23137 ·
+       Rostra 1 23138 · Mansarda 23139 · Villa L'Aia 23140 · Leccio 23141 ·
+       Corbezzolo 23142 · Olivo 23143 · Melo 23144 · Quercia 23145 ·
+       Nerbona in esclusiva 28078 · La Casina in esclusiva 28079
+
+     POSTI LETTO dalle schede pubbliche della struttura: da verificare con il
+     cliente. */
 
   accommodations: [
     {
+      category: AT_NERBONA("SEI APPARTAMENTI", "SIX APARTMENTS"),
       slug: "nerbona-bilocale",
       name: "Bilocali",
-      category: AT_NERBONA("SEI APPARTAMENTI", "SIX APARTMENTS"),
       size: "6",
-      guests: "2–4",
+      guests: "2–3",
       layout: {
         it: "Soggiorno con cucina · 1 camera · 1 bagno",
         en: "Living room with kitchen · 1 bedroom · 1 bathroom",
@@ -1792,87 +1937,186 @@ const site: SiteConfig = {
         en: "One bedroom, a kitchen and a door opening onto the courtyard or the garden.",
       },
       description: {
-        it: "Sei bilocali ricavati dagli edifici di lavoro della fattoria, quasi tutti al piano terra: cucina-soggiorno, una camera da letto e un bagno. Granaio è pensato anche per chi usa la sedia a rotelle. Da Pasqua a ottobre ognuno ha il suo spazio esterno privato.",
-        en: "Six one-bedroom apartments carved from the farm's working buildings, almost all on the ground floor: kitchen-living room, one bedroom and one bathroom. Granaio is also designed for wheelchair users. From Easter to October each has its own private outdoor space.",
+        it: "Sei bilocali ricavati dagli edifici di lavoro della fattoria, la mangiatoia, il granaio, la taverna, il forno, quasi tutti al piano terra. Granaio è adatto anche a chi usa la sedia a rotelle. Soggiorno minimo due notti.",
+        en: "Six one-bedroom apartments carved from the farm's working buildings, the manger, the granary, the tavern, the bakehouse, almost all on the ground floor. Granaio is also suitable for wheelchair users. Minimum stay two nights.",
       },
-      cover: "stays/nerbona-bilocale-01.webp",
-      detail: "stays/nerbona-bilocale-02.webp",
-      gallery: [
-        "stays/nerbona-bilocale-03.webp",
-        "stays/nerbona-bilocale-04.webp",
-        "stays/nerbona-bilocale-05.webp",
-        "stays/nerbona-bilocale-06.webp",
-        "stays/nerbona-bilocale-07.webp",
-        "stays/nerbona-bilocale-08.webp",
-        "stays/nerbona-bilocale-09.webp",
-        "stays/nerbona-bilocale-10.webp",
-        "stays/nerbona-bilocale-11.webp",
-        "stays/nerbona-bilocale-12.webp",
-        "stays/nerbona-bilocale-13.webp",
-        "stays/nerbona-bilocale-14.webp",
-        "stays/nerbona-bilocale-15.webp",
-        "stays/nerbona-bilocale-16.webp",
-        "stays/nerbona-bilocale-17.webp",
-        "stays/nerbona-bilocale-18.webp",
-      ],
+      cover: "stays/mangiatoia-01.webp",
+      detail: "stays/granaio-01.webp",
+      gallery: [],
       units: [
         {
+          slug: "mangiatoia",
           name: "Mangiatoia",
-          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Cucina-soggiorno, una camera da letto e un bagno, con Wi-Fi.",
-            en: "Kitchen-living room, one bedroom and one bathroom, with Wi-Fi.",
+          guests: "2",
+          layout: {
+            it: "Piano terra · 1 camera · 1 bagno",
+            en: "Ground floor · 1 bedroom · 1 bathroom",
           },
+          text: {
+            it: "Bilocale al piano terra con cucina-soggiorno, una camera da letto e un bagno, nell'antica mangiatoia della fattoria. Wi-Fi nell'appartamento e, da Pasqua a ottobre, spazio esterno privato con tavolo, sedie e ombrellone.",
+            en: "Ground-floor apartment in the farm's old manger, with kitchen-living room, one bedroom and one bathroom. Wi-Fi in the apartment and, from Easter to October, a private outdoor area with table, chairs and parasol.",
+          },
+          tags: [
+            WIFI_IN,
+          ],
+          images: [
+            "stays/mangiatoia-01.webp",
+            "stays/mangiatoia-02.webp",
+            "stays/mangiatoia-03.webp",
+            "stays/mangiatoia-04.webp",
+            "stays/mangiatoia-05.webp",
+          ],
         },
         {
+          slug: "granaio",
           name: "Granaio",
-          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Bagno senza bidet, con doccia a filo pavimento e water rialzato: l'appartamento è adatto anche a chi usa la sedia a rotelle.",
-            en: "Bathroom without bidet, with a walk-in shower and raised toilet: the apartment is also suitable for wheelchair users.",
+          guests: "3",
+          layout: {
+            it: "Piano terra · 1 camera · 1 bagno",
+            en: "Ground floor · 1 bedroom · 1 bathroom",
           },
-          tags: [ACCESSIBLE],
+          text: {
+            it: "Bilocale al piano terra nel vecchio granaio. Il bagno è senza bidet, con doccia a filo pavimento e water rialzato: l'appartamento è adatto anche a chi usa la sedia a rotelle. Wi-Fi e spazio esterno privato da Pasqua a ottobre.",
+            en: "Ground-floor apartment in the old granary. The bathroom has no bidet, with a walk-in shower and raised toilet: the apartment is also suitable for wheelchair users. Wi-Fi and private outdoor space from Easter to October.",
+          },
+          tags: [
+            ACCESSIBLE,
+            WIFI_IN,
+          ],
+          images: [
+            "stays/granaio-01.webp",
+            "stays/granaio-02.webp",
+            "stays/granaio-03.webp",
+            "stays/granaio-04.webp",
+            "stays/granaio-05.webp",
+            "stays/granaio-06.webp",
+          ],
         },
         {
+          slug: "taverna",
           name: "Taverna",
-          layout: { it: "Piano terra · 1 camera · 1 bagno", en: "Ground floor · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Cucina-soggiorno, una camera da letto e un bagno, con Wi-Fi.",
-            en: "Kitchen-living room, one bedroom and one bathroom, with Wi-Fi.",
+          guests: "3",
+          layout: {
+            it: "Piano terra · 1 camera · 1 bagno",
+            en: "Ground floor · 1 bedroom · 1 bathroom",
           },
+          text: {
+            it: "Bilocale al piano terra con cucina-soggiorno, una camera e un bagno. Wi-Fi nell'appartamento e spazio esterno privato da Pasqua a ottobre.",
+            en: "Ground-floor apartment with kitchen-living room, one bedroom and one bathroom. Wi-Fi in the apartment and private outdoor space from Easter to October.",
+          },
+          tags: [
+            WIFI_IN,
+          ],
+          images: [
+            "stays/taverna-01.webp",
+            "stays/taverna-02.webp",
+            "stays/taverna-03.webp",
+            "stays/taverna-04.webp",
+            "stays/taverna-05.webp",
+            "stays/taverna-06.webp",
+          ],
         },
         {
+          slug: "rostra-2",
           name: "Rostra 2",
-          layout: { it: "Primo piano · 1 camera · 1 bagno", en: "First floor · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Al primo piano, con zanzariere. Lo spazio esterno privato è al piano terra.",
-            en: "On the first floor, with mosquito nets. The private outdoor space is on the ground floor.",
+          guests: "3",
+          layout: {
+            it: "Primo piano · 1 camera · 1 bagno",
+            en: "First floor · 1 bedroom · 1 bathroom",
           },
-          tags: [NETS],
+          text: {
+            it: "Bilocale al primo piano con cucina-soggiorno, una camera e un bagno, con Wi-Fi e zanzariere. Lo spazio esterno privato, da Pasqua a ottobre, è al piano terra.",
+            en: "First-floor apartment with kitchen-living room, one bedroom and one bathroom, with Wi-Fi and mosquito nets. The private outdoor space, from Easter to October, is on the ground floor.",
+          },
+          tags: [
+            WIFI_IN,
+            NETS,
+          ],
+          images: [
+            "stays/rostra-2-01.webp",
+            "stays/rostra-2-02.webp",
+            "stays/rostra-2-03.webp",
+            "stays/rostra-2-04.webp",
+            "stays/rostra-2-05.webp",
+            "stays/rostra-2-06.webp",
+          ],
         },
         {
+          slug: "forno-1",
           name: "Forno 1",
-          layout: { it: "Piano terra, lato giardino · 1 camera · 1 bagno", en: "Ground floor, garden side · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Si affaccia sul giardino. Cucina-soggiorno, una camera e un bagno.",
-            en: "Looks onto the garden. Kitchen-living room, one bedroom and one bathroom.",
+          guests: "3",
+          layout: {
+            it: "Piano terra, lato giardino · 1 camera · 1 bagno",
+            en: "Ground floor, garden side · 1 bedroom · 1 bathroom",
           },
+          text: {
+            it: "Bilocale al piano terra affacciato sul giardino, nell'edificio dell'antico forno. Cucina-soggiorno, una camera, un bagno, Wi-Fi e spazio esterno privato da Pasqua a ottobre.",
+            en: "Ground-floor apartment overlooking the garden, in the old bakehouse. Kitchen-living room, one bedroom, one bathroom, Wi-Fi and private outdoor space from Easter to October.",
+          },
+          tags: [
+            WIFI_IN,
+            {
+              it: "Lato giardino",
+              en: "Garden side",
+            },
+          ],
+          images: [
+            "stays/forno-1-01.webp",
+            "stays/forno-1-02.webp",
+            "stays/forno-1-03.webp",
+            "stays/forno-1-04.webp",
+            "stays/forno-1-05.webp",
+            "stays/forno-1-06.webp",
+            "stays/forno-1-07.webp",
+          ],
         },
         {
+          slug: "forno-2",
           name: "Forno 2",
-          layout: { it: "Piano terra, lato giardino · 1 camera · 1 bagno", en: "Ground floor, garden side · 1 bedroom · 1 bathroom" },
-          text: {
-            it: "Accanto a Forno 1, sullo stesso giardino. Cucina-soggiorno, una camera e un bagno.",
-            en: "Next to Forno 1, on the same garden. Kitchen-living room, one bedroom and one bathroom.",
+          guests: "3",
+          layout: {
+            it: "Piano terra, lato giardino · 1 camera · 1 bagno",
+            en: "Ground floor, garden side · 1 bedroom · 1 bathroom",
           },
+          text: {
+            it: "Accanto a Forno 1, sullo stesso giardino: cucina-soggiorno, una camera e un bagno, Wi-Fi e spazio esterno privato da Pasqua a ottobre.",
+            en: "Next to Forno 1, on the same garden: kitchen-living room, one bedroom and one bathroom, Wi-Fi and private outdoor space from Easter to October.",
+          },
+          tags: [
+            WIFI_IN,
+            {
+              it: "Lato giardino",
+              en: "Garden side",
+            },
+          ],
+          images: [
+            "stays/forno-2-01.webp",
+            "stays/forno-2-02.webp",
+            "stays/forno-2-03.webp",
+            "stays/forno-2-04.webp",
+            "stays/forno-2-05.webp",
+            "stays/forno-2-06.webp",
+            "stays/forno-2-07.webp",
+            "stays/forno-2-08.webp",
+            "stays/forno-2-09.webp",
+            "stays/forno-2-10.webp",
+            "stays/forno-2-11.webp",
+            "stays/forno-2-12.webp",
+            "stays/forno-2-13.webp",
+            "stays/forno-2-14.webp",
+            "stays/forno-2-15.webp",
+          ],
         },
       ],
-      amenities: [WIFI_IN, OUTDOOR, KITCHEN],
+      amenities: [
+        OUTDOOR,
+        KITCHEN,
+      ],
     },
     {
+      category: AT_NERBONA("CINQUE APPARTAMENTI", "FIVE APARTMENTS"),
       slug: "trilocale",
       name: "Trilocali",
-      category: AT_NERBONA("CINQUE APPARTAMENTI", "FIVE APARTMENTS"),
       size: "5",
       guests: "4–6",
       layout: {
@@ -1884,84 +2128,161 @@ const site: SiteConfig = {
         en: "The most popular size: two bedrooms, an equipped kitchen and a table outside the door.",
       },
       description: {
-        it: "Cinque trilocali fra la casa padronale e gli annessi: due camere da letto, cucina-soggiorno, uno o due bagni. Piccionaia e Solaio stanno all'ultimo piano, Trinciatoio al piano terra ed è adatto anche a chi usa la sedia a rotelle.",
-        en: "Five two-bedroom apartments between the main house and its outbuildings: two bedrooms, kitchen-living room, one or two bathrooms. Piccionaia and Solaio are on the top floor; Trinciatoio is on the ground floor and also suitable for wheelchair users.",
+        it: "Cinque trilocali fra la casa padronale e gli annessi. Piccionaia e Solaio stanno all'ultimo piano, Trinciatoio al piano terra ed è adatto anche a chi usa la sedia a rotelle, Rostra 1 ha due bagni. Soggiorno minimo due notti.",
+        en: "Five two-bedroom apartments between the main house and its outbuildings. Piccionaia and Solaio are on the top floor, Trinciatoio is on the ground floor and suitable for wheelchair users, Rostra 1 has two bathrooms. Minimum stay two nights.",
       },
-      cover: "stays/trilocale-01.webp",
-      detail: "stays/trilocale-02.webp",
-      gallery: [
-        "stays/trilocale-03.webp",
-        "stays/trilocale-04.webp",
-        "stays/trilocale-05.webp",
-        "stays/trilocale-06.webp",
-        "stays/trilocale-07.webp",
-        "stays/trilocale-08.webp",
-        "stays/trilocale-09.webp",
-        "stays/trilocale-10.webp",
-        "stays/trilocale-11.webp",
-        "stays/trilocale-12.webp",
-        "stays/trilocale-13.webp",
-        "stays/trilocale-14.webp",
-        "stays/trilocale-15.webp",
-        "stays/trilocale-16.webp",
-        "stays/trilocale-17.webp",
-        "stays/trilocale-18.webp",
-        "stays/trilocale-19.webp",
-      ],
+      cover: "stays/piccionaia-01.webp",
+      detail: "stays/solaio-01.webp",
+      gallery: [],
       units: [
         {
+          slug: "piccionaia",
           name: "Piccionaia",
-          layout: { it: "Secondo piano · 2 camere · 1 bagno", en: "Second floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Nella vecchia piccionaia, all'ultimo piano. Lo spazio esterno privato è in cortile.",
-            en: "In the old dovecote, on the top floor. The private outdoor space is in the courtyard.",
+          guests: "5",
+          layout: {
+            it: "Secondo piano · 2 camere · 1 bagno",
+            en: "Second floor · 2 bedrooms · 1 bathroom",
           },
-          tags: [NETS],
+          text: {
+            it: "Trilocale all'ultimo piano, nella vecchia piccionaia: cucina-soggiorno, due camere da letto e un bagno, con Wi-Fi e zanzariere. Lo spazio esterno privato è in cortile, al piano terra.",
+            en: "Top-floor apartment in the old dovecote: kitchen-living room, two bedrooms and one bathroom, with Wi-Fi and mosquito nets. The private outdoor space is in the courtyard, on the ground floor.",
+          },
+          tags: [
+            WIFI_IN,
+            NETS,
+          ],
+          images: [
+            "stays/piccionaia-01.webp",
+            "stays/piccionaia-02.webp",
+            "stays/piccionaia-03.webp",
+            "stays/piccionaia-04.webp",
+            "stays/piccionaia-05.webp",
+            "stays/piccionaia-06.webp",
+            "stays/piccionaia-07.webp",
+          ],
         },
         {
+          slug: "solaio",
           name: "Solaio",
-          layout: { it: "Secondo piano · 2 camere · 1 bagno", en: "Second floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "All'ultimo piano, accanto alla Piccionaia. Lo spazio esterno privato è in cortile.",
-            en: "On the top floor, next to Piccionaia. The private outdoor space is in the courtyard.",
+          guests: "5",
+          layout: {
+            it: "Secondo piano · 2 camere · 1 bagno",
+            en: "Second floor · 2 bedrooms · 1 bathroom",
           },
-          tags: [NETS],
+          text: {
+            it: "Trilocale all'ultimo piano, accanto alla Piccionaia: cucina-soggiorno, due camere e un bagno, con Wi-Fi e zanzariere. Spazio esterno privato in cortile.",
+            en: "Top-floor apartment next to Piccionaia: kitchen-living room, two bedrooms and one bathroom, with Wi-Fi and mosquito nets. Private outdoor space in the courtyard.",
+          },
+          tags: [
+            WIFI_IN,
+            NETS,
+          ],
+          images: [
+            "stays/solaio-01.webp",
+            "stays/solaio-02.webp",
+            "stays/solaio-03.webp",
+            "stays/solaio-04.webp",
+            "stays/solaio-05.webp",
+          ],
         },
         {
+          slug: "trinciatoio",
           name: "Trinciatoio",
-          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Bagno senza bidet, con doccia a filo pavimento e water rialzato: adatto anche a chi usa la sedia a rotelle.",
-            en: "Bathroom without bidet, with a walk-in shower and raised toilet: also suitable for wheelchair users.",
+          guests: "4",
+          layout: {
+            it: "Piano terra · 2 camere · 1 bagno",
+            en: "Ground floor · 2 bedrooms · 1 bathroom",
           },
-          tags: [ACCESSIBLE],
+          text: {
+            it: "Trilocale al piano terra con cucina-soggiorno e due camere. Il bagno è senza bidet, con doccia a filo pavimento e water rialzato: adatto anche a chi usa la sedia a rotelle.",
+            en: "Ground-floor apartment with kitchen-living room and two bedrooms. The bathroom has no bidet, with a walk-in shower and raised toilet: also suitable for wheelchair users.",
+          },
+          tags: [
+            ACCESSIBLE,
+            WIFI_IN,
+          ],
+          images: [
+            "stays/trinciatoio-01.webp",
+            "stays/trinciatoio-02.webp",
+            "stays/trinciatoio-03.webp",
+            "stays/trinciatoio-04.webp",
+            "stays/trinciatoio-05.webp",
+            "stays/trinciatoio-06.webp",
+          ],
         },
         {
+          slug: "rostra-1",
           name: "Rostra 1",
-          layout: { it: "Primo piano · 2 camere · 2 bagni", en: "First floor · 2 bedrooms · 2 bathrooms" },
-          text: {
-            it: "L'unico trilocale con due bagni. Lo spazio esterno privato è al piano terra.",
-            en: "The only two-bedroom apartment with two bathrooms. The private outdoor space is on the ground floor.",
+          guests: "5",
+          layout: {
+            it: "Primo piano · 2 camere · 2 bagni",
+            en: "First floor · 2 bedrooms · 2 bathrooms",
           },
-          tags: [NETS],
+          text: {
+            it: "L'unico trilocale con due bagni: cucina-soggiorno e due camere al primo piano, con Wi-Fi e zanzariere. Lo spazio esterno privato è al piano terra.",
+            en: "The only two-bedroom apartment with two bathrooms: kitchen-living room and two bedrooms on the first floor, with Wi-Fi and mosquito nets. The private outdoor space is on the ground floor.",
+          },
+          tags: [
+            WIFI_IN,
+            NETS,
+            {
+              it: "Due bagni",
+              en: "Two bathrooms",
+            },
+          ],
+          images: [
+            "stays/rostra-1-01.webp",
+            "stays/rostra-1-02.webp",
+            "stays/rostra-1-03.webp",
+            "stays/rostra-1-04.webp",
+            "stays/rostra-1-05.webp",
+            "stays/rostra-1-06.webp",
+            "stays/rostra-1-07.webp",
+            "stays/rostra-1-08.webp",
+            "stays/rostra-1-09.webp",
+            "stays/rostra-1-10.webp",
+            "stays/rostra-1-11.webp",
+          ],
         },
         {
+          slug: "cappella",
           name: "Cappella",
-          layout: { it: "Piano rialzato · 2 camere · 1 bagno", en: "Raised ground floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Accanto alla chiesetta di San Luigi, da cui prende il nome.",
-            en: "Next to the little church of San Luigi, which gives it its name.",
+          guests: "6",
+          layout: {
+            it: "Piano rialzato · 2 camere · 1 bagno",
+            en: "Raised ground floor · 2 bedrooms · 1 bathroom",
           },
+          text: {
+            it: "Trilocale accanto alla chiesetta di San Luigi, da cui prende il nome: cucina-soggiorno, due camere e un bagno, Wi-Fi e spazio esterno privato al piano terra.",
+            en: "Apartment next to the little church of San Luigi, which gives it its name: kitchen-living room, two bedrooms and one bathroom, Wi-Fi and private outdoor space on the ground floor.",
+          },
+          tags: [
+            WIFI_IN,
+          ],
+          images: [
+            "stays/cappella-02.webp",
+            "stays/cappella-01.webp",
+            "stays/cappella-03.webp",
+            "stays/cappella-04.webp",
+            "stays/cappella-05.webp",
+            "stays/cappella-06.webp",
+            "stays/cappella-07.webp",
+            "stays/cappella-08.webp",
+            "stays/cappella-09.webp",
+          ],
         },
       ],
-      amenities: [WIFI_IN, OUTDOOR, KITCHEN],
+      amenities: [
+        OUTDOOR,
+        KITCHEN,
+      ],
     },
     {
+      category: AT_NERBONA("QUADRILOCALE", "THREE-BEDROOM"),
       slug: "quadrilocale-nerbona",
       name: "Mansarda",
-      category: AT_NERBONA("QUADRILOCALE", "THREE-BEDROOM"),
       size: "1",
-      guests: "6–8",
+      guests: "6",
       layout: {
         it: "Primo piano · 3 camere · 2 bagni",
         en: "First floor · 3 bedrooms · 2 bathrooms",
@@ -1971,69 +2292,134 @@ const site: SiteConfig = {
         en: "Three bedrooms and two bathrooms under the roof beams, for larger families.",
       },
       description: {
-        it: "Il quadrilocale di Nerbona: cucina-soggiorno, tre camere da letto e due bagni al primo piano. Una delle camere ha il tetto basso mansardato, che di solito piace molto ai bambini ed è adatta a chi non è troppo alto. Lo spazio esterno privato è in cortile, al piano terra.",
-        en: "Nerbona's three-bedroom apartment: kitchen-living room, three bedrooms and two bathrooms on the first floor. One of the bedrooms has a low sloping ceiling that children usually love, best for guests who aren't too tall. The private outdoor space is in the courtyard, on the ground floor.",
+        it: "Il quadrilocale di Nerbona, al primo piano: la scelta per chi viaggia in sei. Soggiorno minimo due notti.",
+        en: "Nerbona's three-bedroom apartment, on the first floor: the choice for a party of six. Minimum stay two nights.",
       },
-      cover: "stays/quadrilocale-nerbona-01.webp",
-      detail: "stays/quadrilocale-nerbona-02.webp",
-      gallery: [
-        "stays/quadrilocale-nerbona-03.webp",
-        "stays/quadrilocale-nerbona-04.webp",
-        "stays/quadrilocale-nerbona-05.webp",
-        "stays/quadrilocale-nerbona-06.webp",
-        "stays/quadrilocale-nerbona-07.webp",
-        "stays/quadrilocale-nerbona-08.webp",
-      ],
-      amenities: [WIFI_IN, NETS, OUTDOOR, KITCHEN],
-    },
-    {
-      slug: "villa-aia",
-      name: "Villa L'Aia",
-      category: AT_NERBONA("LA VILLA", "THE VILLA"),
-      size: "1",
-      guests: "6–8",
-      layout: {
-        it: "Due saloni · 3 camere · 3 bagni · lavatrice privata",
-        en: "Two living rooms · 3 bedrooms · 3 bathrooms · private washer",
-      },
-      blurb: {
-        it: "Una casa indipendente dentro la tenuta, con due saloni e lo spazio esterno tutto suo.",
-        en: "An independent house within the estate, with two living rooms and outdoor space of its own.",
-      },
-      description: {
-        it: "Villa L'Aia è una struttura indipendente nella sede principale: due ampi saloni, una cucina con lavastoviglie, tre camere da letto (due matrimoniali e una con due letti singoli per bambini) e tre bagni, di cui uno di servizio. Ha una lavatrice a uso privato e, da Pasqua a ottobre, uno spazio esterno con tavolo, sedie e ombrelloni. Gli animali non sono ammessi.",
-        en: "Villa L'Aia is an independent building on the main site: two large living rooms, a kitchen with dishwasher, three bedrooms (two doubles and one with two single beds for children) and three bathrooms, one of them a guest WC. It has its own washing machine and, from Easter to October, an outdoor area with table, chairs and parasols. Pets are not allowed.",
-      },
-      cover: "stays/villa-aia-01.webp",
-      detail: "stays/villa-aia-02.webp",
-      gallery: [
-        "stays/villa-aia-03.webp",
-        "stays/villa-aia-04.webp",
-        "stays/villa-aia-05.webp",
-        "stays/villa-aia-06.webp",
-        "stays/villa-aia-07.webp",
-        "stays/villa-aia-08.webp",
-        "stays/villa-aia-09.webp",
-        "stays/villa-aia-10.webp",
-        "stays/villa-aia-11.webp",
-        "stays/villa-aia-12.webp",
-        "stays/villa-aia-13.webp",
-        "stays/villa-aia-14.webp",
-        "stays/villa-aia-15.webp",
-        "stays/villa-aia-16.webp",
+      cover: "stays/mansarda-01.webp",
+      detail: "stays/mansarda-02.webp",
+      gallery: [],
+      units: [
+        {
+          slug: "mansarda",
+          name: "Mansarda",
+          guests: "6",
+          layout: {
+            it: "Primo piano · 3 camere · 2 bagni",
+            en: "First floor · 3 bedrooms · 2 bathrooms",
+          },
+          text: {
+            it: "Quadrilocale al primo piano con cucina-soggiorno, tre camere e due bagni. Una camera ha il tetto basso mansardato, che di solito piace molto ai bambini. Wi-Fi, zanzariere e spazio esterno privato in cortile.",
+            en: "First-floor apartment with kitchen-living room, three bedrooms and two bathrooms. One bedroom has a low sloping ceiling that children usually love. Wi-Fi, mosquito nets and private outdoor space in the courtyard.",
+          },
+          tags: [
+            WIFI_IN,
+            NETS,
+          ],
+          images: [
+            "stays/mansarda-01.webp",
+            "stays/mansarda-02.webp",
+            "stays/mansarda-03.webp",
+            "stays/mansarda-04.webp",
+            "stays/mansarda-05.webp",
+            "stays/mansarda-06.webp",
+            "stays/mansarda-07.webp",
+            "stays/mansarda-08.webp",
+          ],
+        },
       ],
       amenities: [
-        { it: "Lavastoviglie", en: "Dishwasher" },
-        { it: "Lavatrice privata", en: "Private washing machine" },
-        { it: "Animali non ammessi", en: "No pets" },
         OUTDOOR,
         KITCHEN,
       ],
     },
     {
+      category: AT_NERBONA("LA VILLA", "THE VILLA"),
+      slug: "villa-aia",
+      name: "Villa L'Aia",
+      size: "1",
+      guests: "6",
+      layout: {
+        it: "Due saloni · 3 camere · 3 bagni · camino",
+        en: "Two living rooms · 3 bedrooms · 3 bathrooms · fireplace",
+      },
+      blurb: {
+        it: "Una casa indipendente dentro la tenuta, con il camino, due saloni e lo spazio esterno tutto suo.",
+        en: "An independent house within the estate, with a fireplace, two living rooms and outdoor space of its own.",
+      },
+      description: {
+        it: "Villa L'Aia è la casa più riservata di Nerbona: indipendente, con un grande salone con camino e vetrate panoramiche, e uno spazio esterno privato ampio. Soggiorno minimo tre notti; gli animali non sono ammessi.",
+        en: "Villa L'Aia is Nerbona's most private home: independent, with a large living room with fireplace and panoramic windows, and a spacious private outdoor area. Minimum stay three nights; pets are not allowed.",
+      },
+      cover: "stays/villa-aia-01.webp",
+      detail: "stays/villa-aia-02.webp",
+      gallery: [],
+      units: [
+        {
+          slug: "villa-aia",
+          name: "Villa L'Aia",
+          guests: "6",
+          layout: {
+            it: "Casa indipendente · 3 camere · 3 bagni",
+            en: "Independent house · 3 bedrooms · 3 bathrooms",
+          },
+          text: {
+            it: "Una casa indipendente dentro la sede principale: due ampi saloni, il più grande con camino e vetrate sul giardino, cucina con lavastoviglie, due camere matrimoniali e una con due letti singoli per bambini, tre bagni (uno di servizio) e lavatrice privata. Da Pasqua a ottobre un grande spazio esterno privato. Gli animali non sono ammessi.",
+            en: "An independent house within the main site: two large living rooms, the bigger one with a fireplace and windows onto the garden, a kitchen with dishwasher, two double bedrooms and one with two single beds for children, three bathrooms (one a guest WC) and a private washing machine. From Easter to October a large private outdoor area. Pets are not allowed.",
+          },
+          tags: [
+            {
+              it: "Camino",
+              en: "Fireplace",
+            },
+            {
+              it: "Lavastoviglie",
+              en: "Dishwasher",
+            },
+            {
+              it: "Lavatrice privata",
+              en: "Private washer",
+            },
+            {
+              it: "Soggiorno minimo 3 notti",
+              en: "Minimum stay 3 nights",
+            },
+          ],
+          images: [
+            "stays/villa-aia-01.webp",
+            "stays/villa-aia-02.webp",
+            "stays/villa-aia-03.webp",
+            "stays/villa-aia-04.webp",
+            "stays/villa-aia-05.webp",
+            "stays/villa-aia-06.webp",
+            "stays/villa-aia-07.webp",
+            "stays/villa-aia-08.webp",
+            "stays/villa-aia-09.webp",
+            "stays/villa-aia-10.webp",
+            "stays/villa-aia-11.webp",
+            "stays/villa-aia-12.webp",
+            "stays/villa-aia-13.webp",
+            "stays/villa-aia-14.webp",
+            "stays/villa-aia-15.webp",
+            "stays/villa-aia-16.webp",
+            "stays/villa-aia-17.webp",
+            "stays/villa-aia-18.webp",
+            "stays/villa-aia-19.webp",
+            "stays/villa-aia-20.webp",
+            "stays/villa-aia-21.webp",
+            "stays/villa-aia-22.webp",
+            "stays/villa-aia-23.webp",
+          ],
+        },
+      ],
+      amenities: [
+        OUTDOOR,
+        KITCHEN,
+      ],
+    },
+    {
+      category: AT_NERBONA("DUE CAMERE", "TWO ROOMS"),
       slug: "camere-nerbona",
       name: "Camere",
-      category: AT_NERBONA("DUE CAMERE", "TWO ROOMS"),
       size: "2",
       guests: "2",
       layout: {
@@ -2045,48 +2431,81 @@ const site: SiteConfig = {
         en: "For short stays: a room with bathroom, no kitchen, on the ground floor.",
       },
       description: {
-        it: "Lavanda e Ortensia sono due camere al piano terra con bagno privato (senza bidet e senza finestra). Non hanno cucina, ma frigorifero, TV, bollitore, zanzariera e aria condizionata. Da Pasqua a ottobre anche loro hanno uno spazio esterno privato.",
-        en: "Lavanda and Ortensia are two ground-floor rooms with private bathroom (no bidet, no window). They have no kitchen, but a fridge, TV, kettle, mosquito net and air conditioning. From Easter to October they too have a private outdoor space.",
+        it: "Lavanda e Ortensia sono due camere matrimoniali al piano terra della sede principale, per chi si ferma poche notti: si prenotano anche per una notte sola. Colazione a buffet da aprile a ottobre, su prenotazione.",
+        en: "Lavanda and Ortensia are two double rooms on the ground floor of the main site, for short stays: they can be booked for a single night. Buffet breakfast from April to October, on request.",
       },
-      cover: "stays/camere-nerbona-01.webp",
-      detail: "stays/camere-nerbona-02.webp",
-      gallery: [
-        "stays/camere-nerbona-03.webp",
-        "stays/camere-nerbona-04.webp",
-        "stays/camere-nerbona-05.webp",
-        "stays/camere-nerbona-06.webp",
-        "stays/camere-nerbona-07.webp",
-      ],
+      cover: "stays/lavanda-01.webp",
+      detail: "stays/ortensia-01.webp",
+      gallery: [],
       units: [
         {
+          slug: "lavanda",
           name: "Lavanda",
-          layout: { it: "Piano terra · bagno privato", en: "Ground floor · private bathroom" },
-          text: {
-            it: "Frigorifero, TV, bollitore elettrico, zanzariera e aria condizionata.",
-            en: "Fridge, TV, electric kettle, mosquito net and air conditioning.",
+          guests: "2",
+          layout: {
+            it: "Piano terra · camera con bagno",
+            en: "Ground floor · room with bathroom",
           },
+          text: {
+            it: "Camera matrimoniale al piano terra con bagno privato (senza bidet e senza finestra). Niente cucina, ma frigorifero, TV, bollitore, zanzariera e aria condizionata. Da Pasqua a ottobre uno spazio esterno privato.",
+            en: "Ground-floor double room with private bathroom (no bidet, no window). No kitchen, but a fridge, TV, kettle, mosquito net and air conditioning. From Easter to October a private outdoor space.",
+          },
+          tags: [
+            {
+              it: "Aria condizionata",
+              en: "Air conditioning",
+            },
+            {
+              it: "Soggiorno minimo 1 notte",
+              en: "Minimum stay 1 night",
+            },
+          ],
+          images: [
+            "stays/lavanda-01.webp",
+            "stays/lavanda-02.webp",
+            "stays/lavanda-03.webp",
+            "stays/lavanda-04.webp",
+          ],
         },
         {
+          slug: "ortensia",
           name: "Ortensia",
-          layout: { it: "Piano terra · bagno privato", en: "Ground floor · private bathroom" },
-          text: {
-            it: "Frigorifero, TV, bollitore elettrico, zanzariera e aria condizionata.",
-            en: "Fridge, TV, electric kettle, mosquito net and air conditioning.",
+          guests: "2",
+          layout: {
+            it: "Piano terra · camera con bagno",
+            en: "Ground floor · room with bathroom",
           },
+          text: {
+            it: "Camera matrimoniale al piano terra con bagno privato (senza bidet e senza finestra), frigorifero, TV, bollitore, zanzariera e aria condizionata. Da Pasqua a ottobre uno spazio esterno privato.",
+            en: "Ground-floor double room with private bathroom (no bidet, no window), fridge, TV, kettle, mosquito net and air conditioning. From Easter to October a private outdoor space.",
+          },
+          tags: [
+            {
+              it: "Aria condizionata",
+              en: "Air conditioning",
+            },
+            {
+              it: "Soggiorno minimo 1 notte",
+              en: "Minimum stay 1 night",
+            },
+          ],
+          images: [
+            "stays/ortensia-01.webp",
+            "stays/ortensia-02.webp",
+            "stays/ortensia-03.webp",
+          ],
         },
       ],
       amenities: [
-        { it: "Aria condizionata", en: "Air conditioning" },
-        { it: "Frigorifero e bollitore", en: "Fridge and kettle" },
         OUTDOOR,
       ],
     },
     {
+      category: AT_CASINA("BILOCALE", "ONE-BEDROOM"),
       slug: "bilocale-casina",
       name: "Leccio",
-      category: AT_CASINA("BILOCALE", "ONE-BEDROOM"),
       size: "1",
-      guests: "2–4",
+      guests: "2",
       layout: {
         it: "Piano terra · 1 camera · 1 bagno",
         en: "Ground floor · 1 bedroom · 1 bathroom",
@@ -2096,24 +2515,50 @@ const site: SiteConfig = {
         en: "La Casina's most intimate apartment, on the ground floor, with the lawn in front.",
       },
       description: {
-        it: "Leccio è il bilocale della Casina: cucina-soggiorno, una camera da letto e un bagno al piano terra, con zanzariere. Da Pasqua a ottobre ha il suo spazio esterno privato. Il Wi-Fi è disponibile all'esterno dell'appartamento.",
-        en: "Leccio is La Casina's one-bedroom apartment: kitchen-living room, one bedroom and one bathroom on the ground floor, with mosquito nets. From Easter to October it has its own private outdoor space. Wi-Fi is available outside the apartment.",
+        it: "Leccio è il bilocale della Casina, per una coppia che cerca silenzio, la piscina panoramica a pochi passi e il portico per cenare all'aperto. Soggiorno minimo due notti.",
+        en: "Leccio is La Casina's one-bedroom apartment, for a couple seeking quiet, with the panoramic pool a few steps away and the portico for dining outdoors. Minimum stay two nights.",
       },
-      cover: "stays/bilocale-casina-01.webp",
-      detail: "stays/bilocale-casina-02.webp",
-      gallery: [
-        "stays/bilocale-casina-03.webp",
-        "stays/bilocale-casina-04.webp",
-        "stays/bilocale-casina-05.webp",
+      cover: "stays/leccio-01.webp",
+      detail: "stays/leccio-02.webp",
+      gallery: [],
+      units: [
+        {
+          slug: "leccio",
+          name: "Leccio",
+          guests: "2",
+          layout: {
+            it: "Piano terra · 1 camera · 1 bagno",
+            en: "Ground floor · 1 bedroom · 1 bathroom",
+          },
+          text: {
+            it: "Il bilocale della Casina: cucina-soggiorno, una camera e un bagno al piano terra, con zanzariere. Da Pasqua a ottobre spazio esterno privato; il Wi-Fi è disponibile all'esterno dell'appartamento.",
+            en: "La Casina's one-bedroom apartment: kitchen-living room, one bedroom and one bathroom on the ground floor, with mosquito nets. From Easter to October a private outdoor space; Wi-Fi is available outside the apartment.",
+          },
+          tags: [
+            NETS,
+          ],
+          images: [
+            "stays/leccio-01.webp",
+            "stays/leccio-02.webp",
+            "stays/leccio-03.webp",
+            "stays/leccio-04.webp",
+            "stays/leccio-05.webp",
+            "stays/leccio-06.webp",
+          ],
+        },
       ],
-      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
+      amenities: [
+        WIFI_OUT,
+        OUTDOOR,
+        KITCHEN,
+      ],
     },
     {
+      category: AT_CASINA("TRE APPARTAMENTI", "THREE APARTMENTS"),
       slug: "trilocali-casina",
       name: "Trilocali",
-      category: AT_CASINA("TRE APPARTAMENTI", "THREE APARTMENTS"),
       size: "3",
-      guests: "4–6",
+      guests: "4–5",
       layout: {
         it: "Soggiorno con cucina · 2 camere · 1 bagno",
         en: "Living room with kitchen · 2 bedrooms · 1 bathroom",
@@ -2123,62 +2568,106 @@ const site: SiteConfig = {
         en: "Three two-bedroom apartments: one upstairs with a terrace, two on the ground floor by the lawn.",
       },
       description: {
-        it: "I tre trilocali della Casina hanno due camere da letto, cucina e un bagno, tutti con zanzariere. Corbezzolo è al primo piano e ha un terrazzino; Olivo e Melo sono al piano terra, e Melo ha due spazi esterni, uno dal lato dell'ingresso e uno dal lato di una camera. Il Wi-Fi è disponibile all'esterno degli appartamenti.",
-        en: "La Casina's three two-bedroom apartments each have two bedrooms, a kitchen and a bathroom, all with mosquito nets. Corbezzolo is upstairs with a small terrace; Olivo and Melo are on the ground floor, and Melo has two outdoor areas, one by the entrance and one by a bedroom. Wi-Fi is available outside the apartments.",
+        it: "Corbezzolo, Olivo e Melo: tre trilocali con zanzariere, alla Casina, a un chilometro e mezzo dalla sede principale. Soggiorno minimo due notti.",
+        en: "Corbezzolo, Olivo and Melo: three two-bedroom apartments with mosquito nets at La Casina, a kilometre and a half from the main site. Minimum stay two nights.",
       },
-      cover: "stays/trilocali-casina-01.webp",
-      detail: "stays/trilocali-casina-02.webp",
-      gallery: [
-        "stays/trilocali-casina-03.webp",
-        "stays/trilocali-casina-04.webp",
-        "stays/trilocali-casina-05.webp",
-        "stays/trilocali-casina-06.webp",
-        "stays/trilocali-casina-07.webp",
-        "stays/trilocali-casina-08.webp",
-        "stays/trilocali-casina-09.webp",
-        "stays/trilocali-casina-10.webp",
-        "stays/trilocali-casina-11.webp",
-        "stays/trilocali-casina-12.webp",
-        "stays/trilocali-casina-13.webp",
-        "stays/trilocali-casina-14.webp",
-        "stays/trilocali-casina-15.webp",
-      ],
+      cover: "stays/corbezzolo-01.webp",
+      detail: "stays/olivo-01.webp",
+      gallery: [],
       units: [
         {
+          slug: "corbezzolo",
           name: "Corbezzolo",
-          layout: { it: "Primo piano · 2 camere · 1 bagno", en: "First floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Al primo piano, con un terrazzino arredato con tavolo e sedie.",
-            en: "On the first floor, with a small terrace furnished with table and chairs.",
+          guests: "4",
+          layout: {
+            it: "Primo piano · 2 camere · 1 bagno",
+            en: "First floor · 2 bedrooms · 1 bathroom",
           },
-          tags: [{ it: "Terrazzino", en: "Terrace" }],
+          text: {
+            it: "Trilocale al primo piano con cucina, due camere e un bagno, zanzariere e un terrazzino con tavolo e sedie da Pasqua a ottobre. Wi-Fi all'esterno dell'appartamento.",
+            en: "First-floor apartment with kitchen, two bedrooms and one bathroom, mosquito nets and a small terrace with table and chairs from Easter to October. Wi-Fi outside the apartment.",
+          },
+          tags: [
+            NETS,
+            {
+              it: "Terrazzino",
+              en: "Terrace",
+            },
+          ],
+          images: [
+            "stays/corbezzolo-01.webp",
+            "stays/corbezzolo-02.webp",
+            "stays/corbezzolo-03.webp",
+            "stays/corbezzolo-04.webp",
+            "stays/corbezzolo-05.webp",
+          ],
         },
         {
+          slug: "olivo",
           name: "Olivo",
-          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Al piano terra, con spazio esterno privato con tavolo, sedie e ombrellone.",
-            en: "On the ground floor, with a private outdoor area with table, chairs and parasol.",
+          guests: "5",
+          layout: {
+            it: "Piano terra · 2 camere · 1 bagno",
+            en: "Ground floor · 2 bedrooms · 1 bathroom",
           },
+          text: {
+            it: "Trilocale al piano terra con cucina-soggiorno, due camere e un bagno, zanzariere e spazio esterno privato con tavolo, sedie e ombrellone. Wi-Fi all'esterno dell'appartamento.",
+            en: "Ground-floor apartment with kitchen-living room, two bedrooms and one bathroom, mosquito nets and a private outdoor area with table, chairs and parasol. Wi-Fi outside the apartment.",
+          },
+          tags: [
+            NETS,
+          ],
+          images: [
+            "stays/olivo-01.webp",
+            "stays/olivo-02.webp",
+            "stays/olivo-03.webp",
+            "stays/olivo-04.webp",
+            "stays/olivo-05.webp",
+          ],
         },
         {
+          slug: "melo",
           name: "Melo",
-          layout: { it: "Piano terra · 2 camere · 1 bagno", en: "Ground floor · 2 bedrooms · 1 bathroom" },
-          text: {
-            it: "Due spazi esterni privati: uno dal lato dell'ingresso, l'altro dal lato di una camera.",
-            en: "Two private outdoor areas: one by the entrance, the other by one of the bedrooms.",
+          guests: "5",
+          layout: {
+            it: "Piano terra · 2 camere · 1 bagno",
+            en: "Ground floor · 2 bedrooms · 1 bathroom",
           },
-          tags: [{ it: "Due spazi esterni", en: "Two outdoor areas" }],
+          text: {
+            it: "Trilocale al piano terra con due spazi esterni privati: uno dal lato dell'ingresso, l'altro dal lato di una camera. Cucina-soggiorno, due camere, un bagno e zanzariere; Wi-Fi all'esterno.",
+            en: "Ground-floor apartment with two private outdoor areas: one by the entrance, the other by a bedroom. Kitchen-living room, two bedrooms, one bathroom and mosquito nets; Wi-Fi outside.",
+          },
+          tags: [
+            NETS,
+            {
+              it: "Due spazi esterni",
+              en: "Two outdoor areas",
+            },
+          ],
+          images: [
+            "stays/melo-01.webp",
+            "stays/melo-02.webp",
+            "stays/melo-03.webp",
+            "stays/melo-04.webp",
+            "stays/melo-05.webp",
+            "stays/melo-06.webp",
+            "stays/melo-07.webp",
+            "stays/melo-08.webp",
+          ],
         },
       ],
-      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
+      amenities: [
+        WIFI_OUT,
+        OUTDOOR,
+        KITCHEN,
+      ],
     },
     {
+      category: AT_CASINA("QUADRILOCALE", "THREE-BEDROOM"),
       slug: "quadrilocale-casina",
       name: "Quercia",
-      category: AT_CASINA("QUADRILOCALE", "THREE-BEDROOM"),
       size: "1",
-      guests: "6–8",
+      guests: "6",
       layout: {
         it: "Primo piano · 3 camere · 2 bagni · terrazzino",
         en: "First floor · 3 bedrooms · 2 bathrooms · terrace",
@@ -2188,20 +2677,53 @@ const site: SiteConfig = {
         en: "Three bedrooms, two bathrooms and a small terrace overlooking the olive trees.",
       },
       description: {
-        it: "Quercia è l'appartamento più grande della Casina: al primo piano, cucina-soggiorno, tre camere da letto e due bagni, con zanzariere. Da Pasqua a ottobre il terrazzino ha tavolo, sedie e ombrellone. Il Wi-Fi è disponibile all'esterno dell'appartamento.",
-        en: "Quercia is La Casina's largest apartment: on the first floor, with kitchen-living room, three bedrooms and two bathrooms, and mosquito nets. From Easter to October the terrace has a table, chairs and parasol. Wi-Fi is available outside the apartment.",
+        it: "Quercia è l'appartamento più grande della Casina, per famiglie e piccoli gruppi. Soggiorno minimo due notti.",
+        en: "Quercia is La Casina's largest apartment, for families and small groups. Minimum stay two nights.",
       },
-      cover: "stays/quadrilocale-casina-01.webp",
-      detail: "stays/quadrilocale-casina-02.webp",
-      gallery: [
-        "stays/quadrilocale-casina-03.webp",
-        "stays/quadrilocale-casina-04.webp",
-        "stays/quadrilocale-casina-05.webp",
-        "stays/quadrilocale-casina-06.webp",
+      cover: "stays/quercia-01.webp",
+      detail: "stays/quercia-02.webp",
+      gallery: [],
+      units: [
+        {
+          slug: "quercia",
+          name: "Quercia",
+          guests: "6",
+          layout: {
+            it: "Primo piano · 3 camere · 2 bagni",
+            en: "First floor · 3 bedrooms · 2 bathrooms",
+          },
+          text: {
+            it: "L'appartamento più grande della Casina: al primo piano, cucina-soggiorno, tre camere e due bagni, con zanzariere. Da Pasqua a ottobre il terrazzino affacciato sugli ulivi ha tavolo, sedie e ombrellone. Wi-Fi all'esterno.",
+            en: "La Casina's largest apartment: on the first floor, with kitchen-living room, three bedrooms and two bathrooms, and mosquito nets. From Easter to October the terrace overlooking the olive trees has a table, chairs and parasol. Wi-Fi outside.",
+          },
+          tags: [
+            NETS,
+            {
+              it: "Terrazzino",
+              en: "Terrace",
+            },
+          ],
+          images: [
+            "stays/quercia-01.webp",
+            "stays/quercia-02.webp",
+            "stays/quercia-03.webp",
+            "stays/quercia-04.webp",
+            "stays/quercia-05.webp",
+            "stays/quercia-06.webp",
+            "stays/quercia-07.webp",
+            "stays/quercia-08.webp",
+            "stays/quercia-09.webp",
+          ],
+        },
       ],
-      amenities: [NETS, WIFI_OUT, OUTDOOR, KITCHEN],
+      amenities: [
+        WIFI_OUT,
+        OUTDOOR,
+        KITCHEN,
+      ],
     },
   ],
+
 
   stayPage: {
     back: { it: "Tutti gli alloggi", en: "All apartments" },
@@ -2210,6 +2732,11 @@ const site: SiteConfig = {
     guestsLabel: { it: "Ospiti", en: "Guests" },
     galleryLabel: { it: "Dentro la casa", en: "Inside" },
     unitsLabel: { it: "Gli appartamenti", en: "The apartments" },
+    askLabel: { it: "Chiedi informazioni", en: "Ask about it" },
+    askMessage: {
+      it: "Buongiorno, vorrei informazioni sull'appartamento {name} di Fattoria Nerbona.",
+      en: "Hello, I'd like some information about the {name} apartment at Fattoria Nerbona.",
+    },
     amenitiesLabel: { it: "In tutti gli alloggi", en: "In every apartment" },
     ctaTitle: {
       it: "Questa potrebbe essere la vostra estate.",

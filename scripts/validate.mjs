@@ -145,6 +145,20 @@ function validate(id, site) {
     (stay.gallery ?? []).forEach((image, i) =>
       checkMedia(image, `accommodations[${stay.slug}].gallery[${i}]`),
     );
+    const unitSlugs = new Set();
+    for (const unit of stay.units ?? []) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(unit.slug ?? "")) {
+        err(`accommodations[${stay.slug}].units: slug non valido — "${unit.slug}"`);
+      }
+      if (unitSlugs.has(unit.slug)) err(`accommodations[${stay.slug}].units: slug duplicato — "${unit.slug}"`);
+      unitSlugs.add(unit.slug);
+      (unit.images ?? []).forEach((image, i) =>
+        checkMedia(image, `accommodations[${stay.slug}].units[${unit.slug}].images[${i}]`),
+      );
+      if (unit.bookingUrl && !/^https:\/\//.test(unit.bookingUrl)) {
+        err(`accommodations[${stay.slug}].units[${unit.slug}].bookingUrl: deve iniziare con https://`);
+      }
+    }
   }
 
   /* --- pagine interne ------------------------------------------- */
@@ -257,7 +271,8 @@ function validate(id, site) {
     }
     if (slugs.has(stay.slug)) err(`accommodations: slug duplicato — "${stay.slug}"`);
     slugs.add(stay.slug);
-    if (!stay.gallery?.length) warn(`accommodations[${stay.slug}]: galleria vuota`);
+    const unitPhotos = (stay.units ?? []).some((unit) => unit.images?.length);
+    if (!stay.gallery?.length && !unitPhotos) warn(`accommodations[${stay.slug}]: galleria vuota`);
   }
 
   /* --- sezioni --------------------------------------------------- */
@@ -286,6 +301,15 @@ function validate(id, site) {
     }
     for (const slug of section.type === "stays" ? section.only ?? [] : []) {
       if (!staySlugs.has(slug)) err(`sezione ${section.id}.only: "${slug}" non è fra le sistemazioni`);
+    }
+    if (section.type === "stayTabs") {
+      if (!(site.accommodations ?? []).length) err(`sezione ${section.id}: ci sono le schede alloggi ma accommodations è vuoto`);
+      section.tabs.forEach((tab, i) => {
+        if (!tab.stays?.length) err(`sezione ${section.id}.tabs[${i}]: scheda senza alloggi`);
+        for (const slug of tab.stays ?? []) {
+          if (!staySlugs.has(slug)) err(`sezione ${section.id}.tabs[${i}]: "${slug}" non è fra le sistemazioni`);
+        }
+      });
     }
   }
 
