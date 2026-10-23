@@ -57,6 +57,9 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_BASE_PATH: basePath,
     /* Dominio pubblico. Se assente si usa quello in configurazione. */
     NEXT_PUBLIC_SITE_URL: process.env.SITE_URL ?? "",
+    /* NOINDEX=true per le anteprime: i motori di ricerca non le indicizzano,
+       così non fanno concorrenza al sito vero del cliente. */
+    NEXT_PUBLIC_NOINDEX: process.env.NOINDEX === "true" ? "true" : "",
   },
 };
 

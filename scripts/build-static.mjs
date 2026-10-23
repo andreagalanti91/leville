@@ -32,6 +32,7 @@ const result = spawnSync(process.execPath, [nextBinary, "build"], {
     NEXT_PUBLIC_SITE_ID: siteId,
     BASE_PATH: basePath,
     SITE_URL: process.env.SITE_URL ?? "",
+    NOINDEX: process.env.NOINDEX ?? "",
   },
   stdio: "inherit",
 });

@@ -99,6 +99,12 @@ export const bookingUrl = site.booking?.url;
  *
  * Da qui derivano metadati, sitemap, robots e dati strutturati.
  */
+/**
+ * Vero per le anteprime compilate con NOINDEX=true: le pagine dichiarano
+ * "noindex" e robots.txt chiede di non scansionare nulla.
+ */
+export const noIndex = process.env.NEXT_PUBLIC_NOINDEX === "true";
+
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL || site.seo.domain
 ).replace(/\/+$/, "");

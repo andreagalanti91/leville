@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { asset, defaultLocale, site, siteUrl } from "../src/config";
+import { asset, defaultLocale, noIndex, site, siteUrl } from "../src/config";
 import { LanguageProvider } from "../src/lib/i18n";
 import { translate } from "../src/lib/translate";
 import "./globals.css";
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: translate(site.seo.title, defaultLocale),
   description: translate(site.seo.description, defaultLocale),
+  robots: noIndex ? { index: false, follow: false } : undefined,
   icons: {
     icon: asset(site.brand.logo),
     shortcut: asset(site.brand.logo),

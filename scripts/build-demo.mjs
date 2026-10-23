@@ -37,8 +37,10 @@ const result = spawnSync(process.execPath, ["scripts/build-static.mjs"], {
     ...process.env,
     SITE_ID: id,
     BASE_PATH: basePath,
-    /* L'anteprima vive sul dominio di lavoro, non su quello del cliente. */
+    /* L'anteprima vive sul dominio di lavoro, non su quello del cliente,
+       e non deve finire nei motori di ricerca. */
     SITE_URL: `${origin}${basePath}`,
+    NOINDEX: "true",
   },
   stdio: "inherit",
 });
